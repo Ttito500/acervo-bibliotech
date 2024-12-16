@@ -4,6 +4,172 @@
   margin: 0;
 }
 
+html {
+  font-size: 100%;
+}
+
 body {
   font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+:root {
+  --color-white: #FFF;
+  --color-orange: #FD7E14;
+  --color-orange-light: #ff9036;
+  --color-red: #DC3545;
+  --color-blue: #17A2B8;
+  --color-blue-light: #41a9b9;
+  --color-green: #00A54F;
+}
+
+.bg-orange { background-color: var(--color-orange); }
+.bg-green { background-color: var(--color-green); }
+.bg-red { background-color: var(--color-red); }
+.bg-blue { background-color: var(--color-blue); }
+
+.color-orange { color: var(--color-orange); }
+.color-green { color: var(--color-green); }
+.color-red { color: var(--color-red); }
+.color-blue { color: var(--color-blue); }
+.color-white { color: var(--color-white); }
+
+.bibliotech-badge {
+  font-size: 14px;;
+}
+
+.btn-orange {
+  background-color: var(--color-orange);
+  color: var(--color-white);
+  border-color: var(--color-orange); 
+}
+
+.btn-orange:hover, .btn-orange:focus {
+  background-color: var(--color-orange-light);
+  color: var(--color-white);
+}
+
+.btn-blue {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border-color: var(--color-blue); 
+}
+
+.btn-blue:hover {
+  background-color: var(--color-blue-light);
+  color: var(--color-white);
+}
+
+.obgr {
+  color: var(--color-red);
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--color-white);
+}
+
+.acervo {
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.acervo-acoes {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.acervo-filtros-radio {
+  width: auto;
+}
+
+.tabela tr {
+  font-size: 14px;
+}
+
+.tabela td, .tabela th {
+  vertical-align: middle;
+  border: 1px solid #6C757D;
+}
+
+.tabela th {
+  background-color: #CED4DA;
+}
+
+.tabela-acoes svg {
+  font-size: 20px;
+}
+
+.tabela td {
+  background-color: inherit;
+}
+
+.tabela tr:nth-child(even) {
+  background-color: #E9ECEF;
+}
+
+.tabela tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.tabela tr:hover {
+  background-color: #ddd;
+}
+
+.navbar .container {
+  margin-left: 0px;
+}
+
+.navbar-brand-bibliotech {
+  font-weight: bold;
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--color-orange);
+
+  background-color: var(--color-white);
+  padding: 4px 8px 4px 8px;
+  margin-right: 8px;
+  border-radius: 6px;
+}
+
+.navbar-nav .navbar-link {
+  color: #ddd;
+  font-weight: bold;
+}
+
+.navbar-nav .navbar-link.active {
+  color: var(--color-white);
+  text-decoration-line: underline;
+}
+
+.navbar-nav .navbar-link:hover {
+  color: var(--color-white);
+}
+
+.alunos {
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.alunos-acoes {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.alunos-filtros-radio {
+  width: auto;
 }
