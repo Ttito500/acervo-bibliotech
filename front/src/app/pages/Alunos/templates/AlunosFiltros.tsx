@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
@@ -7,7 +7,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Row from "react-bootstrap/Row";
 
+interface AlunosFitrosAlunoProps {
+  formData: {
+    nome: string;
+    serie: string;
+    turma: string;
+    situacai: string;
+  };
+  onChange: (e: ChangeEvent<any>) => void;
+}
+
 const AlunosFiltros: React.FC = () => {
+  
   return (
     <Accordion defaultActiveKey="0">
       <Accordion.Item eventKey="0">
@@ -18,7 +29,7 @@ const AlunosFiltros: React.FC = () => {
               <Col>
                 <Form.Group
                   className="mb-3"
-                  controlId="exampleForm.ControlInput1"
+                
                 >
                   <Form.Label>
                     Série <span className="obgr">*</span>
@@ -40,7 +51,7 @@ const AlunosFiltros: React.FC = () => {
               <Col>
                 <Form.Group
                   className="mb-3"
-                  controlId="exampleForm.ControlInput1"
+                
                 >
                   <Form.Label>
                     Turma <span className="obgr">*</span>
@@ -61,7 +72,7 @@ const AlunosFiltros: React.FC = () => {
               <Col xs={6}>
                 <Form.Group
                   className="mb-3"
-                  controlId="exampleForm.ControlInput1"
+                
                 >
                   <Form.Label>
                     Nome <span className="obgr">*</span>

@@ -17,7 +17,10 @@ const createWindow = (): void => {
     width: 1280,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-    },
+      additionalArguments: [
+        '--disable-web-security'
+      ]
+    }
   });
 
   // and load the index.html of the app.
