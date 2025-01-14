@@ -4,6 +4,7 @@ import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.models.Livro;
+import com.bibliotech.bibliotech.models.SituacaoEmprestimo;
 import com.bibliotech.bibliotech.repositories.AlunoRepository;
 import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
@@ -26,7 +27,7 @@ public class EmprestimosService {
     private AlunoRepository alunoRepository;
 
     //Ainda tem que fazer as excessoes bonitinhas
-    public Emprestimo realizarEmprestimo (Integer alunoId, Integer livroId, Integer qtdRenovacao ,String situacao ,String observacao) {
+    public Emprestimo realizarEmprestimo (Integer alunoId, Integer livroId, Integer qtdRenovacao ,SituacaoEmprestimo situacaoEmprestimo ,String observacao) {
         Livro livro = livroRepository.findById(livroId)
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
         if (!"disponivel".equalsIgnoreCase(livro.getSituacao())){
@@ -46,7 +47,7 @@ public class EmprestimosService {
         emprestimo.setDataEmprestimo(LocalDate.now());
         emprestimo.setDataPrazo(LocalDate.now().plusDays(7));
         emprestimo.setQtdRenovacao(qtdRenovacao);
-        emprestimo.setSituacao(emprestimo.getSituacao() != null ? emprestimo.getSituacao() : "pendente");
+        emprestimo.setSituacao(emprestimo.getSituacao() != null ? emprestimo.getSituacao() : SituacaoEmprestimo.PENDENTE.getValor());
         emprestimo.setObservacao(observacao);
 
         livro.setSituacao("emprestado");
@@ -54,11 +55,11 @@ public class EmprestimosService {
         return emprestimoRepository.save(emprestimo);
     }
 
-    public Emprestimo alterarSituacao(Integer id, String status){
+    public Emprestimo alterarSituacao(Integer id, SituacaoEmprestimo situacaoEmprestimo){
         Emprestimo emprestimoExistente = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
 
-        emprestimoExistente.setSituacao(status);
+        emprestimoExistente.setSituacao(situacaoEmprestimo.getValor());
 
         emprestimoRepository.save(emprestimoExistente);
         return emprestimoExistente;
@@ -68,7 +69,7 @@ public class EmprestimosService {
         Emprestimo emprestimoExistente = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
 
-        if (emprestimoExistente.getSituacao().equals("atrasado")){
+        if (emprestimoExistente.getSituacao().equals(SituacaoEmprestimo.ATRASO.getValor())){
             emprestimoExistente.setDataPrazo(LocalDate.now().plusDays(7));
         }
         else {

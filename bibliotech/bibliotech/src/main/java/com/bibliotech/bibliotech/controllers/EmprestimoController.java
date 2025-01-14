@@ -3,6 +3,7 @@ package com.bibliotech.bibliotech.controllers;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.models.Livro;
+import com.bibliotech.bibliotech.models.SituacaoEmprestimo;
 import com.bibliotech.bibliotech.services.EmprestimosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class EmprestimoController {
         Integer alunoId = body.getIdAluno().getId();
         Integer livroId = body.getIdLivro().getId();
 
-        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(alunoId, livroId, body.getQtdRenovacao(), body.getSituacao(), body.getObservacao());
+        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(alunoId, livroId, body.getQtdRenovacao(), SituacaoEmprestimo.fromValor(body.getSituacao()), body.getObservacao()); //testar isso
         return ResponseEntity.ok(emprestimo);
     }
 
@@ -38,7 +39,8 @@ public class EmprestimoController {
 
     @PatchMapping("/alterarSituacao/{id}")
     public ResponseEntity<Emprestimo> alterarSituacao(@PathVariable Integer id, @RequestParam String situacao){
-        Emprestimo emprestimo = emprestimosService.alterarSituacao(id, situacao);
+        SituacaoEmprestimo situacaoEmprestimo = SituacaoEmprestimo.fromValor(situacao);
+        Emprestimo emprestimo = emprestimosService.alterarSituacao(id, situacaoEmprestimo);
         return ResponseEntity.ok(emprestimo);
     }
 
