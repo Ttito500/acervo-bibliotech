@@ -44,6 +44,16 @@ public class LivrosService {
         return livroExistente;
     }
 
+    public List<Livro> filtrarLivros(String isbn, String titulo, String autor, String situacao, Integer idSecao) {
+        System.out.println("ISBN: " + isbn);
+        System.out.println("Título: " + titulo);
+        System.out.println("Autor: " + autor);
+        System.out.println("Situação: " + situacao);
+        System.out.println("ID Seção: " + idSecao);
+
+        return livroRepository.filtrarLivros(isbn, titulo, autor, situacao, idSecao);
+    }
+
     public List<Livro> getLivros(){ return livroRepository.findAll(); }
 
     public Optional<Livro> getLivroById(Integer id){return livroRepository.findById(id);}

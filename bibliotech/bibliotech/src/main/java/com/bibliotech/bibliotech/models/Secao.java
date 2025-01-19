@@ -18,4 +18,7 @@ public class Secao {
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
+    @Column(name = "descricao", length = 500)
+    private String descricao;
+
 }
