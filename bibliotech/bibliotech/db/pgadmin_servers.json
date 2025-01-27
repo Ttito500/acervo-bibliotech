@@ -1,0 +1,15 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Acervo Bibliotech",
+      "Group": "Servers",
+      "Host": "bibliotech-postgres",
+      "Port": 5432,
+      "Username": "postgres",
+      "Password": "admin",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "bibliotech",
+      "SavePassword": true
+    }
+  }
+}

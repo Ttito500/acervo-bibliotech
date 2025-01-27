@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+meu-backup.sql
+
 ### STS ###
 .apt_generated
 .classpath
@@ -31,3 +33,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Env ###
+.env

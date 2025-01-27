@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/generos")
 public class GenerosController {
+
     @Autowired
     private GenerosService generosService;
 

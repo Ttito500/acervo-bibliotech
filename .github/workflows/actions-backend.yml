@@ -1,0 +1,67 @@
+name: Actions Backend
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+        DB_NAME: ${{ vars.DB_NAME }}
+        DB_USER: ${{ vars.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_PORT: ${{ vars.DB_PORT }}
+
+        JDBC_URL: ${{ vars.JDBC_URL }}
+        DB_SCHEMA_NAME: ${{ vars.DB_SCHEMA_NAME }}
+        API_PORT: ${{ vars.API_PORT }}
+
+        PGADMIN_DEFAULT_EMAIL: ${{ vars.PGADMIN_DEFAULT_EMAIL }}
+        PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
+        PGADMIN_LISTEN_PORT: ${{ vars.PGADMIN_LISTEN_PORT }}
+        PGADMIN_PORT: ${{ vars.PGADMIN_PORT }}
+    defaults:
+      run:
+        working-directory: ./bibliotech/bibliotech/
+
+    steps:
+      # Clonar o repositório
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Listar arquivos no diretório raiz
+        run: ls -alh
+
+      # Configurar o ambiente do Docker
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      #  Construir e rodar os containers com Docker Compose
+      - name: Build and start services
+        run: docker-compose -f docker-compose.yml up -d --build
+
+       # Aguardar a aplicação Spring Boot estar saudável
+      - name: Wait for the Spring Boot application to be healthy
+        run: |
+          echo "Waiting for Spring Boot application to start...";
+          until curl -s http://localhost:${{ vars.API_PORT }}/actuator/health/readiness | grep UP; do
+            echo "Waiting for application...";
+            sleep 5;
+          done
+          echo "The application is healthy!"
+
+      # Rodar testes da aplicação
+      - name: Run tests
+        run: docker-compose -f docker-compose.yml exec -T api mvn test
+
+      # Encerrar os containers após a execução
+      - name: Stop and clean up
+        if: always()
+        run: docker-compose -f docker-compose.yml down

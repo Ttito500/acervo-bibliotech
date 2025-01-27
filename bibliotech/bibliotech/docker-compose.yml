@@ -3,24 +3,51 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
+    container_name: bibliotech-postgres
     environment:
-      POSTGRES_DB: bibliotech
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - ./db/init_data.sql:/docker-entrypoint-initdb.d/init_data.sql
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: bibliotech-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: pedrorivaldev@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
     ports:
-      - "15432:80"
+      - "${PGADMIN_PORT}:${PGADMIN_LISTEN_PORT}"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+      - ./db/pgadmin_servers.json:/pgadmin4/servers.json
+    depends_on:
+      - postgres
+
+  api:
+    build: .
+    container_name: bibliotech-api
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - JDBC_URL=${JDBC_URL}
+      - DB_SCHEMA_NAME=${DB_SCHEMA_NAME}
+      - API_PORT=${API_PORT}
+    ports:
+      - "${API_PORT}:8090"
+    healthcheck:
+      test: "curl --fail --silent http://localhost:${API_PORT}/actuator/health/readiness | grep UP || exit 1"
+      interval: 2s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
     depends_on:
       - postgres
 

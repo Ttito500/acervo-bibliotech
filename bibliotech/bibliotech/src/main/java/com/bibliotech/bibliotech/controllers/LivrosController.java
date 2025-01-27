@@ -1,6 +1,5 @@
 package com.bibliotech.bibliotech.controllers;
 
-import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;

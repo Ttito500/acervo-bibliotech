@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-@Table(name = "livrogenero", schema = "adelino_cunha")
+@Table(name = "livrogenero")
 public class Livrogenero {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

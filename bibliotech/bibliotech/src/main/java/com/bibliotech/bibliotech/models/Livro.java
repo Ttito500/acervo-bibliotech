@@ -2,17 +2,18 @@ package com.bibliotech.bibliotech.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@NoArgsConstructor
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "livro", schema = "adelino_cunha")
+@Table(name = "livro")
 public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,24 +26,40 @@ public class Livro {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
+    @ColumnDefault("true")
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo = false;
+
     @Column(name = "autor", nullable = false)
     private String autor;
+
+    @Column(name = "observacao", length = 500)
+    private String observacao;
 
     @ColumnDefault("'disponivel'")
     @Column(name = "situacao", length = 20)
     private String situacao;
 
-    @Column(name = "observacao", length = 500)
-    private String observacao;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_estante_prateleira")
+    private Estanteprateleira idEstantePrateleira;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_secao", nullable = false)
     private com.bibliotech.bibliotech.models.Secao idSecao;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_estante_prateleira")
-    private Estanteprateleira idEstantePrateleira;
+    @OneToMany(mappedBy = "idLivro")
+    private Set<Emprestimo> emprestimos = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idLivro")
+    private Set<Exemplar> exemplares = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idLivro")
+    private Set<com.bibliotech.bibliotech.models.Livroautor> livroAutores = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idLivro")
+    private Set<com.bibliotech.bibliotech.models.Livrogenero> livroGeneros = new LinkedHashSet<>();
 
 }
