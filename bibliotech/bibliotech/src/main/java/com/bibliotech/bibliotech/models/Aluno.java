@@ -3,10 +3,8 @@ package com.bibliotech.bibliotech.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -20,26 +18,30 @@ public class Aluno {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_turma")
-    private com.bibliotech.bibliotech.models.Turma idTurma;
+    private Turma turma;
 
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "telefone", length = 15)
     private String telefone;
 
-    @ColumnDefault("true")
     @Column(name = "ativo", nullable = false)
-    private Boolean ativo = false;
+    private Boolean ativo = true;
 
-    @ColumnDefault("'regular'")
     @Column(name = "situacao", length = 20)
-    private String situacao;
+    private String situacao = "regular";
 
-    @OneToMany(mappedBy = "idAluno")
-    private Set<com.bibliotech.bibliotech.models.Emprestimo> emprestimos = new LinkedHashSet<>();
-
+    @PrePersist
+    public void prePersist() {
+        if (Objects.isNull(this.ativo)) {
+            this.ativo = true;
+        }
+        if (Objects.isNull(this.situacao)) {
+            this.situacao = "regular";
+        }
+    }
 }

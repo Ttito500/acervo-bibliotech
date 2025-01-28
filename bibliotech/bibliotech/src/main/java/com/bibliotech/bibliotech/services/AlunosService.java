@@ -1,82 +1,121 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.request.AlunoRequestDTO;
+import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
+import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.repositories.AlunoRepository;
+import com.bibliotech.bibliotech.dtos.request.mappers.AlunoRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.mappers.AlunoResponseMapper;
+import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AlunosService {
 
-    @Autowired
-    private AlunoRepository alunoRepository;
-    @Autowired
-    private TurmaRepository turmaRepository;
+    private final AlunoRepository alunoRepository;
+    private final AlunoRequestMapper alunoRequestMapper;
+    private final AlunoResponseMapper alunoResponseMapper;
+    private final TurmaRepository turmaRepository;
+    private final EmprestimoRepository emprestimoRepository;
 
-    public List<Aluno> filtrarAlunos(Integer serie, String turma, String nome, String situacao) {
-        System.out.println("Serie: " + serie);
-        System.out.println("Turma: " + turma);
-        System.out.println("Nome: " + nome);
-        System.out.println("Situacao: " + situacao);
-        
-        return alunoRepository.filtrarAlunos(serie, turma, nome, situacao);
+    public AlunosService(AlunoRepository alunoRepository, AlunoRequestMapper alunoRequestMapper, AlunoResponseMapper alunoResponseMapper, TurmaRepository turmaRepository, EmprestimoRepository emprestimoRepository) {
+        this.alunoRepository = alunoRepository;
+        this.alunoRequestMapper = alunoRequestMapper;
+        this.alunoResponseMapper = alunoResponseMapper;
+        this.turmaRepository = turmaRepository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
-    public Aluno cadastrarAluno(Aluno aluno) {
-        // Verifica se a Turma foi enviada corretamente
-        if (aluno.getIdTurma() == null || aluno.getIdTurma().getId() == null) {
-            throw new IllegalArgumentException("A turma associada ao aluno é inválida.");
-        }
-
-        // Busca a Turma no banco de dados
-        Turma turmaExistente = turmaRepository.findById(aluno.getIdTurma().getId())
-                .orElseThrow(() -> new NotFoundException("Turma com ID " + aluno.getIdTurma().getId() + " não encontrada."));
-
-        // Preenche a série com base na turma
-        aluno.setIdTurma(turmaExistente);  // A turma já foi validada e recuperada
-        aluno.setIdTurma(turmaExistente);
-        aluno.setSituacao(aluno.getSituacao() != null ? aluno.getSituacao() : "regular");
-
-        // Salva o Aluno no banco de dados
-        return alunoRepository.save(aluno);
+    public List<AlunoResponseDTO> filtrarAlunos(Integer serie, String turma, String nome, String situacao, Boolean ativo) {
+        List<Aluno> alunos = alunoRepository.filtrarAlunos(serie, turma, nome, ativo, situacao);
+        return alunos.stream()
+                .map(alunoResponseMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public List<Aluno> getAlunos(){return alunoRepository.findAll();}
-
-    public Optional<Aluno> getAlunoById(Integer id){return alunoRepository.findById(id);}
-
-    public Aluno alterarAluno(Integer id, Aluno novoAluno) {
-        // Verifica se o aluno existe
-        Aluno alunoExistente = alunoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
-
-        alunoExistente.setNome(novoAluno.getNome());
-        alunoExistente.setEmail(novoAluno.getEmail());
-        alunoExistente.setTelefone(novoAluno.getTelefone());
-        alunoExistente.setSituacao(novoAluno.getSituacao());
-
-        // Se houver necessidade de atualizar a turma:
-        if (novoAluno.getIdTurma() != null && novoAluno.getIdTurma().getId() != null) {
-            Turma turmaExistente = turmaRepository.findById(novoAluno.getIdTurma().getId())
-                    .orElseThrow(() -> new NotFoundException("Turma com ID " + novoAluno.getIdTurma().getId() + " não encontrada."));
-            alunoExistente.setIdTurma(turmaExistente);
-        }
-
-        // Salva as alterações no aluno
-        return alunoRepository.save(alunoExistente);
-    }
-
-    public void deletarAluno(Integer id) {
+    public AlunoResponseDTO buscarAlunoPorId(Integer id) {
         Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
-
-        alunoRepository.delete(aluno);
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado."));
+        return alunoResponseMapper.toDto(aluno);
     }
 
+    @Transactional
+    public AlunoResponseDTO cadastrarAluno(AlunoRequestDTO requestDTO) {
+        if (requestDTO.getIdTurma() == null) {
+            throw new ValidationException("A turma não pode ser nula.");
+        }
+        if (requestDTO.getNome() == null || requestDTO.getNome().isEmpty()) {
+            throw new ValidationException("O nome do aluno é obrigatório.");
+        }
+        if (requestDTO.getEmail() == null || requestDTO.getEmail().isEmpty()) {
+            throw new ValidationException("O e-mail do aluno é obrigatório.");
+        }
+        if (alunoRepository.existsByEmail(requestDTO.getEmail())) {
+            throw new ValidationException("Já existe um aluno cadastrado com esse e-mail.");
+        }
+
+        Aluno aluno = alunoRequestMapper.toEntity(requestDTO);
+        aluno.setSituacao("regular");
+        Aluno alunoSalvo = alunoRepository.save(aluno);
+        return alunoResponseMapper.toDto(alunoSalvo);
+    }
+
+    @Transactional
+    public AlunoResponseDTO atualizarAluno(Integer id, AlunoRequestDTO requestDTO) {
+        Aluno alunoExistente = alunoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado."));
+
+        if (!alunoExistente.getEmail().equals(requestDTO.getEmail()) && alunoRepository.existsByEmail(requestDTO.getEmail())) {
+            throw new ValidationException("Já existe um aluno cadastrado com esse e-mail.");
+        }
+
+        alunoExistente.setNome(requestDTO.getNome());
+        alunoExistente.setEmail(requestDTO.getEmail());
+        alunoExistente.setTelefone(requestDTO.getTelefone());
+
+        String situacao = requestDTO.getSituacao();
+        if (situacao != null && !situacao.isEmpty() && !situacao.equals("regular") && !situacao.equals("debito") && !situacao.equals("irregular")) {
+            throw new ValidationException("Situação inválida. Deve ser 'regular', 'debito' ou 'irregular'.");
+        }
+        alunoExistente.setSituacao(situacao);
+
+        if (requestDTO.getIdTurma() != null) {
+            Turma turmaExistente = turmaRepository.findById(requestDTO.getIdTurma())
+                    .orElseThrow(() -> new ValidationException("Turma não encontrada."));
+            alunoExistente.setTurma(turmaExistente);
+        }
+
+        Aluno alunoAtualizado = alunoRepository.save(alunoExistente);
+        return alunoResponseMapper.toDto(alunoAtualizado);
+    }
+
+    @Transactional
+    public void inativarAluno(Integer id) {
+        Aluno alunoExistente = alunoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado."));
+
+//        if (emprestimoRepository.existsByAlunoAndDataDevolucaoIsNull(alunoExistente)) {
+//            throw new AlunoComPendenciasException("Aluno possui pendências e não pode ser inativado.");
+//        }
+
+        alunoExistente.setAtivo(false);
+        alunoRepository.save(alunoExistente); // Não esqueça de salvar a alteração!
+    }
+
+    //achei melhor passar logo o obj de turma ao inves de passar id para evitar a query do banco
+    public void inativarAlunosPorTurma(Turma turma) {
+        List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, true, null);
+        for (Aluno aluno : alunos) {
+            aluno.setAtivo(false);
+        }
+        alunoRepository.saveAll(alunos);
+    }
 }
