@@ -12,9 +12,11 @@ public interface TurmaRepository extends JpaRepository<Turma, Integer> {
             "WHERE (:serie IS NULL OR t.serie = :serie) " +
             "AND (:turma IS NULL OR t.turma = :turma) " +
             "AND (:anoDeEntrada IS NULL OR t.anoDeEntrada = :anoDeEntrada) " +
-            "AND (:ativo IS NULL OR t.ativo = :ativo)")
+            "AND (:ativo IS NULL OR t.ativo = :ativo) ORDER BY t.serie, t.turma")
     List<Turma> filtrarTurmas(@Param("serie") Integer serie,
                               @Param("turma") String turma,
                               @Param("anoDeEntrada") Integer anoDeEntrada,
                               @Param("ativo") Boolean ativo);
+
+    boolean existsBySerieAndTurmaAndAnoDeEntrada(Integer serie, String turma, Integer anoDeEntrada);
 }

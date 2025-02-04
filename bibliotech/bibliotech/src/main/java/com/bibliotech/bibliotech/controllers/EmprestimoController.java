@@ -23,10 +23,9 @@ public class EmprestimoController {
 
     @PostMapping("")
     public ResponseEntity<Emprestimo> realizarEmprestimo(@RequestBody Emprestimo body){
-        Integer alunoId = body.getIdAluno().getId();
-        Integer livroId = body.getIdLivro().getId();
+        Integer alunoId = body.getAluno().getId();
 
-        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(alunoId, livroId, body.getQtdRenovacao(), body.getSituacao(), body.getObservacao());
+        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(alunoId, body.getQtdRenovacao(), 1, "");
         return ResponseEntity.ok(emprestimo);
     }
 

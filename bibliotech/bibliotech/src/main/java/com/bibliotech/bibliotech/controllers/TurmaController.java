@@ -31,11 +31,6 @@ public class TurmaController {
         return ResponseEntity.created(location).body(turma);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<Turma>> getTurmas(){
-        List<Turma> turmas = turmasService.getTurmas();
-        return ResponseEntity.ok(turmas);
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Turma> getTurmaById(@PathVariable Integer id){
@@ -60,13 +55,6 @@ public class TurmaController {
         return ResponseEntity.ok(turmaAtualizada);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarTurma(@PathVariable Integer id) {
-        turmasService.deletarTurma(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    //falta testar, farei quando alves mandar o aluno atualizado, tava dando uns problema
     @PatchMapping("/{id}/inativar")
     public ResponseEntity<Void> inativarTurma(@PathVariable Integer id) {
         turmasService.inativarTurma(id);

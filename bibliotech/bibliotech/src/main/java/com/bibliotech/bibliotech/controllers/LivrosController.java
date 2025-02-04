@@ -1,7 +1,6 @@
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.services.AlunosService;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +39,8 @@ public class LivrosController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Livro> deleteLivroById(@PathVariable Integer id){
-        Livro livroDeletado = livrosService.deletarLivro(id);
-        return ResponseEntity.ok(livroDeletado);
+        livrosService.deletarLivro(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")

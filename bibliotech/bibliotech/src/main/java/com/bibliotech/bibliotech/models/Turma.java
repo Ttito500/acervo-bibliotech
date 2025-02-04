@@ -31,4 +31,9 @@ public class Turma {
     @ColumnDefault("true")
     @Column(name = "ativo", nullable = false)
     boolean ativo;
+
+    @PrePersist
+    public void prePersist() {
+        this.ativo = true;
+    }
 }

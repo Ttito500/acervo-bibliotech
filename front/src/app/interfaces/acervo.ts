@@ -1,11 +1,13 @@
+import { EstantePrateleira, Secao } from "./models"
+
 export interface CreateLivroRequest {
   isbn: string
   titulo: string
   autor: string
   situacao: string
   observacao: string
-  idSecao: IdSecao
-  idEstantePrateleira: IdEstantePrateleira
+  idSecao: Secao
+  idEstantePrateleira: EstantePrateleira
 }
 
 export interface UpdateLivroRequest {
@@ -14,19 +16,8 @@ export interface UpdateLivroRequest {
   autor: string
   situacao: string
   observacao: string
-  idSecao: IdSecao
-  idEstantePrateleira: IdEstantePrateleira
-}
-
-export interface IdSecao {
-  id: number
-  nome: string
-}
-
-export interface IdEstantePrateleira {
-  id: number
-  estante: string
-  prateleira: string
+  idSecao: Secao
+  idEstantePrateleira: EstantePrateleira
 }
 
 export interface CreateLivroResponse {
@@ -36,8 +27,8 @@ export interface CreateLivroResponse {
   autor: string
   situacao: string
   observacao: string
-  idSecao: IdSecao
-  idEstantePrateleira: IdEstantePrateleira
+  idSecao: Secao
+  idEstantePrateleira: EstantePrateleira
 }
 
 export interface GetLivroResponse {
@@ -47,8 +38,8 @@ export interface GetLivroResponse {
   autor: string
   situacao: string
   observacao: string
-  idSecao: IdSecao
-  idEstantePrateleira: IdEstantePrateleira
+  idSecao: Secao
+  idEstantePrateleira: EstantePrateleira
 }
 
 export interface UpdateLivroResponse {
@@ -58,6 +49,6 @@ export interface UpdateLivroResponse {
   autor: string
   situacao: string
   observacao: string
-  idSecao: IdSecao
-  idEstantePrateleira: IdEstantePrateleira
+  idSecao: Secao
+  idEstantePrateleira: EstantePrateleira
 }

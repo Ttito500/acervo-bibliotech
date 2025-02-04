@@ -26,8 +26,8 @@ public class SecaoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Secao> deletarSecao(@PathVariable Integer id) {
-        Secao secaoDeletada = secaoService.deletarSecao(id);
-        return ResponseEntity.ok().body(secaoDeletada);
+        secaoService.deletarSecao(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("")

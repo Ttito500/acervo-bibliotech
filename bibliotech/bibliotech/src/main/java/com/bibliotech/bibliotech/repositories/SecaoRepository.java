@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SecaoRepository extends JpaRepository<Secao, Integer> {
+    boolean existsByNome(String nome);
 }

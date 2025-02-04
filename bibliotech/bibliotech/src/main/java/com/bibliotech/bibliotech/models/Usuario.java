@@ -14,7 +14,6 @@ import java.time.Instant;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('adelino_cunha.usuario_id_seq')")
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -24,9 +23,8 @@ public class Usuario {
     @Column(name = "cargo", nullable = false, length = 50)
     private String cargo;
 
-    @ColumnDefault("true")
     @Column(name = "ativo", nullable = false)
-    private Boolean ativo = false;
+    private Boolean ativo = true;
 
     @Column(name = "email", nullable = false)
     private String email;

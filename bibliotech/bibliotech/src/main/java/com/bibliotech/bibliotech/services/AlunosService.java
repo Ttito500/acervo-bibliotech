@@ -9,7 +9,6 @@ import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.repositories.AlunoRepository;
 import com.bibliotech.bibliotech.dtos.request.mappers.AlunoRequestMapper;
 import com.bibliotech.bibliotech.dtos.response.mappers.AlunoResponseMapper;
-import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +23,12 @@ public class AlunosService {
     private final AlunoRequestMapper alunoRequestMapper;
     private final AlunoResponseMapper alunoResponseMapper;
     private final TurmaRepository turmaRepository;
-    private final EmprestimoRepository emprestimoRepository;
 
-    public AlunosService(AlunoRepository alunoRepository, AlunoRequestMapper alunoRequestMapper, AlunoResponseMapper alunoResponseMapper, TurmaRepository turmaRepository, EmprestimoRepository emprestimoRepository) {
+    public AlunosService(AlunoRepository alunoRepository, AlunoRequestMapper alunoRequestMapper, AlunoResponseMapper alunoResponseMapper, TurmaRepository turmaRepository) {
         this.alunoRepository = alunoRepository;
         this.alunoRequestMapper = alunoRequestMapper;
         this.alunoResponseMapper = alunoResponseMapper;
         this.turmaRepository = turmaRepository;
-        this.emprestimoRepository = emprestimoRepository;
     }
 
     public List<AlunoResponseDTO> filtrarAlunos(Integer serie, String turma, String nome, String situacao, Boolean ativo) {
@@ -107,7 +104,7 @@ public class AlunosService {
 //        }
 
         alunoExistente.setAtivo(false);
-        alunoRepository.save(alunoExistente); // Não esqueça de salvar a alteração!
+        alunoRepository.save(alunoExistente);
     }
 
     //achei melhor passar logo o obj de turma ao inves de passar id para evitar a query do banco

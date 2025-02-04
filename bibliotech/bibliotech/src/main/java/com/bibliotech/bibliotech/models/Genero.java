@@ -3,7 +3,6 @@ package com.bibliotech.bibliotech.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,11 +19,5 @@ public class Genero {
 
     @Column(name = "genero", nullable = false)
     private String genero;
-
-    @OneToMany(mappedBy = "idGenero")
-    private Set<com.bibliotech.bibliotech.models.Livrogenero> livroGeneros = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idGenero")
-    private Set<com.bibliotech.bibliotech.models.Secaogenero> secaoGeneros = new LinkedHashSet<>();
 
 }

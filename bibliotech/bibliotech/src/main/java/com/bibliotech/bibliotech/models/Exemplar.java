@@ -3,10 +3,6 @@ package com.bibliotech.bibliotech.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,15 +16,11 @@ public class Exemplar {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_livro", nullable = false)
-    private com.bibliotech.bibliotech.models.Livro idLivro;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_secao", nullable = false)
-    private com.bibliotech.bibliotech.models.Secao idSecao;
+    private Livro livro;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estante_prateleira")
-    private Estanteprateleira idEstantePrateleira;
+    private Estanteprateleira estanteprateleira;
 
     @Column(name = "observacao", length = 500)
     private String observacao;
@@ -36,11 +28,11 @@ public class Exemplar {
     @Column(name = "numero", nullable = false)
     private Integer numero;
 
-    @ColumnDefault("'disponivel'")
     @Column(name = "situacao", length = 10)
-    private String situacao;
+    private String situacao = "disponivel"; // "disponivel", "emprestado", "extraviado"
 
-    @OneToMany(mappedBy = "idExemplar")
-    private Set<Emprestimo> emprestimos = new LinkedHashSet<>();
-
+    @PrePersist
+    public void prePersist() {
+        this.situacao = "disponivel";
+    }
 }

@@ -1,42 +1,65 @@
 package com.bibliotech.bibliotech.services;
+
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Genero;
 import com.bibliotech.bibliotech.repositories.GeneroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class GenerosService {
     @Autowired
     private GeneroRepository generoRepository;
 
-    public Genero criarSecao(Genero genero) {
-        generoRepository.save(genero);
-        return genero;
+    public List<Genero> addGenero(List<Genero> generos) {
+        Set<String> nomesNovosGeneros = generos.stream()
+                .map(Genero::getGenero)
+                .filter(genero -> genero != null && !genero.isEmpty())
+                .collect(Collectors.toSet());
+
+        List<Genero> novosGeneros = new ArrayList<>();
+
+        nomesNovosGeneros.forEach(genero -> {
+            Optional<Genero> generoOptional = generoRepository.findFirstByGeneroIgnoreCase(genero);
+            Genero generoParaSalvar = generoOptional.orElseGet(() -> {
+                Genero novoGenero = new Genero();
+                novoGenero.setGenero(genero);
+                return novoGenero;
+            });
+
+            if (generoOptional.isEmpty()) {
+                generoRepository.save(generoParaSalvar);
+                novosGeneros.add(generoParaSalvar);
+            }
+        });
+
+        return novosGeneros;
     }
 
-    public Genero deletarSecao (Integer id) {
-        Genero genero = generoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Genero com ID " + id + " não encontrado"));
+    public void removeGenerosWithNoAssociation() {
+        List<Genero> generosSemAssociacao = generoRepository.findGenerosSemAssociacao();
+        System.out.println("Deletando " + generosSemAssociacao.size() + " gêneros não associados.");
 
-        generoRepository.delete(genero);
-        return genero;
+        generoRepository.deleteAll(generosSemAssociacao);
     }
 
-    public List<Genero> getGeneros() {
+    public Optional<Genero> findGeneroByGenero(String genero) {
+        Optional<Genero> generoOptional = generoRepository.findByGenero(genero);
+        if (generoOptional.isEmpty()) {
+            throw new NotFoundException("Genero " + genero + " não encontrado.");
+        }
+
+        return generoOptional;
+    }
+
+    public List<Genero> getAllGeneros() {
         return generoRepository.findAll();
-    }
-
-    public Genero getGeneroById(Integer id) {
-        return generoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Gênero com ID " + id + " não encontrado"));
-    }
-
-    public List<Genero> filtrarGenero(String genero) {
-        return generoRepository.filtrarGeneros(genero);
     }
 
 

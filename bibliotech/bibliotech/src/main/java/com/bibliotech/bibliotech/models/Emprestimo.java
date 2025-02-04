@@ -21,13 +21,12 @@ public class Emprestimo {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_aluno", nullable = false)
-    private Aluno idAluno;
+    private Aluno aluno;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_exemplar", nullable = false)
-    private com.bibliotech.bibliotech.models.Exemplar idExemplar;
+    private Exemplar exemplar;
 
-    @ColumnDefault("CURRENT_DATE")
     @Column(name = "data_emprestimo", nullable = false)
     private LocalDate dataEmprestimo;
 
@@ -41,27 +40,20 @@ public class Emprestimo {
     @Column(name = "qtd_renovacao")
     private Integer qtdRenovacao;
 
-    @ColumnDefault("'pendente'")
     @Column(name = "situacao", length = 20)
-    private String situacao;
+    private String situacao; // "pendente", "entregue", "atrasado", "extraviado", "cancelado"
 
     @Column(name = "observacao", length = 500)
     private String observacao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "realizado_por", nullable = false)
-    private com.bibliotech.bibliotech.models.Usuario realizadoPor;
+    private Usuario realizadoPor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concluido_por")
-    private com.bibliotech.bibliotech.models.Usuario concluidoPor;
+    private Usuario concluidoPor;
 
     @Column(name = "data_devolucao")
     private LocalDate dataDevolucao;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_livro", nullable = false)
-    private com.bibliotech.bibliotech.models.Livro idLivro;
-
 }

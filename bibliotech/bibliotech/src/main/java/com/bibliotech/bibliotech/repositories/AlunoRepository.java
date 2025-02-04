@@ -17,7 +17,7 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
             "AND (:turma IS NULL OR t.turma = :turma) " +
             "AND (COALESCE(:nome, '') = '' OR LOWER(a.nome) LIKE LOWER(CONCAT('%', :nome, '%'))) " + // Condição ajustada
             "AND (:situacao IS NULL OR a.situacao = :situacao) " +
-            "AND (:ativo IS NULL OR a.ativo = :ativo)")
+            "AND (:ativo IS NULL OR a.ativo = :ativo) ORDER BY a.nome")
     List<Aluno> filtrarAlunos(@Param("serie") Integer serie,
                               @Param("turma") String turma,
                               @Param("nome") String nome,

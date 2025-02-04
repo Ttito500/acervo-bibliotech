@@ -19,19 +19,22 @@ public class AlunoRequestMapper {
     }
 
     public Aluno toEntity(AlunoRequestDTO alunoRequestDTO) {
-        if (alunoRequestDTO == null) {
-            return null;
-        }
-
         Aluno aluno = new Aluno();
         Turma turmaExistente = turmaRepository.findById(alunoRequestDTO.getIdTurma())
                 .orElseThrow(() -> new ValidationException(List.of("Turma não encontrada")));
 
+        if (!turmaExistente.isAtivo()) {
+            throw new ValidationException("Turma com o id: "+turmaExistente.getId()+" está inativa");
+        }
+        if (alunoRequestDTO == null) {
+            return null;
+        }
+
+        aluno.setTurma(turmaExistente);
         aluno.setId(alunoRequestDTO.getId());
         aluno.setNome(alunoRequestDTO.getNome());
         aluno.setEmail(alunoRequestDTO.getEmail());
         aluno.setTelefone(alunoRequestDTO.getTelefone());
-        aluno.setTurma(turmaExistente);
         aluno.setSituacao(alunoRequestDTO.getSituacao());
 
         return aluno;

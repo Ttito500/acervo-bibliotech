@@ -11,11 +11,22 @@ import java.util.Optional;
 
 @Service
 public class LivrosService {
+
+    @Autowired
+    AutorService autorService;
+
     @Autowired
     private LivroRepository livroRepository;
 
+
     public Livro cadastrarLivro(Livro livro){
+
+        // Autor autor = autorService.addAutor(livro.getAutor()); (refazer devido a lista de autores)
+
         livroRepository.save(livro);
+
+        // livroautorService.cadastrarLivroautor(livro.getId(), autor.getId()); (refazer devido a lista de autores)
+
         return livro;
     }
 
@@ -30,15 +41,10 @@ public class LivrosService {
     public Livro atualizarLivro(Integer id, Livro livro){
 
         Livro livroExistente = livroRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Livro com ID " + id + " não encontrado."));
 
         livroExistente.setIsbn(livro.getIsbn());
         livroExistente.setTitulo(livro.getTitulo());
-        livroExistente.setAutor(livro.getAutor());
-        livroExistente.setSituacao(livro.getSituacao());
-        livroExistente.setObservacao(livro.getObservacao());
-        livroExistente.setIdSecao(livro.getIdSecao());
-        livroExistente.setIdEstantePrateleira(livro.getIdEstantePrateleira());
 
         livroRepository.save(livroExistente);
         return livroExistente;

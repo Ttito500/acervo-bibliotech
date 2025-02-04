@@ -3,7 +3,6 @@ package com.bibliotech.bibliotech.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -20,11 +19,11 @@ public class Livrogenero {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_livro", nullable = false)
-    private Livro idLivro;
+    private Livro livro;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_genero", nullable = false)
-    private Genero idGenero;
+    private Genero genero;
 
 }
