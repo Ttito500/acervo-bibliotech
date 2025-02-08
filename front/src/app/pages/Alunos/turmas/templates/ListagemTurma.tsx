@@ -20,24 +20,24 @@ const ListagemTurma: React.FC = () => {
       <Table striped className="tabela">
         <thead>
           <tr>
-            <th>Série</th>
-            <th>Turma</th>
+            <th className="text-center th-center-size-fifteen">Série</th>
+            <th className="text-center th-center-size-fifteen">Turma</th>
             <th>Ano de Entrada</th>
-            <th>Ativo</th>
-            <th>Ações</th>
+            <th className="text-center">Ativo</th>
+            <th className="th-center-size-eight">Ações</th>
           </tr>
         </thead>
         <tbody>
           <tr className="tabela-tr">
-            <td>1º Ano</td>
-            <td>A</td>
+            <td className="text-center">1</td>
+            <td className="text-center">A</td>
             <td>2023</td>
-            <td>
+            <td className="text-center">
               <Badge className="bibliotech-badge" bg="green">
                 Ativo
               </Badge>
             </td>
-            <td>
+            <td className="text-center">
               <ButtonGroup aria-label="Ações" className="tabela-acoes">
                 <Button
                   onClick={handleShowEditar}
@@ -57,15 +57,15 @@ const ListagemTurma: React.FC = () => {
             </td>
           </tr>
           <tr className="tabela-tr">
-            <td>2º Ano</td>
-            <td>B</td>
+            <td className="text-center">2</td>
+            <td className="text-center">B</td>
             <td>2022</td>
-            <td>
+            <td className="text-center">
               <Badge className="bibliotech-badge" bg="green">
                 Ativo
               </Badge>
             </td>
-            <td>
+            <td className="text-center">
               <ButtonGroup aria-label="Ações" className="tabela-acoes">
                 <Button
                   onClick={handleShowEditar}
@@ -85,15 +85,15 @@ const ListagemTurma: React.FC = () => {
             </td>
           </tr>
           <tr className="tabela-tr">
-            <td>3º Ano</td>
-            <td>C</td>
+            <td className="text-center">3</td>
+            <td className="text-center">C</td>
             <td>2021</td>
-            <td>
+            <td className="text-center">
               <Badge className="bibliotech-badge" bg="red">
                 Inativo
               </Badge>
             </td>
-            <td>
+            <td className="text-center">
               <ButtonGroup aria-label="Ações" className="tabela-acoes">
                 <Button
                   onClick={handleShowEditar}

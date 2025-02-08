@@ -192,3 +192,63 @@ body {
   gap: 16px;
 }
 
+.custon-accordion-header-green .accordion-button {
+  background-color: #D1E7DD !important;
+  color: black !important;
+}
+
+.custon-accordion-header-green .accordion-button:not(.collapsed) {
+  background-color: #D1E7DD !important;
+  box-shadow: none !important;
+}
+
+.custon-accordion-header-red .accordion-button {
+  background-color: #F8D7DA !important;
+  color: black !important;
+}
+
+.custon-accordion-header-red .accordion-button:not(.collapsed) {
+  background-color: #F8D7DA !important;
+  box-shadow: none !important;
+}
+
+.custom-placeholder:invalid {
+  color: #495057
+}
+
+.resizable-button {
+  width: 230px;
+  height: 40px;
+  font-size: 16px;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  transition: padding 0.3s ease;
+}
+
+.no-border-radius-right {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+} /*resolvendo conflito*/
+
+.th-center-size-eight {
+  width: 8%;
+  text-align: center;
+}
+
+.th-center-size-twelve {
+  width: 12%;
+  text-align: center;
+}
+
+.th-center-size-fifteen {
+  width: 15%;
+  text-align: center;
+}
+
+.th-size-twenty {
+  width: 20%;
+}

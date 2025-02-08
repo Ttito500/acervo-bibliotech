@@ -12,7 +12,7 @@ const Menu: React.FC = () => {
             Acervo Bibliotech
           </span>
           <Nav className="me-auto">
-            <Nav.Link as={NavLink} to="/" className="navbar-link color-white">
+            <Nav.Link as={NavLink} to="/inicio" className="navbar-link color-white">
               Início
             </Nav.Link>
             <Nav.Link as={NavLink} to="/acervo" className="navbar-link color-white">

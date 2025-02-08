@@ -24,28 +24,28 @@ const ListagemExemplares: React.FC = () => {
           <Table striped className="tabela">
               <thead>
               <tr>
-                  <th>Exemplar</th>
-                  <th>Estante</th>
-                  <th>Prateleira</th>
+                  <th className="th-center-size-eight">Exemplar</th>
+                  <th className="th-center-size-eight">Estante</th>
+                  <th className="th-center-size-eight">Prateleira</th>
                   <th>Seção</th>
                   <th>Observações</th>
-                  <th>Situação</th>
-                  <th>Ações</th>
+                  <th className="th-center-size-fifteen">Situação</th>
+                  <th className="th-center-size-eight">Ações</th>
               </tr>
               </thead>
               <tbody>
               <tr className="tabela-tr">
-                  <td>A</td>
-                  <td>1</td>
-                  <td>3</td>
-                  <td>Literatura</td>
+                  <td className="text-center">1</td>
+                  <td className="text-center">A</td>
+                  <td className="text-center">2</td>
+                  <td>Romance</td>
                   <td>Bom estado</td>
-                  <td>
+                  <td className="text-center">
                       <Badge className="bibliotech-badge" bg="green">
                           Disponível
                       </Badge>
                   </td>
-                  <td>
+                  <td className="text-center">
                       <ButtonGroup aria-label="Ações" className="tabela-acoes">
                           <Button
                               onClick={handleShowEditar}
@@ -58,17 +58,17 @@ const ListagemExemplares: React.FC = () => {
                   </td>
               </tr>
               <tr className="tabela-tr">
-                  <td>A</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>Ciências</td>
+                  <td className="text-center">2</td>
+                  <td className="text-center">A</td>
+                  <td className="text-center">2</td>
+                  <td>Romance</td>
                   <td>Pequenos desgastes</td>
-                  <td>
+                  <td className="text-center">
                       <Badge className="bibliotech-badge" bg="blue">
                           Emprestado
                       </Badge>
                   </td>
-                  <td>
+                  <td className="text-center">
                       <ButtonGroup aria-label="Ações" className="tabela-acoes">
                           <Button
                               onClick={handleShowEditar}
@@ -81,17 +81,17 @@ const ListagemExemplares: React.FC = () => {
                   </td>
               </tr>
               <tr className="tabela-tr">
-                  <td>A</td>
-                  <td>1</td>
-                  <td>4</td>
-                  <td>História</td>
+                  <td className="text-center">3</td>
+                  <td className="text-center">A</td>
+                  <td className="text-center">2</td>
+                  <td>Romance</td>
                   <td>Danificado</td>
-                  <td>
+                  <td className="text-center">
                       <Badge className="bibliotech-badge" bg="red">
                           Extraviado
                       </Badge>
                   </td>
-                  <td>
+                  <td className="text-center">
                       <ButtonGroup aria-label="Ações" className="tabela-acoes">
                           <Button
                               onClick={handleShowEditar}

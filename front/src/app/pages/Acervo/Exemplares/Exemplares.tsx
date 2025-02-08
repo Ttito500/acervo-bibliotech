@@ -156,7 +156,7 @@ const Exemplares: React.FC = () => {
                                         </Form.Group>
                                     </Col>
                                     <Col>
-                                        <div className="w-100 h-100 d-flex justify-content-end align-items-center">
+                                        <div className="w-100 h-100 d-flex justify-content-end align-items-center" style={{ marginTop: "9px" }}>
                                             <Button variant="success">
                                                 <FontAwesomeIcon icon={faPlus} /> Cadastrar Novo(s) Exemplar(es)
                                             </Button>

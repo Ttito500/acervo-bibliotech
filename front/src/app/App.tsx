@@ -7,6 +7,7 @@ import Alunos from "./pages/Alunos/Alunos";
 import Secoes from "./pages/Secoes/Secoes";
 import Menu from "./pages/Menu/Menu";
 import Estantes from "./pages/Estantes/Estantes";
+import Inicio from "./pages/Inicio/Inicio";
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
       <div className="w-100">
         <Routes>
           <Route path="/" />
+          <Route path="/inicio" element={<Inicio />} />
           <Route path="/acervo" element={<Acervo />} />
           <Route path="/emprestimos" element={<Emprestimos />} />
           <Route path="/alunos" element={<Alunos />} />

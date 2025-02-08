@@ -97,7 +97,7 @@ const Emprestimo: React.FC = () => {
         <Modal
           show={showCadastrar}
           onHide={handleCloseCadastrar}
-          size="xl"
+          size="lg"
           backdrop="static"
           centered
           keyboard={false}

@@ -8,7 +8,7 @@ const CadastrarEmprestimo: React.FC = () => {
     <Form>
       {/* Primeira Linha - Seleção de Livro e Exemplar */}
       <Row>
-        <Col xs={6}>
+        <Col xs={8}>
           <Form.Group className="mb-3">
             <Form.Label>
               Livro <span className="obgr">*</span>
@@ -27,8 +27,8 @@ const CadastrarEmprestimo: React.FC = () => {
             <Form.Label>
               Exemplar <span className="obgr">*</span>
             </Form.Label>
-            <Form.Select aria-label="Selecione o Id do exemplar">
-              <option>Selecione o Id do exemplar</option>
+            <Form.Select aria-label="Selecione">
+              <option>Selecione</option>
               <option value="1">Exemplar 1</option>
               <option value="2">Exemplar 2</option>
               <option value="3">Exemplar 3</option>
@@ -60,14 +60,14 @@ const CadastrarEmprestimo: React.FC = () => {
             </Form.Label>
             <Form.Select aria-label="Selecionar">
               <option>Selecione</option>
-              <option value="1">Turma A</option>
-              <option value="2">Turma B</option>
-              <option value="3">Turma C</option>
+              <option value="1">A</option>
+              <option value="2">B</option>
+              <option value="3">C</option>
             </Form.Select>
           </Form.Group>
         </Col>
 
-        <Col xs={6}>
+        <Col xs={8}>
           <Form.Group className="mb-3">
             <Form.Label>
               Selecionar Aluno <span className="obgr">*</span>
@@ -84,7 +84,7 @@ const CadastrarEmprestimo: React.FC = () => {
 
       {/* Terceira Linha - Observação (opcional, ocupa a linha inteira) */}
       <Row>
-        <Col xs={10}>
+        <Col xs={12}>
           <Form.Group className="mb-3">
             <Form.Label>Observação</Form.Label>
             <Form.Control
@@ -98,7 +98,7 @@ const CadastrarEmprestimo: React.FC = () => {
 
       {/* Quarta Linha - Prazo Calculado Para Devolução */}
       <Row>
-        <Col xs={4}>
+        <Col xs={6}>
           <Form.Group className="mb-3">
             <Form.Label>
               Prazo Calculado Para Devolução <span className="obgr">*</span>

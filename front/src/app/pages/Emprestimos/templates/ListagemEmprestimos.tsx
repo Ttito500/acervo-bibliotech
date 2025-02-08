@@ -34,39 +34,39 @@ const ListagemEmprestimos = () => {
         <thead>
           <tr>
             <th>ISBN</th>
-            <th>Exemplar</th>
+            <th className="text-center">Exemplar</th>
             <th>Título</th>
             <th>Aluno</th>
             <th>Emprestado Por</th>
             <th>Concluído Por</th>
             <th>Observações</th>
-            <th>Data Empr.</th>
-            <th>Prazo</th>
-            <th>Devolução</th>
-            <th>Renovações</th>
-            <th>Status</th>
-            <th>Ações</th>
+            <th className="text-center">Data Empr.</th>
+            <th className="text-center">Prazo</th>
+            <th className="text-center">Devolução</th>
+            <th className="text-center">Renovações</th>
+            <th className="text-center">Status</th>
+            <th className="text-center">Ações</th>
           </tr>
         </thead>
         <tbody>
           <tr className="tabela-tr">
             <td>978-3-16-148410-0</td>
-            <td>1</td>
+            <td className="text-center">1</td>
             <td>Livro Exemplo</td>
             <td>João Silva</td>
             <td>Monitor N</td>
             <td>Bibliotecária</td>
             <td>Nenhuma</td>
-            <td>01/02/2024</td>
-            <td>15/02/2024</td>
-            <td>14/02/2024</td>
-            <td>1</td>
-            <td>
+            <td className="text-center">01/02/2024</td>
+            <td className="text-center">15/02/2024</td>
+            <td className="text-center">14/02/2024</td>
+            <td className="text-center">1</td>
+            <td className="text-center">
               <Badge className="bibliotech-badge" bg="green">
                 Entregue
               </Badge>
             </td>
-            <td>
+            <td className="text-center">
               <ButtonGroup aria-label="Ações" className="tabela-acoes">
                 <Button
                   onClick={handleShowReceber}
@@ -94,22 +94,22 @@ const ListagemEmprestimos = () => {
           </tr>
           <tr className="tabela-tr">
             <td>978-3-16-148411-7</td>
-            <td>2</td>
+            <td className="text-center">2</td>
             <td>Livro Pendente</td>
             <td>Maria Oliveira</td>
             <td>Monitor A</td>
             <td>Bibliotecário X</td>
             <td>Atenção na devolução</td>
-            <td>05/02/2024</td>
-            <td>20/02/2024</td>
-            <td></td>
-            <td>2</td>
-            <td>
+            <td className="text-center">05/02/2024</td>
+            <td className="text-center">20/02/2024</td>
+            <td className="text-center"></td>
+            <td className="text-center">2</td>
+            <td className="text-center">
               <Badge className="bibliotech-badge" bg="blue">
                 Pendente
               </Badge>
             </td>
-            <td>
+            <td className="text-center">
               <ButtonGroup aria-label="Ações" className="tabela-acoes">
                 <Button
                   onClick={handleShowReceber}
@@ -137,22 +137,22 @@ const ListagemEmprestimos = () => {
           </tr>
           <tr className="tabela-tr">
             <td>978-3-16-148412-4</td>
-            <td>3</td>
+            <td className="text-center">3</td>
             <td>Livro Atrasado</td>
             <td>Carlos Mendes</td>
             <td>Monitor B</td>
             <td>Bibliotecário Y</td>
             <td>Urgente</td>
-            <td>10/01/2024</td>
-            <td>25/01/2024</td>
-            <td></td>
-            <td>0</td>
-            <td>
+            <td className="text-center">10/01/2024</td>
+            <td className="text-center">25/01/2024</td>
+            <td className="text-center"></td>
+            <td className="text-center">0</td>
+            <td className="text-center">
               <Badge className="bibliotech-badge" bg="warning">
                 Atrasado
               </Badge>
             </td>
-            <td>
+            <td className="text-center">
               <ButtonGroup aria-label="Ações" className="tabela-acoes">
                 <Button
                   onClick={handleShowReceber}
@@ -180,22 +180,22 @@ const ListagemEmprestimos = () => {
           </tr>
           <tr className="tabela-tr">
             <td>978-3-16-148413-1</td>
-            <td>4</td>
+            <td className="text-center">4</td>
             <td>Livro Extraviado</td>
             <td>Ana Souza</td>
             <td>Monitor C</td>
             <td>Bibliotecário Z</td>
             <td>Verificar condição</td>
-            <td>12/02/2024</td>
-            <td>27/02/2024</td>
-            <td></td>
-            <td>1</td>
-            <td>
+            <td className="text-center">12/02/2024</td>
+            <td className="text-center">27/02/2024</td>
+            <td className="text-center"></td>
+            <td className="text-center">1</td>
+            <td className="text-center">
               <Badge className="bibliotech-badge" bg="red">
                 Extraviado
               </Badge>
             </td>
-            <td>
+            <td className="text-center">
               <ButtonGroup aria-label="Ações" className="tabela-acoes">
                 <Button
                   onClick={handleShowReceber}

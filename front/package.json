@@ -55,6 +55,7 @@
     "electron-squirrel-startup": "^1.0.1",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.6",
+    "react-datepicker": "^8.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.0.2"
   }
