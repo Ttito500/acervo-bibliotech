@@ -16,6 +16,7 @@ import Modal from "react-bootstrap/esm/Modal";
 import VerFrequencias from "./templates/VerFrequencias";
 import VerOcorrencias from "./templates/VerOcorrencias";
 import AlunosCadastrarAluno from "../Alunos/templates/AlunosCadastrarAluno";
+import {Table} from "react-bootstrap";
 
 const Inicio: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -68,10 +69,41 @@ const Inicio: React.FC = () => {
 
   return (
     <section className="Exemplar">
-      <div className="Exemplar-acoes"></div>
 
       <div className="w-100">
 
+        <h2 className="cronograma-titulo">Cronograma de Alunos Monitores</h2>
+
+        <Table striped className="cronograma">
+          <thead>
+          <tr>
+            <th className="text-center">Segunda</th>
+            <th className="text-center">Terça</th>
+            <th className="text-center">Quarta</th>
+            <th className="text-center">Quinta</th>
+            <th className="text-center">Sexta</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr className="cronograma-tr">
+            <td className="text-center">
+              Pedro Rivaldo <br/> Gabriel Alves
+            </td>
+            <td className="text-center">
+              Kauan Pereira <br/> Luis King
+            </td>
+            <td className="text-center">
+              Tiago Tito <br/> Lucas Tito
+            </td>
+            <td className="text-center">
+              Robson José <br/> Gustavo Fernandes
+            </td>
+            <td className="text-center">
+              Gustavo Henrique <br/> Daniel Lucas
+            </td>
+          </tr>
+          </tbody>
+        </Table>
       </div>
 
       <div className="w-100">
@@ -89,9 +121,9 @@ const Inicio: React.FC = () => {
                         Nome <span className="obgr">*</span>
                       </Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="Busque pelo nome do aluno"
-                        required
+                          type="text"
+                          placeholder="Busque pelo nome do aluno"
+                          required
                       />
                       <Form.Control.Feedback type="invalid">
                         Campo obrigatório.
@@ -104,9 +136,9 @@ const Inicio: React.FC = () => {
                         Atividade <span className="obgr">*</span>
                       </Form.Label>
                       <Form.Select
-                        aria-label="Selecione"
-                        required
-                        className="custom-placeholder"
+                          aria-label="Selecione"
+                          required
+                          className="custom-placeholder"
                       >
                         <option value="" disabled selected hidden>
                           Atividade que o aluno está fazendo

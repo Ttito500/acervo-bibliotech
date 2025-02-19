@@ -363,6 +363,76 @@ body {
   width: 60%;
 }
 
+.cronograma-titulo {
+  font-weight: bold;
+  color: black;
+  font-size: 1.3rem;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+
+.cronograma {
+  background-color: white;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #00A54F;
+  table-layout: fixed;
+}
+
+.cronograma th,
+.cronograma td {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid #00A54F;
+  background-color: white !important;
+  --bs-table-bg-type: transparent !important;
+  font-weight: bold;
+}
+
+.cronograma th {
+  border-bottom: 2px solid #00A54F;
+  color: #00A54F;
+  font-size: 1.3rem;
+}
+
+.cronograma td {
+  color: #6C757D;
+}
+
+.cronograma th:first-child,
+.cronograma td:first-child {
+  border-left: none;
+}
+
+.cronograma th:last-child,
+.cronograma td:last-child {
+  border-right: none;
+}
+
+.balao-monitor {
+  background-color: #D1E7DD;
+  color: black;
+  padding: 8px;
+  border-radius: 10px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.balao-monitor .texto {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.balao-monitor .icone-lixo {
+  color: #DC3545;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
 .ReactTags__tags {
   position: relative;
 }
