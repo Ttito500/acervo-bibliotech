@@ -36,4 +36,4 @@ EOT
 cd bibliotech/bibliotech
 
 # Roda apenas o banco e a API
-docker-compose up -d --build postgres api
+docker-compose --env-file /opt/app/.env up -d --build postgres api
