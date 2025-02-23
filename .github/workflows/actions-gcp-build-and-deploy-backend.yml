@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./ci/gcp/terraform
+        working-directory: ./ci/
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v3
