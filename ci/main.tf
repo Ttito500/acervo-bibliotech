@@ -14,7 +14,7 @@ resource "google_compute_subnetwork" "default" {
 
 resource "google_compute_instance" "default" {
   name         = var.instance_name
-  machine_type = "f1-micro"
+  machine_type = "e2-medium"
   zone         = var.zone
   tags         = ["ssh"]
 
