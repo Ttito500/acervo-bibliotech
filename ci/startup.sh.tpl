@@ -41,7 +41,7 @@ PGADMIN_LISTEN_PORT=${pgadmin_listen_port}
 PGADMIN_PORT=${pgadmin_port}
 EOT
 
-cd bibliotech/bibliotech
+# cd bibliotech/bibliotech
 
 # Roda apenas o banco e a API
-docker-compose --env-file /opt/app/.env up -d --build postgres api
+# docker-compose --env-file /opt/app/.env up -d --build postgres api
