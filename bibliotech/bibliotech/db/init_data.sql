@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.12 (Debian 15.12-1.pgdg120+1)
--- Dumped by pg_dump version 15.10
+-- Dumped from database version 15.10 (Debian 15.10-1.pgdg120+1)
+-- Dumped by pg_dump version 15.8
 
--- Started on 2025-02-22 18:55:38 UTC
+-- Started on 2025-02-23 23:01:06 UTC
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -38,14 +38,14 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE adelino_cunha.aluno (
-                                     id integer NOT NULL,
-                                     id_turma integer,
-                                     nome character varying(255) NOT NULL,
-                                     email character varying(255) NOT NULL,
-                                     telefone character varying(15),
-                                     ativo boolean DEFAULT true NOT NULL,
-                                     situacao character varying(9) DEFAULT 'regular'::character varying,
-                                     CONSTRAINT aluno_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['regular'::character varying, 'irregular'::character varying, 'debito'::character varying])::text[])))
+    id integer NOT NULL,
+    id_turma integer,
+    nome character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    telefone character varying(15),
+    ativo boolean DEFAULT true NOT NULL,
+    situacao character varying(20) DEFAULT 'regular'::character varying,
+    CONSTRAINT aluno_situacao_check CHECK (((situacao)::text = ANY (ARRAY[('regular'::character varying)::text, ('irregular'::character varying)::text, ('debito'::character varying)::text])))
 );
 
 
@@ -68,7 +68,7 @@ CREATE SEQUENCE adelino_cunha.aluno_id_seq
 ALTER TABLE adelino_cunha.aluno_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3559 (class 0 OID 0)
+-- TOC entry 3573 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: aluno_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -82,8 +82,8 @@ ALTER SEQUENCE adelino_cunha.aluno_id_seq OWNED BY adelino_cunha.aluno.id;
 --
 
 CREATE TABLE adelino_cunha.autor (
-                                     id integer NOT NULL,
-                                     nome character varying(255) NOT NULL
+    id integer NOT NULL,
+    nome character varying(255) NOT NULL
 );
 
 
@@ -106,7 +106,7 @@ CREATE SEQUENCE adelino_cunha.autor_id_seq
 ALTER TABLE adelino_cunha.autor_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3560 (class 0 OID 0)
+-- TOC entry 3574 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: autor_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -115,15 +115,28 @@ ALTER SEQUENCE adelino_cunha.autor_id_seq OWNED BY adelino_cunha.autor.id;
 
 
 --
+-- TOC entry 247 (class 1259 OID 16645)
+-- Name: autor_livros; Type: TABLE; Schema: adelino_cunha; Owner: postgres
+--
+
+CREATE TABLE adelino_cunha.autor_livros (
+    autores_id integer NOT NULL,
+    livros_id integer NOT NULL
+);
+
+
+ALTER TABLE adelino_cunha.autor_livros OWNER TO postgres;
+
+--
 -- TOC entry 246 (class 1259 OID 16629)
 -- Name: cronogramaalunomonitor; Type: TABLE; Schema: adelino_cunha; Owner: postgres
 --
 
 CREATE TABLE adelino_cunha.cronogramaalunomonitor (
-                                                      id integer NOT NULL,
-                                                      id_aluno_monitor integer NOT NULL,
-                                                      dia_da_semana character varying(20) NOT NULL,
-                                                      CONSTRAINT cronogramaalunomonitor_dia_da_semana_check CHECK (((dia_da_semana)::text = ANY ((ARRAY['segunda-feira'::character varying, 'terca-feira'::character varying, 'quarta-feira'::character varying, 'quinta-feira'::character varying, 'sexta-feira'::character varying])::text[])))
+    id integer NOT NULL,
+    id_aluno_monitor integer NOT NULL,
+    dia_da_semana character varying(20) NOT NULL,
+    CONSTRAINT cronogramaalunomonitor_dia_da_semana_check CHECK (((dia_da_semana)::text = ANY ((ARRAY['segunda-feira'::character varying, 'terca-feira'::character varying, 'quarta-feira'::character varying, 'quinta-feira'::character varying, 'sexta-feira'::character varying])::text[])))
 );
 
 
@@ -146,7 +159,7 @@ CREATE SEQUENCE adelino_cunha.cronogramaalunomonitor_id_seq
 ALTER TABLE adelino_cunha.cronogramaalunomonitor_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3561 (class 0 OID 0)
+-- TOC entry 3575 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: cronogramaalunomonitor_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -160,18 +173,19 @@ ALTER SEQUENCE adelino_cunha.cronogramaalunomonitor_id_seq OWNED BY adelino_cunh
 --
 
 CREATE TABLE adelino_cunha.emprestimo (
-                                          id integer NOT NULL,
-                                          id_aluno integer NOT NULL,
-                                          id_exemplar integer NOT NULL,
-                                          data_emprestimo date DEFAULT CURRENT_DATE NOT NULL,
-                                          data_conclusao date,
-                                          data_prazo date NOT NULL,
-                                          qtd_renovacao integer DEFAULT 0,
-                                          situacao character varying(10) DEFAULT 'pendente'::character varying,
-                                          observacao character varying(500),
-                                          realizado_por integer NOT NULL,
-                                          concluido_por integer,
-                                          CONSTRAINT emprestimo_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['pendente'::character varying, 'atrasado'::character varying, 'entregue'::character varying, 'extraviado'::character varying, 'cancelado'::character varying])::text[])))
+    id integer NOT NULL,
+    id_aluno integer NOT NULL,
+    id_exemplar integer NOT NULL,
+    data_emprestimo date DEFAULT CURRENT_DATE NOT NULL,
+    data_conclusao date,
+    data_prazo date NOT NULL,
+    qtd_renovacao integer DEFAULT 0,
+    situacao character varying(20) DEFAULT 'pendente'::character varying,
+    observacao character varying(500),
+    realizado_por integer NOT NULL,
+    concluido_por integer,
+    data_ultima_notificacao date,
+    CONSTRAINT emprestimo_situacao_check CHECK (((situacao)::text = ANY (ARRAY[('pendente'::character varying)::text, ('atrasado'::character varying)::text, ('entregue'::character varying)::text, ('extraviado'::character varying)::text, ('cancelado'::character varying)::text])))
 );
 
 
@@ -194,7 +208,7 @@ CREATE SEQUENCE adelino_cunha.emprestimo_id_seq
 ALTER TABLE adelino_cunha.emprestimo_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3562 (class 0 OID 0)
+-- TOC entry 3576 (class 0 OID 0)
 -- Dependencies: 239
 -- Name: emprestimo_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -208,9 +222,9 @@ ALTER SEQUENCE adelino_cunha.emprestimo_id_seq OWNED BY adelino_cunha.emprestimo
 --
 
 CREATE TABLE adelino_cunha.estanteprateleira (
-                                                 id integer NOT NULL,
-                                                 estante character varying(1) NOT NULL,
-                                                 prateleira integer NOT NULL
+    id integer NOT NULL,
+    estante character varying(1) NOT NULL,
+    prateleira integer NOT NULL
 );
 
 
@@ -233,7 +247,7 @@ CREATE SEQUENCE adelino_cunha.estanteprateleira_id_seq
 ALTER TABLE adelino_cunha.estanteprateleira_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3563 (class 0 OID 0)
+-- TOC entry 3577 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: estanteprateleira_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -247,9 +261,9 @@ ALTER SEQUENCE adelino_cunha.estanteprateleira_id_seq OWNED BY adelino_cunha.est
 --
 
 CREATE TABLE adelino_cunha.estanteprateleirasecao (
-                                                      id integer NOT NULL,
-                                                      id_estante_prateleira integer NOT NULL,
-                                                      id_secao integer NOT NULL
+    id integer NOT NULL,
+    id_estante_prateleira integer NOT NULL,
+    id_secao integer NOT NULL
 );
 
 
@@ -272,7 +286,7 @@ CREATE SEQUENCE adelino_cunha.estanteprateleirasecao_id_seq
 ALTER TABLE adelino_cunha.estanteprateleirasecao_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3564 (class 0 OID 0)
+-- TOC entry 3578 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: estanteprateleirasecao_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -286,14 +300,14 @@ ALTER SEQUENCE adelino_cunha.estanteprateleirasecao_id_seq OWNED BY adelino_cunh
 --
 
 CREATE TABLE adelino_cunha.exemplar (
-                                        id integer NOT NULL,
-                                        id_livro integer NOT NULL,
-                                        id_secao integer NOT NULL,
-                                        id_estante_prateleira integer,
-                                        observacao character varying(500),
-                                        numero integer NOT NULL,
-                                        situacao character varying(10) DEFAULT 'disponivel'::character varying,
-                                        CONSTRAINT exemplar_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['disponivel'::character varying, 'emprestado'::character varying, 'extraviado'::character varying])::text[])))
+    id integer NOT NULL,
+    id_livro integer NOT NULL,
+    id_secao integer NOT NULL,
+    id_estante_prateleira integer,
+    observacao character varying(500),
+    numero integer NOT NULL,
+    situacao character varying(10) DEFAULT 'disponivel'::character varying,
+    CONSTRAINT exemplar_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['disponivel'::character varying, 'emprestado'::character varying, 'extraviado'::character varying])::text[])))
 );
 
 
@@ -316,7 +330,7 @@ CREATE SEQUENCE adelino_cunha.exemplar_id_seq
 ALTER TABLE adelino_cunha.exemplar_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3565 (class 0 OID 0)
+-- TOC entry 3579 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: exemplar_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -330,12 +344,12 @@ ALTER SEQUENCE adelino_cunha.exemplar_id_seq OWNED BY adelino_cunha.exemplar.id;
 --
 
 CREATE TABLE adelino_cunha.frequenciaalunos (
-                                                id integer NOT NULL,
-                                                id_aluno integer NOT NULL,
-                                                registrada_por integer NOT NULL,
-                                                atividade character varying(20) DEFAULT 'lendo'::character varying,
-                                                data_frequencia date NOT NULL,
-                                                CONSTRAINT frequenciaalunos_atividade_check CHECK (((atividade)::text = ANY ((ARRAY['lendo'::character varying, 'celula_de_estudo'::character varying, 'estudo_individual'::character varying, 'descansando'::character varying, 'outros'::character varying])::text[])))
+    id integer NOT NULL,
+    id_aluno integer NOT NULL,
+    registrada_por integer NOT NULL,
+    atividade character varying(20) DEFAULT 'lendo'::character varying,
+    data_frequencia date NOT NULL,
+    CONSTRAINT frequenciaalunos_atividade_check CHECK (((atividade)::text = ANY ((ARRAY['lendo'::character varying, 'celula_de_estudo'::character varying, 'estudo_individual'::character varying, 'descansando'::character varying, 'outros'::character varying])::text[])))
 );
 
 
@@ -358,7 +372,7 @@ CREATE SEQUENCE adelino_cunha.frequenciaalunos_id_seq
 ALTER TABLE adelino_cunha.frequenciaalunos_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3566 (class 0 OID 0)
+-- TOC entry 3580 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: frequenciaalunos_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -372,8 +386,8 @@ ALTER SEQUENCE adelino_cunha.frequenciaalunos_id_seq OWNED BY adelino_cunha.freq
 --
 
 CREATE TABLE adelino_cunha.genero (
-                                      id integer NOT NULL,
-                                      genero character varying(100) NOT NULL
+    id integer NOT NULL,
+    genero character varying(255) NOT NULL
 );
 
 
@@ -396,7 +410,7 @@ CREATE SEQUENCE adelino_cunha.genero_id_seq
 ALTER TABLE adelino_cunha.genero_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3567 (class 0 OID 0)
+-- TOC entry 3581 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: genero_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -405,15 +419,28 @@ ALTER SEQUENCE adelino_cunha.genero_id_seq OWNED BY adelino_cunha.genero.id;
 
 
 --
+-- TOC entry 248 (class 1259 OID 16650)
+-- Name: genero_livros; Type: TABLE; Schema: adelino_cunha; Owner: postgres
+--
+
+CREATE TABLE adelino_cunha.genero_livros (
+    generos_id integer NOT NULL,
+    livros_id integer NOT NULL
+);
+
+
+ALTER TABLE adelino_cunha.genero_livros OWNER TO postgres;
+
+--
 -- TOC entry 226 (class 1259 OID 16438)
 -- Name: livro; Type: TABLE; Schema: adelino_cunha; Owner: postgres
 --
 
 CREATE TABLE adelino_cunha.livro (
-                                     id integer NOT NULL,
-                                     isbn character varying(13) NOT NULL,
-                                     titulo character varying(255) NOT NULL,
-                                     ativo boolean DEFAULT true NOT NULL
+    id integer NOT NULL,
+    isbn character varying(13) NOT NULL,
+    titulo character varying(255) NOT NULL,
+    ativo boolean DEFAULT true NOT NULL
 );
 
 
@@ -436,7 +463,7 @@ CREATE SEQUENCE adelino_cunha.livro_id_seq
 ALTER TABLE adelino_cunha.livro_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3568 (class 0 OID 0)
+-- TOC entry 3582 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: livro_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -450,9 +477,9 @@ ALTER SEQUENCE adelino_cunha.livro_id_seq OWNED BY adelino_cunha.livro.id;
 --
 
 CREATE TABLE adelino_cunha.livroautor (
-                                          id integer NOT NULL,
-                                          id_livro integer NOT NULL,
-                                          id_autor integer NOT NULL
+    id integer NOT NULL,
+    id_livro integer NOT NULL,
+    id_autor integer NOT NULL
 );
 
 
@@ -475,7 +502,7 @@ CREATE SEQUENCE adelino_cunha.livroautor_id_seq
 ALTER TABLE adelino_cunha.livroautor_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3569 (class 0 OID 0)
+-- TOC entry 3583 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: livroautor_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -489,9 +516,9 @@ ALTER SEQUENCE adelino_cunha.livroautor_id_seq OWNED BY adelino_cunha.livroautor
 --
 
 CREATE TABLE adelino_cunha.livrogenero (
-                                           id integer NOT NULL,
-                                           id_livro integer NOT NULL,
-                                           id_genero integer NOT NULL
+    id integer NOT NULL,
+    id_livro integer NOT NULL,
+    id_genero integer NOT NULL
 );
 
 
@@ -514,7 +541,7 @@ CREATE SEQUENCE adelino_cunha.livrogenero_id_seq
 ALTER TABLE adelino_cunha.livrogenero_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3570 (class 0 OID 0)
+-- TOC entry 3584 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: livrogenero_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -528,11 +555,11 @@ ALTER SEQUENCE adelino_cunha.livrogenero_id_seq OWNED BY adelino_cunha.livrogene
 --
 
 CREATE TABLE adelino_cunha.ocorrencias (
-                                           id integer NOT NULL,
-                                           id_aluno integer NOT NULL,
-                                           registrada_por integer NOT NULL,
-                                           detalhes character varying(500),
-                                           data_ocorrencia date NOT NULL
+    id integer NOT NULL,
+    id_aluno integer NOT NULL,
+    registrada_por integer NOT NULL,
+    detalhes character varying(500),
+    data_ocorrencia date NOT NULL
 );
 
 
@@ -555,7 +582,7 @@ CREATE SEQUENCE adelino_cunha.ocorrencias_id_seq
 ALTER TABLE adelino_cunha.ocorrencias_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3571 (class 0 OID 0)
+-- TOC entry 3585 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: ocorrencias_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -569,9 +596,9 @@ ALTER SEQUENCE adelino_cunha.ocorrencias_id_seq OWNED BY adelino_cunha.ocorrenci
 --
 
 CREATE TABLE adelino_cunha.secao (
-                                     id integer NOT NULL,
-                                     nome character varying(100) NOT NULL,
-                                     descricao character varying(500)
+    id integer NOT NULL,
+    nome character varying(100) NOT NULL,
+    descricao character varying(500)
 );
 
 
@@ -594,7 +621,7 @@ CREATE SEQUENCE adelino_cunha.secao_id_seq
 ALTER TABLE adelino_cunha.secao_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3572 (class 0 OID 0)
+-- TOC entry 3586 (class 0 OID 0)
 -- Dependencies: 215
 -- Name: secao_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -608,11 +635,11 @@ ALTER SEQUENCE adelino_cunha.secao_id_seq OWNED BY adelino_cunha.secao.id;
 --
 
 CREATE TABLE adelino_cunha.turma (
-                                     id integer NOT NULL,
-                                     serie integer NOT NULL,
-                                     turma character varying(1) NOT NULL,
-                                     ano_de_entrada smallint NOT NULL,
-                                     ativo boolean DEFAULT true NOT NULL
+    id integer NOT NULL,
+    serie integer NOT NULL,
+    turma character varying(1) NOT NULL,
+    ano_de_entrada integer NOT NULL,
+    ativo boolean DEFAULT true NOT NULL
 );
 
 
@@ -635,7 +662,7 @@ CREATE SEQUENCE adelino_cunha.turma_id_seq
 ALTER TABLE adelino_cunha.turma_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3573 (class 0 OID 0)
+-- TOC entry 3587 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: turma_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -649,14 +676,14 @@ ALTER SEQUENCE adelino_cunha.turma_id_seq OWNED BY adelino_cunha.turma.id;
 --
 
 CREATE TABLE adelino_cunha.usuario (
-                                       id integer NOT NULL,
-                                       nome character varying(255) NOT NULL,
-                                       cargo character varying(13) NOT NULL,
-                                       ativo boolean DEFAULT true NOT NULL,
-                                       email character varying(255) NOT NULL,
-                                       senha character varying(255) NOT NULL,
-                                       data_ultimo_acesso timestamp with time zone,
-                                       CONSTRAINT usuario_cargo_check CHECK (((cargo)::text = ANY ((ARRAY['bibliotecario'::character varying, 'aluno_monitor'::character varying])::text[])))
+    id integer NOT NULL,
+    nome character varying(255) NOT NULL,
+    cargo character varying(50) NOT NULL,
+    ativo boolean DEFAULT true NOT NULL,
+    email character varying(255) NOT NULL,
+    senha character varying(255) NOT NULL,
+    data_ultimo_acesso timestamp with time zone,
+    CONSTRAINT usuario_cargo_check CHECK (((cargo)::text = ANY (ARRAY[('bibliotecario'::character varying)::text, ('aluno_monitor'::character varying)::text])))
 );
 
 
@@ -679,7 +706,7 @@ CREATE SEQUENCE adelino_cunha.usuario_id_seq
 ALTER TABLE adelino_cunha.usuario_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3574 (class 0 OID 0)
+-- TOC entry 3588 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: usuario_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: postgres
 --
@@ -688,7 +715,7 @@ ALTER SEQUENCE adelino_cunha.usuario_id_seq OWNED BY adelino_cunha.usuario.id;
 
 
 --
--- TOC entry 3288 (class 2604 OID 16527)
+-- TOC entry 3296 (class 2604 OID 16527)
 -- Name: aluno id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -696,7 +723,7 @@ ALTER TABLE ONLY adelino_cunha.aluno ALTER COLUMN id SET DEFAULT nextval('adelin
 
 
 --
--- TOC entry 3279 (class 2604 OID 16434)
+-- TOC entry 3287 (class 2604 OID 16434)
 -- Name: autor id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -704,7 +731,7 @@ ALTER TABLE ONLY adelino_cunha.autor ALTER COLUMN id SET DEFAULT nextval('adelin
 
 
 --
--- TOC entry 3300 (class 2604 OID 16632)
+-- TOC entry 3308 (class 2604 OID 16632)
 -- Name: cronogramaalunomonitor id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -712,7 +739,7 @@ ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor ALTER COLUMN id SET DEFAUL
 
 
 --
--- TOC entry 3293 (class 2604 OID 16559)
+-- TOC entry 3301 (class 2604 OID 16559)
 -- Name: emprestimo id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -720,7 +747,7 @@ ALTER TABLE ONLY adelino_cunha.emprestimo ALTER COLUMN id SET DEFAULT nextval('a
 
 
 --
--- TOC entry 3276 (class 2604 OID 16399)
+-- TOC entry 3284 (class 2604 OID 16399)
 -- Name: estanteprateleira id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -728,7 +755,7 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleira ALTER COLUMN id SET DEFAULT nex
 
 
 --
--- TOC entry 3277 (class 2604 OID 16408)
+-- TOC entry 3285 (class 2604 OID 16408)
 -- Name: estanteprateleirasecao id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -736,7 +763,7 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleirasecao ALTER COLUMN id SET DEFAUL
 
 
 --
--- TOC entry 3284 (class 2604 OID 16489)
+-- TOC entry 3292 (class 2604 OID 16489)
 -- Name: exemplar id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -744,7 +771,7 @@ ALTER TABLE ONLY adelino_cunha.exemplar ALTER COLUMN id SET DEFAULT nextval('ade
 
 
 --
--- TOC entry 3297 (class 2604 OID 16592)
+-- TOC entry 3305 (class 2604 OID 16592)
 -- Name: frequenciaalunos id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -752,7 +779,7 @@ ALTER TABLE ONLY adelino_cunha.frequenciaalunos ALTER COLUMN id SET DEFAULT next
 
 
 --
--- TOC entry 3278 (class 2604 OID 16427)
+-- TOC entry 3286 (class 2604 OID 16427)
 -- Name: genero id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -760,7 +787,7 @@ ALTER TABLE ONLY adelino_cunha.genero ALTER COLUMN id SET DEFAULT nextval('adeli
 
 
 --
--- TOC entry 3280 (class 2604 OID 16441)
+-- TOC entry 3288 (class 2604 OID 16441)
 -- Name: livro id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -768,7 +795,7 @@ ALTER TABLE ONLY adelino_cunha.livro ALTER COLUMN id SET DEFAULT nextval('adelin
 
 
 --
--- TOC entry 3283 (class 2604 OID 16470)
+-- TOC entry 3291 (class 2604 OID 16470)
 -- Name: livroautor id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -776,7 +803,7 @@ ALTER TABLE ONLY adelino_cunha.livroautor ALTER COLUMN id SET DEFAULT nextval('a
 
 
 --
--- TOC entry 3282 (class 2604 OID 16451)
+-- TOC entry 3290 (class 2604 OID 16451)
 -- Name: livrogenero id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -784,7 +811,7 @@ ALTER TABLE ONLY adelino_cunha.livrogenero ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 3299 (class 2604 OID 16613)
+-- TOC entry 3307 (class 2604 OID 16613)
 -- Name: ocorrencias id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -792,7 +819,7 @@ ALTER TABLE ONLY adelino_cunha.ocorrencias ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 3275 (class 2604 OID 16390)
+-- TOC entry 3283 (class 2604 OID 16390)
 -- Name: secao id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -800,7 +827,7 @@ ALTER TABLE ONLY adelino_cunha.secao ALTER COLUMN id SET DEFAULT nextval('adelin
 
 
 --
--- TOC entry 3286 (class 2604 OID 16517)
+-- TOC entry 3294 (class 2604 OID 16517)
 -- Name: turma id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -808,7 +835,7 @@ ALTER TABLE ONLY adelino_cunha.turma ALTER COLUMN id SET DEFAULT nextval('adelin
 
 
 --
--- TOC entry 3291 (class 2604 OID 16546)
+-- TOC entry 3299 (class 2604 OID 16546)
 -- Name: usuario id; Type: DEFAULT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -816,27 +843,27 @@ ALTER TABLE ONLY adelino_cunha.usuario ALTER COLUMN id SET DEFAULT nextval('adel
 
 
 --
--- TOC entry 3543 (class 0 OID 16524)
+-- TOC entry 3555 (class 0 OID 16524)
 -- Dependencies: 236
 -- Data for Name: aluno; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
 
 COPY adelino_cunha.aluno (id, id_turma, nome, email, telefone, ativo, situacao) FROM stdin;
-1	\N	Kauan	kauan@email.com	1111111111	t	regular
-2	\N	Maria Oliveira	maria@email.com	2222222222	t	regular
-3	\N	Gabriel Alves	gabriel@email.com	3333333333	t	regular
-4	\N	Ana Souza	ana@email.com	4444444444	t	irregular
-5	\N	Pedro Rivaldo	pedro@email.com	5555555555	t	regular
-6	\N	Lucas Tito	lucas@email.com	6666666666	f	regular
-7	\N	Juliana Mendes	juliana@email.com	7777777777	t	regular
-8	\N	Luis	luis@email.com	8888888888	t	debito
-9	\N	Camila Andrade	camila@email.com	9999999999	t	regular
-10	\N	Tiago Tito	tiago@email.com	1010101010	t	regular
+1	1	Kauan	kauan@email.com	1111111111	t	regular
+2	1	Maria Oliveira	maria@email.com	2222222222	t	regular
+3	1	Gabriel Alves	gabriel@email.com	3333333333	t	regular
+4	1	Ana Souza	ana@email.com	4444444444	t	irregular
+5	1	Pedro Rivaldo	pedro@email.com	5555555555	t	regular
+6	1	Lucas Tito	lucas@email.com	6666666666	f	regular
+7	1	Juliana Mendes	juliana@email.com	7777777777	t	regular
+8	1	Luis	luis@email.com	8888888888	t	debito
+9	1	Camila Andrade	camila@email.com	9999999999	t	regular
+10	1	Tiago Tito	tiago@email.com	1010101010	t	regular
 \.
 
 
 --
--- TOC entry 3531 (class 0 OID 16431)
+-- TOC entry 3543 (class 0 OID 16431)
 -- Dependencies: 224
 -- Data for Name: autor; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -856,7 +883,17 @@ COPY adelino_cunha.autor (id, nome) FROM stdin;
 
 
 --
--- TOC entry 3553 (class 0 OID 16629)
+-- TOC entry 3566 (class 0 OID 16645)
+-- Dependencies: 247
+-- Data for Name: autor_livros; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
+--
+
+COPY adelino_cunha.autor_livros (autores_id, livros_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3565 (class 0 OID 16629)
 -- Dependencies: 246
 -- Data for Name: cronogramaalunomonitor; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -876,27 +913,27 @@ COPY adelino_cunha.cronogramaalunomonitor (id, id_aluno_monitor, dia_da_semana) 
 
 
 --
--- TOC entry 3547 (class 0 OID 16556)
+-- TOC entry 3559 (class 0 OID 16556)
 -- Dependencies: 240
 -- Data for Name: emprestimo; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
 
-COPY adelino_cunha.emprestimo (id, id_aluno, id_exemplar, data_emprestimo, data_conclusao, data_prazo, qtd_renovacao, situacao, observacao, realizado_por, concluido_por) FROM stdin;
-1	1	1	2023-10-01	\N	2023-10-15	0	pendente	\N	1	\N
-2	2	2	2023-10-02	2023-10-16	2023-10-16	1	entregue	\N	2	2
-3	3	3	2023-10-03	\N	2023-10-17	0	pendente	Devolvido com rasuras na primeira pagina	3	\N
-4	4	4	2023-10-04	2023-10-18	2023-10-18	0	\N	Entregue no prazo	4	4
-5	5	5	2023-10-05	\N	2023-10-19	0	pendente	Devolvido com paginas arrancadas	5	\N
-6	6	6	2023-10-06	\N	2023-10-20	0	pendente	\N	6	\N
-7	7	7	2023-10-07	2023-10-21	2023-10-21	0	\N	Entregue no prazo	7	7
-8	8	8	2023-10-08	\N	2023-10-22	0	pendente	Devolvido com mancha de café	8	\N
-9	9	9	2023-10-09	\N	2023-10-23	0	pendente	\N	9	\N
-10	10	10	2023-10-10	\N	2023-10-24	0	pendente	\N	10	\N
+COPY adelino_cunha.emprestimo (id, id_aluno, id_exemplar, data_emprestimo, data_conclusao, data_prazo, qtd_renovacao, situacao, observacao, realizado_por, concluido_por, data_ultima_notificacao) FROM stdin;
+1	1	1	2024-10-01	2024-10-15	2024-10-15	0	entregue	\N	1	1	\N
+2	2	2	2024-10-02	2024-10-16	2024-10-16	1	entregue	\N	2	1	\N
+3	3	3	2024-10-03	2024-10-17	2024-10-17	0	entregue	Devolvido com rasuras na primeira pagina	3	1	\N
+4	4	4	2024-10-04	2024-10-18	2024-10-18	0	entregue	Entregue no prazo	4	1	\N
+5	5	5	2024-10-05	2024-10-19	2024-10-19	0	entregue	Devolvido com paginas arrancadas	5	1	\N
+6	6	6	2024-10-06	2024-10-20	2024-10-20	0	entregue	\N	6	1	\N
+7	7	7	2024-10-07	2024-10-21	2024-10-21	0	entregue	Entregue no prazo	7	7	\N
+8	8	8	2024-10-08	2024-10-22	2024-10-22	0	entregue	Devolvido com mancha de café	8	1	\N
+9	9	9	2024-10-09	2024-10-23	2024-10-23	0	entregue	\N	9	1	\N
+10	10	10	2024-10-10	2024-10-24	2024-10-24	0	entregue	\N	10	1	\N
 \.
 
 
 --
--- TOC entry 3525 (class 0 OID 16396)
+-- TOC entry 3537 (class 0 OID 16396)
 -- Dependencies: 218
 -- Data for Name: estanteprateleira; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -933,7 +970,7 @@ COPY adelino_cunha.estanteprateleira (id, estante, prateleira) FROM stdin;
 
 
 --
--- TOC entry 3527 (class 0 OID 16405)
+-- TOC entry 3539 (class 0 OID 16405)
 -- Dependencies: 220
 -- Data for Name: estanteprateleirasecao; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -968,7 +1005,7 @@ COPY adelino_cunha.estanteprateleirasecao (id, id_estante_prateleira, id_secao) 
 
 
 --
--- TOC entry 3539 (class 0 OID 16486)
+-- TOC entry 3551 (class 0 OID 16486)
 -- Dependencies: 232
 -- Data for Name: exemplar; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -998,27 +1035,27 @@ COPY adelino_cunha.exemplar (id, id_livro, id_secao, id_estante_prateleira, obse
 
 
 --
--- TOC entry 3549 (class 0 OID 16589)
+-- TOC entry 3561 (class 0 OID 16589)
 -- Dependencies: 242
 -- Data for Name: frequenciaalunos; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
 
 COPY adelino_cunha.frequenciaalunos (id, id_aluno, registrada_por, atividade, data_frequencia) FROM stdin;
-1	1	1	lendo	2023-10-01
-2	2	2	celula_de_estudo	2023-10-01
-3	3	3	estudo_individual	2023-10-01
-4	4	4	descansando	2023-10-01
-5	5	5	outros	2023-10-01
-6	6	6	lendo	2023-10-03
-7	7	7	celula_de_estudo	2023-10-03
-8	8	8	estudo_individual	2023-10-03
-9	9	9	descansando	2023-10-03
-10	10	10	outros	2023-10-13
+1	1	1	lendo	2024-10-01
+2	2	2	celula_de_estudo	2024-10-01
+3	3	3	estudo_individual	2024-10-01
+4	4	4	descansando	2024-10-01
+5	5	5	outros	2024-10-01
+6	6	6	lendo	2024-10-03
+7	7	7	celula_de_estudo	2024-10-03
+8	8	8	estudo_individual	2024-10-03
+9	9	9	descansando	2024-10-03
+10	10	10	outros	2024-10-13
 \.
 
 
 --
--- TOC entry 3529 (class 0 OID 16424)
+-- TOC entry 3541 (class 0 OID 16424)
 -- Dependencies: 222
 -- Data for Name: genero; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -1038,7 +1075,17 @@ COPY adelino_cunha.genero (id, genero) FROM stdin;
 
 
 --
--- TOC entry 3533 (class 0 OID 16438)
+-- TOC entry 3567 (class 0 OID 16650)
+-- Dependencies: 248
+-- Data for Name: genero_livros; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
+--
+
+COPY adelino_cunha.genero_livros (generos_id, livros_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3545 (class 0 OID 16438)
 -- Dependencies: 226
 -- Data for Name: livro; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -1058,7 +1105,7 @@ COPY adelino_cunha.livro (id, isbn, titulo, ativo) FROM stdin;
 
 
 --
--- TOC entry 3537 (class 0 OID 16467)
+-- TOC entry 3549 (class 0 OID 16467)
 -- Dependencies: 230
 -- Data for Name: livroautor; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -1078,7 +1125,7 @@ COPY adelino_cunha.livroautor (id, id_livro, id_autor) FROM stdin;
 
 
 --
--- TOC entry 3535 (class 0 OID 16448)
+-- TOC entry 3547 (class 0 OID 16448)
 -- Dependencies: 228
 -- Data for Name: livrogenero; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -1098,27 +1145,27 @@ COPY adelino_cunha.livrogenero (id, id_livro, id_genero) FROM stdin;
 
 
 --
--- TOC entry 3551 (class 0 OID 16610)
+-- TOC entry 3563 (class 0 OID 16610)
 -- Dependencies: 244
 -- Data for Name: ocorrencias; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
 
 COPY adelino_cunha.ocorrencias (id, id_aluno, registrada_por, detalhes, data_ocorrencia) FROM stdin;
-1	3	1	Aluno pregando ideias extremistas	2023-10-01
-2	10	2	Aluno comendo feijoada na biblioteca	2023-10-02
-3	8	3	Aluno jogando LOL	2023-10-03
-4	1	4	Aluno se escondendo na biblioteca para faltar aula	2023-10-04
-5	5	5	Aluno usa JS no backend	2023-10-05
-6	6	6	Aluno danificou livro	2023-10-06
-7	7	7	Aluno puxando cabelo da outra	2023-10-07
-8	8	8	Aluno jogando free fire	2023-10-08
-9	9	9	Aluno trouxe uma sanduicheira e fez misto quente	2023-10-09
-10	10	10	Aluno quebrou a mesa jogando truco	2023-10-10
+1	3	1	Aluno pregando ideias extremistas	2024-10-01
+2	10	2	Aluno comendo feijoada na biblioteca	2024-10-02
+3	8	3	Aluno jogando LOL	2024-10-03
+4	1	4	Aluno se escondendo na biblioteca para faltar aula	2024-10-04
+5	5	5	Aluno usa JS no backend	2024-10-05
+6	6	6	Aluno danificou livro	2024-10-06
+7	7	7	Aluno puxando cabelo da outra	2024-10-07
+8	8	8	Aluno jogando free fire	2024-10-08
+9	9	9	Aluno trouxe uma sanduicheira e fez misto quente	2024-10-09
+10	10	10	Aluno quebrou a mesa jogando truco	2024-10-10
 \.
 
 
 --
--- TOC entry 3523 (class 0 OID 16387)
+-- TOC entry 3535 (class 0 OID 16387)
 -- Dependencies: 216
 -- Data for Name: secao; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -1138,7 +1185,7 @@ COPY adelino_cunha.secao (id, nome, descricao) FROM stdin;
 
 
 --
--- TOC entry 3541 (class 0 OID 16514)
+-- TOC entry 3553 (class 0 OID 16514)
 -- Dependencies: 234
 -- Data for Name: turma; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
@@ -1150,35 +1197,36 @@ COPY adelino_cunha.turma (id, serie, turma, ano_de_entrada, ativo) FROM stdin;
 4	2	A	2024	t
 5	2	B	2024	t
 6	2	C	2024	t
-7	3	A	2023	t
-8	3	B	2023	t
-9	3	C	2023	t
+7	3	A	2024	t
+8	3	B	2024	t
+9	3	C	2024	t
 10	3	A	2022	f
 \.
 
 
 --
--- TOC entry 3545 (class 0 OID 16543)
+-- TOC entry 3557 (class 0 OID 16543)
 -- Dependencies: 238
 -- Data for Name: usuario; Type: TABLE DATA; Schema: adelino_cunha; Owner: postgres
 --
 
 COPY adelino_cunha.usuario (id, nome, cargo, ativo, email, senha, data_ultimo_acesso) FROM stdin;
-1	João Silva	bibliotecario	t	joao.silva@escola.com	senha123	2023-10-01 00:00:00+00
-2	Maria Oliveira	aluno_monitor	t	maria.oliveira@escola.com	senha456	2023-10-02 00:00:00+00
-3	Pedro Souza	bibliotecario	t	pedro.souza@escola.com	senha789	2023-10-03 00:00:00+00
-4	Ana Costa	aluno_monitor	t	ana.costa@escola.com	senha101	2023-10-04 00:00:00+00
-5	Carlos Mendes	bibliotecario	t	carlos.mendes@escola.com	senha202	2023-10-05 00:00:00+00
-6	Fernanda Lima	aluno_monitor	t	fernanda.lima@escola.com	senha303	2023-10-06 00:00:00+00
-7	Ricardo Alves	bibliotecario	t	ricardo.alves@escola.com	senha404	2023-10-07 00:00:00+00
-8	Juliana Pereira	aluno_monitor	t	juliana.pereira@escola.com	senha505	2023-10-08 00:00:00+00
-9	Lucas Gomes	bibliotecario	t	lucas.gomes@escola.com	senha606	2023-10-09 00:00:00+00
-10	Patricia Santos	aluno_monitor	t	patricia.santos@escola.com	senha707	2023-10-10 00:00:00+00
+1	João Silva	bibliotecario	t	joao.silva@escola.com	$2a$10$zGxxid8A2KUbcvXr2mBZmeRD6uRdzJCTxZV33ZcZCw08WXLDQbmz6	2024-10-01 00:00:00+00
+2	Maria Oliveira	aluno_monitor	t	maria.oliveira@escola.com	$2a$10$SXNc5gJX8X5Xidx45Urd9.GCDEoR6lmMCjppGnt1aXWYH2cw6dgpa	2024-10-02 00:00:00+00
+3	Pedro Souza	bibliotecario	t	pedro.souza@escola.com	$2a$10$woR3.PteoHUhiKe6HM6GZurS38YLM7YmNNlHEqr7Gd7Bwavwe5sSy	2024-10-03 00:00:00+00
+4	Ana Costa	aluno_monitor	t	ana.costa@escola.com	$2a$10$IkgXEI8BRqmyyJa9jxi1UO/8.wPnkmyuPaGxA7RtDTq8w4kMTZ/ei	2024-10-04 00:00:00+00
+5	Carlos Mendes	bibliotecario	t	carlos.mendes@escola.com	$2a$10$AnAUrGa3.2y8Hiy07KZcZ.ayeBx.K2sspAxCaGJDPVcTOOzb8DA1O	2024-10-05 00:00:00+00
+6	Fernanda Lima	aluno_monitor	t	fernanda.lima@escola.com	$2a$10$CtzZ2fhEFT7THPyG3aD2e.mB9rVibrCTyNYR8JKe3uaXorwU/bNlG	2024-10-06 00:00:00+00
+7	Ricardo Alves	bibliotecario	t	ricardo.alves@escola.com	$2a$10$dLg7rIMToIfguIqo67SkeuEbTyOxxGmGnkD.OIcSxlJzpFy2xuZOO	2024-10-07 00:00:00+00
+8	Juliana Pereira	aluno_monitor	t	juliana.pereira@escola.com	$2a$10$y12aaQ3jA/BKzxZKroaO4eqdtRGQSyVgoKvKR.Ji4/OxJPwl9uGsK	2024-10-08 00:00:00+00
+9	Lucas Gomes	bibliotecario	t	lucas.gomes@escola.com	$2a$10$aS5OBcfIbP9K.evCmXChTu/TXALHPXMQ6q8782cX/RIs23jLp7l3q	2024-10-09 00:00:00+00
+10	Patricia Santos	aluno_monitor	t	patricia.santos@escola.com	$2a$10$d/WJrKvxCHFQbIVnzVlPEOFQgIv7CMyWp1ifE30DDYN7mv4xYOqsa	2024-10-10 00:00:00+00
+11	admin	bibliotecario	t	admin@admin	$2a$10$N1GNH0Nk4rATx6rDloRVMu9zWGWsX2aYYNKfIlk6cH/LjDAE3qaP2	2025-02-23 00:00:00+00
 \.
 
 
 --
--- TOC entry 3575 (class 0 OID 0)
+-- TOC entry 3589 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: aluno_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1187,7 +1235,7 @@ SELECT pg_catalog.setval('adelino_cunha.aluno_id_seq', 10, true);
 
 
 --
--- TOC entry 3576 (class 0 OID 0)
+-- TOC entry 3590 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: autor_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1196,7 +1244,7 @@ SELECT pg_catalog.setval('adelino_cunha.autor_id_seq', 10, true);
 
 
 --
--- TOC entry 3577 (class 0 OID 0)
+-- TOC entry 3591 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: cronogramaalunomonitor_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1205,7 +1253,7 @@ SELECT pg_catalog.setval('adelino_cunha.cronogramaalunomonitor_id_seq', 10, true
 
 
 --
--- TOC entry 3578 (class 0 OID 0)
+-- TOC entry 3592 (class 0 OID 0)
 -- Dependencies: 239
 -- Name: emprestimo_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1214,7 +1262,7 @@ SELECT pg_catalog.setval('adelino_cunha.emprestimo_id_seq', 10, true);
 
 
 --
--- TOC entry 3579 (class 0 OID 0)
+-- TOC entry 3593 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: estanteprateleira_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1223,7 +1271,7 @@ SELECT pg_catalog.setval('adelino_cunha.estanteprateleira_id_seq', 27, true);
 
 
 --
--- TOC entry 3580 (class 0 OID 0)
+-- TOC entry 3594 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: estanteprateleirasecao_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1232,7 +1280,7 @@ SELECT pg_catalog.setval('adelino_cunha.estanteprateleirasecao_id_seq', 25, true
 
 
 --
--- TOC entry 3581 (class 0 OID 0)
+-- TOC entry 3595 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: exemplar_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1241,7 +1289,7 @@ SELECT pg_catalog.setval('adelino_cunha.exemplar_id_seq', 20, true);
 
 
 --
--- TOC entry 3582 (class 0 OID 0)
+-- TOC entry 3596 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: frequenciaalunos_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1250,7 +1298,7 @@ SELECT pg_catalog.setval('adelino_cunha.frequenciaalunos_id_seq', 10, true);
 
 
 --
--- TOC entry 3583 (class 0 OID 0)
+-- TOC entry 3597 (class 0 OID 0)
 -- Dependencies: 221
 -- Name: genero_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1259,7 +1307,7 @@ SELECT pg_catalog.setval('adelino_cunha.genero_id_seq', 10, true);
 
 
 --
--- TOC entry 3584 (class 0 OID 0)
+-- TOC entry 3598 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: livro_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1268,7 +1316,7 @@ SELECT pg_catalog.setval('adelino_cunha.livro_id_seq', 10, true);
 
 
 --
--- TOC entry 3585 (class 0 OID 0)
+-- TOC entry 3599 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: livroautor_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1277,7 +1325,7 @@ SELECT pg_catalog.setval('adelino_cunha.livroautor_id_seq', 10, true);
 
 
 --
--- TOC entry 3586 (class 0 OID 0)
+-- TOC entry 3600 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: livrogenero_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1286,7 +1334,7 @@ SELECT pg_catalog.setval('adelino_cunha.livrogenero_id_seq', 10, true);
 
 
 --
--- TOC entry 3587 (class 0 OID 0)
+-- TOC entry 3601 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: ocorrencias_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1295,7 +1343,7 @@ SELECT pg_catalog.setval('adelino_cunha.ocorrencias_id_seq', 10, true);
 
 
 --
--- TOC entry 3588 (class 0 OID 0)
+-- TOC entry 3602 (class 0 OID 0)
 -- Dependencies: 215
 -- Name: secao_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1304,7 +1352,7 @@ SELECT pg_catalog.setval('adelino_cunha.secao_id_seq', 10, true);
 
 
 --
--- TOC entry 3589 (class 0 OID 0)
+-- TOC entry 3603 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: turma_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
@@ -1313,16 +1361,16 @@ SELECT pg_catalog.setval('adelino_cunha.turma_id_seq', 10, true);
 
 
 --
--- TOC entry 3590 (class 0 OID 0)
+-- TOC entry 3604 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: postgres
 --
 
-SELECT pg_catalog.setval('adelino_cunha.usuario_id_seq', 10, true);
+SELECT pg_catalog.setval('adelino_cunha.usuario_id_seq', 11, true);
 
 
 --
--- TOC entry 3342 (class 2606 OID 16536)
+-- TOC entry 3350 (class 2606 OID 16536)
 -- Name: aluno aluno_email_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1331,7 +1379,7 @@ ALTER TABLE ONLY adelino_cunha.aluno
 
 
 --
--- TOC entry 3344 (class 2606 OID 16534)
+-- TOC entry 3352 (class 2606 OID 16534)
 -- Name: aluno aluno_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1340,7 +1388,7 @@ ALTER TABLE ONLY adelino_cunha.aluno
 
 
 --
--- TOC entry 3320 (class 2606 OID 16436)
+-- TOC entry 3328 (class 2606 OID 16436)
 -- Name: autor autor_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1349,7 +1397,7 @@ ALTER TABLE ONLY adelino_cunha.autor
 
 
 --
--- TOC entry 3358 (class 2606 OID 16637)
+-- TOC entry 3366 (class 2606 OID 16637)
 -- Name: cronogramaalunomonitor cronogramaalunomonitor_id_aluno_monitor_dia_da_semana_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1358,7 +1406,7 @@ ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor
 
 
 --
--- TOC entry 3360 (class 2606 OID 16635)
+-- TOC entry 3368 (class 2606 OID 16635)
 -- Name: cronogramaalunomonitor cronogramaalunomonitor_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1367,7 +1415,7 @@ ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor
 
 
 --
--- TOC entry 3350 (class 2606 OID 16567)
+-- TOC entry 3358 (class 2606 OID 16567)
 -- Name: emprestimo emprestimo_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1376,7 +1424,7 @@ ALTER TABLE ONLY adelino_cunha.emprestimo
 
 
 --
--- TOC entry 3310 (class 2606 OID 16403)
+-- TOC entry 3318 (class 2606 OID 16403)
 -- Name: estanteprateleira estanteprateleira_estante_prateleira_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1385,7 +1433,7 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleira
 
 
 --
--- TOC entry 3312 (class 2606 OID 16401)
+-- TOC entry 3320 (class 2606 OID 16401)
 -- Name: estanteprateleira estanteprateleira_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1394,7 +1442,7 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleira
 
 
 --
--- TOC entry 3314 (class 2606 OID 16412)
+-- TOC entry 3322 (class 2606 OID 16412)
 -- Name: estanteprateleirasecao estanteprateleirasecao_id_estante_prateleira_id_secao_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1403,7 +1451,7 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleirasecao
 
 
 --
--- TOC entry 3316 (class 2606 OID 16410)
+-- TOC entry 3324 (class 2606 OID 16410)
 -- Name: estanteprateleirasecao estanteprateleirasecao_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1412,7 +1460,7 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleirasecao
 
 
 --
--- TOC entry 3334 (class 2606 OID 16497)
+-- TOC entry 3342 (class 2606 OID 16497)
 -- Name: exemplar exemplar_id_livro_numero_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1421,7 +1469,7 @@ ALTER TABLE ONLY adelino_cunha.exemplar
 
 
 --
--- TOC entry 3336 (class 2606 OID 16495)
+-- TOC entry 3344 (class 2606 OID 16495)
 -- Name: exemplar exemplar_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1430,7 +1478,7 @@ ALTER TABLE ONLY adelino_cunha.exemplar
 
 
 --
--- TOC entry 3352 (class 2606 OID 16598)
+-- TOC entry 3360 (class 2606 OID 16598)
 -- Name: frequenciaalunos frequenciaalunos_id_aluno_data_frequencia_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1439,7 +1487,7 @@ ALTER TABLE ONLY adelino_cunha.frequenciaalunos
 
 
 --
--- TOC entry 3354 (class 2606 OID 16596)
+-- TOC entry 3362 (class 2606 OID 16596)
 -- Name: frequenciaalunos frequenciaalunos_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1448,7 +1496,7 @@ ALTER TABLE ONLY adelino_cunha.frequenciaalunos
 
 
 --
--- TOC entry 3318 (class 2606 OID 16429)
+-- TOC entry 3326 (class 2606 OID 16429)
 -- Name: genero genero_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1457,7 +1505,7 @@ ALTER TABLE ONLY adelino_cunha.genero
 
 
 --
--- TOC entry 3322 (class 2606 OID 16446)
+-- TOC entry 3330 (class 2606 OID 16446)
 -- Name: livro livro_isbn_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1466,7 +1514,7 @@ ALTER TABLE ONLY adelino_cunha.livro
 
 
 --
--- TOC entry 3324 (class 2606 OID 16444)
+-- TOC entry 3332 (class 2606 OID 16444)
 -- Name: livro livro_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1475,7 +1523,7 @@ ALTER TABLE ONLY adelino_cunha.livro
 
 
 --
--- TOC entry 3330 (class 2606 OID 16474)
+-- TOC entry 3338 (class 2606 OID 16474)
 -- Name: livroautor livroautor_id_livro_id_autor_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1484,7 +1532,7 @@ ALTER TABLE ONLY adelino_cunha.livroautor
 
 
 --
--- TOC entry 3332 (class 2606 OID 16472)
+-- TOC entry 3340 (class 2606 OID 16472)
 -- Name: livroautor livroautor_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1493,7 +1541,7 @@ ALTER TABLE ONLY adelino_cunha.livroautor
 
 
 --
--- TOC entry 3326 (class 2606 OID 16455)
+-- TOC entry 3334 (class 2606 OID 16455)
 -- Name: livrogenero livrogenero_id_livro_id_genero_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1502,7 +1550,7 @@ ALTER TABLE ONLY adelino_cunha.livrogenero
 
 
 --
--- TOC entry 3328 (class 2606 OID 16453)
+-- TOC entry 3336 (class 2606 OID 16453)
 -- Name: livrogenero livrogenero_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1511,7 +1559,7 @@ ALTER TABLE ONLY adelino_cunha.livrogenero
 
 
 --
--- TOC entry 3356 (class 2606 OID 16617)
+-- TOC entry 3364 (class 2606 OID 16617)
 -- Name: ocorrencias ocorrencias_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1520,7 +1568,7 @@ ALTER TABLE ONLY adelino_cunha.ocorrencias
 
 
 --
--- TOC entry 3308 (class 2606 OID 16394)
+-- TOC entry 3316 (class 2606 OID 16394)
 -- Name: secao secao_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1529,7 +1577,7 @@ ALTER TABLE ONLY adelino_cunha.secao
 
 
 --
--- TOC entry 3338 (class 2606 OID 16520)
+-- TOC entry 3346 (class 2606 OID 16520)
 -- Name: turma turma_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1538,7 +1586,7 @@ ALTER TABLE ONLY adelino_cunha.turma
 
 
 --
--- TOC entry 3340 (class 2606 OID 16522)
+-- TOC entry 3348 (class 2606 OID 16654)
 -- Name: turma turma_serie_turma_ano_de_entrada_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1547,7 +1595,7 @@ ALTER TABLE ONLY adelino_cunha.turma
 
 
 --
--- TOC entry 3346 (class 2606 OID 16554)
+-- TOC entry 3354 (class 2606 OID 16554)
 -- Name: usuario usuario_email_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1556,7 +1604,7 @@ ALTER TABLE ONLY adelino_cunha.usuario
 
 
 --
--- TOC entry 3348 (class 2606 OID 16552)
+-- TOC entry 3356 (class 2606 OID 16552)
 -- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1565,7 +1613,7 @@ ALTER TABLE ONLY adelino_cunha.usuario
 
 
 --
--- TOC entry 3370 (class 2606 OID 16537)
+-- TOC entry 3378 (class 2606 OID 16537)
 -- Name: aluno aluno_id_turma_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1574,7 +1622,7 @@ ALTER TABLE ONLY adelino_cunha.aluno
 
 
 --
--- TOC entry 3379 (class 2606 OID 16638)
+-- TOC entry 3387 (class 2606 OID 16638)
 -- Name: cronogramaalunomonitor cronogramaalunomonitor_id_aluno_monitor_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1583,7 +1631,7 @@ ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor
 
 
 --
--- TOC entry 3371 (class 2606 OID 16583)
+-- TOC entry 3379 (class 2606 OID 16583)
 -- Name: emprestimo emprestimo_concluido_por_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1592,7 +1640,7 @@ ALTER TABLE ONLY adelino_cunha.emprestimo
 
 
 --
--- TOC entry 3372 (class 2606 OID 16568)
+-- TOC entry 3380 (class 2606 OID 16568)
 -- Name: emprestimo emprestimo_id_aluno_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1601,7 +1649,7 @@ ALTER TABLE ONLY adelino_cunha.emprestimo
 
 
 --
--- TOC entry 3373 (class 2606 OID 16573)
+-- TOC entry 3381 (class 2606 OID 16573)
 -- Name: emprestimo emprestimo_id_exemplar_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1610,7 +1658,7 @@ ALTER TABLE ONLY adelino_cunha.emprestimo
 
 
 --
--- TOC entry 3374 (class 2606 OID 16578)
+-- TOC entry 3382 (class 2606 OID 16578)
 -- Name: emprestimo emprestimo_realizado_por_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1619,7 +1667,7 @@ ALTER TABLE ONLY adelino_cunha.emprestimo
 
 
 --
--- TOC entry 3361 (class 2606 OID 16413)
+-- TOC entry 3369 (class 2606 OID 16413)
 -- Name: estanteprateleirasecao estanteprateleirasecao_id_estante_prateleira_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1628,7 +1676,7 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleirasecao
 
 
 --
--- TOC entry 3362 (class 2606 OID 16418)
+-- TOC entry 3370 (class 2606 OID 16418)
 -- Name: estanteprateleirasecao estanteprateleirasecao_id_secao_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1637,7 +1685,7 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleirasecao
 
 
 --
--- TOC entry 3367 (class 2606 OID 16508)
+-- TOC entry 3375 (class 2606 OID 16508)
 -- Name: exemplar exemplar_id_estante_prateleira_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1646,7 +1694,7 @@ ALTER TABLE ONLY adelino_cunha.exemplar
 
 
 --
--- TOC entry 3368 (class 2606 OID 16503)
+-- TOC entry 3376 (class 2606 OID 16503)
 -- Name: exemplar exemplar_id_livro_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1655,7 +1703,7 @@ ALTER TABLE ONLY adelino_cunha.exemplar
 
 
 --
--- TOC entry 3369 (class 2606 OID 16498)
+-- TOC entry 3377 (class 2606 OID 16498)
 -- Name: exemplar exemplar_id_secao_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1664,7 +1712,43 @@ ALTER TABLE ONLY adelino_cunha.exemplar
 
 
 --
--- TOC entry 3375 (class 2606 OID 16599)
+-- TOC entry 3388 (class 2606 OID 16661)
+-- Name: autor_livros fkcqcotisett8tmmdsg2gmy3un6; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
+--
+
+ALTER TABLE ONLY adelino_cunha.autor_livros
+    ADD CONSTRAINT fkcqcotisett8tmmdsg2gmy3un6 FOREIGN KEY (livros_id) REFERENCES adelino_cunha.livro(id);
+
+
+--
+-- TOC entry 3390 (class 2606 OID 16671)
+-- Name: genero_livros fkenknnir1iu7yfdi5t7shor63m; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
+--
+
+ALTER TABLE ONLY adelino_cunha.genero_livros
+    ADD CONSTRAINT fkenknnir1iu7yfdi5t7shor63m FOREIGN KEY (livros_id) REFERENCES adelino_cunha.livro(id);
+
+
+--
+-- TOC entry 3391 (class 2606 OID 16676)
+-- Name: genero_livros fkjwshkttf4nf69ksa42nneke5q; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
+--
+
+ALTER TABLE ONLY adelino_cunha.genero_livros
+    ADD CONSTRAINT fkjwshkttf4nf69ksa42nneke5q FOREIGN KEY (generos_id) REFERENCES adelino_cunha.genero(id);
+
+
+--
+-- TOC entry 3389 (class 2606 OID 16666)
+-- Name: autor_livros fkt9924svrmphfd60nt6s2vg9fc; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
+--
+
+ALTER TABLE ONLY adelino_cunha.autor_livros
+    ADD CONSTRAINT fkt9924svrmphfd60nt6s2vg9fc FOREIGN KEY (autores_id) REFERENCES adelino_cunha.autor(id);
+
+
+--
+-- TOC entry 3383 (class 2606 OID 16599)
 -- Name: frequenciaalunos frequenciaalunos_id_aluno_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1673,7 +1757,7 @@ ALTER TABLE ONLY adelino_cunha.frequenciaalunos
 
 
 --
--- TOC entry 3376 (class 2606 OID 16604)
+-- TOC entry 3384 (class 2606 OID 16604)
 -- Name: frequenciaalunos frequenciaalunos_registrada_por_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1682,7 +1766,7 @@ ALTER TABLE ONLY adelino_cunha.frequenciaalunos
 
 
 --
--- TOC entry 3365 (class 2606 OID 16480)
+-- TOC entry 3373 (class 2606 OID 16480)
 -- Name: livroautor livroautor_id_autor_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1691,7 +1775,7 @@ ALTER TABLE ONLY adelino_cunha.livroautor
 
 
 --
--- TOC entry 3366 (class 2606 OID 16475)
+-- TOC entry 3374 (class 2606 OID 16475)
 -- Name: livroautor livroautor_id_livro_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1700,7 +1784,7 @@ ALTER TABLE ONLY adelino_cunha.livroautor
 
 
 --
--- TOC entry 3363 (class 2606 OID 16461)
+-- TOC entry 3371 (class 2606 OID 16461)
 -- Name: livrogenero livrogenero_id_genero_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1709,7 +1793,7 @@ ALTER TABLE ONLY adelino_cunha.livrogenero
 
 
 --
--- TOC entry 3364 (class 2606 OID 16456)
+-- TOC entry 3372 (class 2606 OID 16456)
 -- Name: livrogenero livrogenero_id_livro_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1718,7 +1802,7 @@ ALTER TABLE ONLY adelino_cunha.livrogenero
 
 
 --
--- TOC entry 3377 (class 2606 OID 16618)
+-- TOC entry 3385 (class 2606 OID 16618)
 -- Name: ocorrencias ocorrencias_id_aluno_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1727,7 +1811,7 @@ ALTER TABLE ONLY adelino_cunha.ocorrencias
 
 
 --
--- TOC entry 3378 (class 2606 OID 16623)
+-- TOC entry 3386 (class 2606 OID 16623)
 -- Name: ocorrencias ocorrencias_registrada_por_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: postgres
 --
 
@@ -1735,7 +1819,7 @@ ALTER TABLE ONLY adelino_cunha.ocorrencias
     ADD CONSTRAINT ocorrencias_registrada_por_fkey FOREIGN KEY (registrada_por) REFERENCES adelino_cunha.usuario(id);
 
 
--- Completed on 2025-02-22 18:55:38 UTC
+-- Completed on 2025-02-23 23:01:06 UTC
 
 --
 -- PostgreSQL database dump complete
