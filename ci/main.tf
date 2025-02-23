@@ -39,6 +39,11 @@ resource "google_compute_instance" "default" {
     email_smtp       = var.email_smtp 
     senha_email_smtp = var.senha_email_smtp
 
+    pgadmin_default_email = var.pgadmin_default_email 
+    pgadmin_listen_port = var.pgadmin_listen_port 
+    pgadmin_port = var.pgadmin_port
+    pgadmin_default_password = var.pgadmin_default_password
+
     jwt_secret       = var.jwt_secret
   })
 

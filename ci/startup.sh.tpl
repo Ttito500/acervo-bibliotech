@@ -31,6 +31,10 @@ API_PORT=${api_port}
 DB_PASSWORD=${db_password}
 SENHA_EMAIL_SMTP=${senha_email_smtp}
 JWT_SECRET=${jwt_secret}
+PGADMIN_DEFAULT_EMAIL=${pgadmin_default_email}
+PGADMIN_DEFAULT_PASSWORD=${pgadmin_default_password}
+PGADMIN_LISTEN_PORT=${pgadmin_listen_port}
+PGADMIN_PORT=${pgadmin_port}
 EOT
 
 cd bibliotech/bibliotech
