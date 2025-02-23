@@ -33,4 +33,8 @@ resource "google_compute_instance" "docker_instance" {
       jwt_secret       = var.jwt_secret
     })
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
