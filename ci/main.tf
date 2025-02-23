@@ -42,7 +42,7 @@ resource "google_compute_instance" "default" {
     jwt_secret       = var.jwt_secret
   }
 
-  metadata_startup_script = "apt-get update && apt-get install -y docker.io docker-compose git; systemctl start docker; git clone https://github.com/Ttito500/acervo-bibliotech.git /opt/app; cd /opt/app; cd bibliotech/bibliotech; docker-compose up -d --build postgres api"
+  metadata_startup_script = "echo hi > /test.txt"
 
   network_interface {
     subnetwork = google_compute_subnetwork.default.id
