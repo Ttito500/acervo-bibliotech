@@ -20,8 +20,6 @@ jobs:
 
       - name: Instalar Terraform
         uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.5.7
       
       - name: Setup terraform variables
         id: vars
