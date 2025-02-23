@@ -15,6 +15,10 @@ export EMAIL_SMTP="${email_smtp}"
 export DB_PASSWORD="${db_password}"
 export SENHA_EMAIL_SMTP="${senha_email_smtp}"
 export JWT_SECRET="${jwt_secret}"
+export PGADMIN_DEFAULT_EMAIL="${pgadmin_default_email}"
+export PGADMIN_DEFAULT_PASSWORD="${pgadmin_default_password}"
+export PGADMIN_LISTEN_PORT="${pgadmin_listen_port}"
+export PGADMIN_PORT="${pgadmin_port}"
 
 git clone "${repo_url}" /opt/app
 cd /opt/app
