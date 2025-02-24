@@ -16,20 +16,16 @@ import java.util.Locale;
 @Service
 public class UsuarioService {
 
+    @Autowired
     private UsuarioRepository usuarioRepository;
-    private UsuarioRequestMapper requestMapper;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioRequestMapper usuarioRequestMapper) {
-        this.usuarioRepository = usuarioRepository;
-        this.requestMapper = usuarioRequestMapper;
-    }
-
-    public Usuario cadastrarUsuario(UsuarioRequestDTO usuarioRequestDTO) {
-        if (usuarioRepository.existsByEmail(usuarioRequestDTO.getEmail())) {
+    public Usuario cadastrarUsuario(Usuario usuario) {
+        if (!usuario.getCargo().equals("aluno_monitor") && !usuario.getCargo().equals("bibliotecario")) {
+            throw new ValidationException("Cargo invalido! Cargos válidos: 'aluno_monitor', 'bibliotecario'.");
+        }
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             throw new ValidationException("Já existe um usuário cadastrado com esse e-mail.");
         }
-
-        Usuario usuario = requestMapper.toEntity(usuarioRequestDTO);
 
         return usuarioRepository.save(usuario);
     }
@@ -49,25 +45,12 @@ public class UsuarioService {
     }
 
     public Usuario alterarUsuario(Integer id, Usuario novoUsuario) {
-        Usuario usuarioExistente = usuarioRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new NotFoundException("Usuario com ID " + id + " não encontrado."));
+        Usuario usuarioExistente = getUsuarioById(id);
 
-        if (novoUsuario.getNome() == null || novoUsuario.getNome().isEmpty()) {
-            throw new ValidationException("O nome do usuário é obrigatório.");
-        }
-        if (novoUsuario.getEmail() == null || novoUsuario.getEmail().isEmpty()) {
-            throw new ValidationException("O email do usuário é obrigatório.");
-        }
-        if (novoUsuario.getSenha() == null || novoUsuario.getSenha().isEmpty()) {
-            throw new ValidationException("A senha do usuário é obrigatória.");
-        }
         if (!novoUsuario.getCargo().equals("aluno_monitor") && !novoUsuario.getCargo().equals("bibliotecario")) {
             throw new ValidationException("Cargo invalido! Cargos válidos: 'aluno_monitor', 'bibliotecario'.");
         }
-        if (novoUsuario.getAtivo() == null) {
-            throw new ValidationException("O campo ativo é obrigatório");
-        }
-        if (usuarioRepository.existsByEmail(novoUsuario.getEmail())) {
+        if (usuarioRepository.existsByEmail(novoUsuario.getEmail())  && novoUsuario.getEmail() != usuarioExistente.getEmail()) {
             throw new ValidationException("Já existe um usuário cadastrado com esse e-mail.");
         }
 
