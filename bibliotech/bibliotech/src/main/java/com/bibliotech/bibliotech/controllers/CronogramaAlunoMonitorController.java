@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.CronogramaAlunoMonitorDTO;
 import com.bibliotech.bibliotech.dtos.mappers.CronogramaAlunoMonitorMapper;
+import com.bibliotech.bibliotech.dtos.request.CronogramaAlunoMonitorRequestDTO;
 import com.bibliotech.bibliotech.services.CronogramaAlunoMonitorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class CronogramaAlunoMonitorController {
     }
 
     @PostMapping
-    public ResponseEntity<CronogramaAlunoMonitorDTO> criar(@RequestBody CronogramaAlunoMonitorDTO cronograma) {
-        return ResponseEntity.ok(mapper.toDTO(service.salvar(cronograma)));
+    public ResponseEntity<CronogramaAlunoMonitorDTO> criar(@RequestBody CronogramaAlunoMonitorRequestDTO cronograma) {
+        return ResponseEntity.ok(mapper.toDTO(service.salvar(mapper.toEntity(cronograma))));
     }
 
     @GetMapping
@@ -38,8 +39,8 @@ public class CronogramaAlunoMonitorController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CronogramaAlunoMonitorDTO> atualizar(@PathVariable Integer id, @RequestBody CronogramaAlunoMonitorDTO cronograma) {
-        return ResponseEntity.ok(mapper.toDTO(service.atualizar(id, cronograma)));
+    public ResponseEntity<CronogramaAlunoMonitorDTO> atualizar(@PathVariable Integer id, @RequestBody CronogramaAlunoMonitorRequestDTO cronograma) {
+        return ResponseEntity.ok(mapper.toDTO(service.atualizar(id, mapper.toEntity(cronograma))));
     }
 
     @DeleteMapping("/{id}")
