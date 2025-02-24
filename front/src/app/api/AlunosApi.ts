@@ -3,7 +3,7 @@ import { getQueryString } from '../shared/utils';
 import { ResponsePagination } from '../interfaces/pagination';
 import api from '../shared/axios/axios';
 
-const API_URL = 'http://localhost:8090/alunos';
+const API_URL = '/alunos';
 
 export const getAlunos = async (filtros?: AlunoFiltros): Promise<ResponsePagination<GetAlunoResponse>> => {
   try {

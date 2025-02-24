@@ -4,7 +4,7 @@ import { ResponsePagination } from '../interfaces/pagination';
 import { CreateExemplarRequest, GetExemplarResponse, UpdateExemplarRequest } from '../interfaces/exemplar';
 import api from '../shared/axios/axios';
 
-const API_URL = 'http://localhost:8090/livros';
+const API_URL = '/livros';
 
 export const getLivros = async (filtros: LivroFiltros): Promise<ResponsePagination<GetLivroResponse>> => {
   try {

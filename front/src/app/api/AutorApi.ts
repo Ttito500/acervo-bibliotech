@@ -1,7 +1,7 @@
 import api from "../shared/axios/axios";
 import { GetAutorResponse } from "../interfaces/autor";
 
-const API_URL = "http://localhost:8090/autor";
+const API_URL = "/autor";
 
 export const getAutores = async (nome: string): Promise<GetAutorResponse[]> => {
   try {

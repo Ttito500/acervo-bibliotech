@@ -59,7 +59,8 @@ const VerFrequencias: React.FC = () => {
   };
 
   const handleExportar = async () => {
-    const pdfUrl = `http://localhost:8090/frequencia-alunos/export/pdf?data=${format(dataFrequencia, "yyyy-MM-dd")}`;
+    const baseUrl = await window.electron.getStoreValue('baseUrl');
+    const pdfUrl = `${baseUrl}/frequencia-alunos/export/pdf?data=${format(dataFrequencia, "yyyy-MM-dd")}`;
 
     try {
       await window.electron.savePdf(pdfUrl);

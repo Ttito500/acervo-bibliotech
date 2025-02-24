@@ -61,7 +61,8 @@ const VerOcorrencias: React.FC = () => {
   };
 
   const handleExportar = async () => {
-    const pdfUrl = `http://localhost:8090/ocorrencias/export/pdf?dataInicio=${format(dataOcorrenciaInicial, "yyyy-MM-dd")}&dataFim=${format(dataOcorrenciaFim, "yyyy-MM-dd")}`;
+    const baseUrl = await window.electron.getStoreValue('baseUrl');
+    const pdfUrl = `${baseUrl}/ocorrencias/export/pdf?dataInicio=${format(dataOcorrenciaInicial, "yyyy-MM-dd")}&dataFim=${format(dataOcorrenciaFim, "yyyy-MM-dd")}`;
 
     try {
       await window.electron.savePdf(pdfUrl);

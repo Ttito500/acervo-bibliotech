@@ -8,7 +8,7 @@ import {
   GetSecaoEstantePrateleiraResponse,
 } from "../interfaces/secao";
 
-const API_URL = "http://localhost:8090/secoes";
+const API_URL = "/secoes";
 
 export const getSecoes = async (): Promise<GetSecaoResponse[]> => {
   try {
@@ -59,7 +59,7 @@ export const deleteSecao = async (id: number): Promise<void> => {
 
 export const deleteSecaoEstantePrateleira = async (idSecao: number, idEstantePrateleira: number): Promise<void> => {
   try {
-    await api.delete(`http://localhost:8090/estantesecao`, { data: { idSecao, idEstantePrateleira } });
+    await api.delete(`/estantesecao`, { data: { idSecao, idEstantePrateleira } });
   } catch (error) {
     console.error("Erro ao deletar prateleira da seção:", error);
     throw error;
@@ -78,7 +78,7 @@ export const getSecaoEstantePrateleiras = async (idSecao: number): Promise<GetSe
 
 export const addSecaoEstantePrateleira = async (idSecao: number, idEstantePrateleira: number): Promise<any> => {
   try {
-    const response = await api.post<any>(`http://localhost:8090/estantesecao`, { idSecao, idEstantePrateleira });
+    const response = await api.post<any>(`/estantesecao`, { idSecao, idEstantePrateleira });
     return response.data;
   } catch (error) {
     console.error("Erro ao adicionar estante-prateleira na seção:", error);

@@ -2,7 +2,7 @@ import api from "../shared/axios/axios";
 import { getQueryString } from "../shared/utils";
 import { CreateOcorrenciaRequest, OcorrenciaFiltros, GetOcorrenciaResponse } from "../interfaces/ocorrencia";
 
-const API_URL = "http://localhost:8090/ocorrencias";
+const API_URL = "/ocorrencias";
 
 export const getOcorrencias = async (filtros: OcorrenciaFiltros): Promise<GetOcorrenciaResponse[]> => {
   try {

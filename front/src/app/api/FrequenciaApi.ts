@@ -2,7 +2,7 @@ import api from "../shared/axios/axios";
 import { getQueryString } from "../shared/utils";
 import { CreateFrequenciaRequest, FrequenciaFiltros, GetFrequenciaResponse } from "../interfaces/frequencia";
 
-const API_URL = "http://localhost:8090/frequencia-alunos";
+const API_URL = "/frequencia-alunos";
 
 export const getFrequencias = async (filtros: FrequenciaFiltros): Promise<GetFrequenciaResponse[]> => {
   try {

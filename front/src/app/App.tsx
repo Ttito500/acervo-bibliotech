@@ -17,20 +17,21 @@ import { notificarAtrasos } from "./api/EmprestimoApi";
 import Cronograma from "./pages/Cronograma/Cronograma";
 import LoadingBar from "./shared/components/loading-bar/LoadingBar";
 import ErrorToast from "./shared/components/error-toast/ErrorToast";
+import { login } from "./api/UsuarioApi";
 
 const App: React.FC = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleLogin = (email: string, senha: string) => {
-    // temporario
-    setIsAuthenticated(true);
-    return
+  const handleLogin = async (email: string, senha: string) => {
 
-    if (email === "adelino@email.com" && senha === "cunha") {
+    try {
+      const data = await login({ email, senha });
+      const token = data.token;
+      await window.electron.setStoreValue('token', token);
       setIsAuthenticated(true);
-    } else {
-      alert("Credenciais incorretas");
+    } catch(err) {
+      console.log(err);
     }
   };
 

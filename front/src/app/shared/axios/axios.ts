@@ -9,8 +9,14 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
+  async (config: InternalAxiosRequestConfig) => {
     NProgress.start();
+    const token = await window.electron.getStoreValue('token');
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error: AxiosError) => {

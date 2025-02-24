@@ -2,7 +2,7 @@ import api from "../shared/axios/axios";
 import { CreateTurmaRequest, CreateTurmaResponse, GetTurmaResponse, TurmaFiltros, UpdateTurmaRequest, UpdateTurmaResponse } from "../interfaces/turma";
 import { getQueryString } from "../shared/utils";
 
-const API_URL = "http://localhost:8090/turmas";
+const API_URL = "/turmas";
 
 export const getTurmas = async (filtros?: TurmaFiltros): Promise<GetTurmaResponse[]> => {
   try {
