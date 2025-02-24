@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.dtos.mappers;
 
 import com.bibliotech.bibliotech.dtos.CronogramaAlunoMonitorDTO;
+import com.bibliotech.bibliotech.dtos.request.CronogramaAlunoMonitorRequestDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.UsuarioResponseMapper;
 import com.bibliotech.bibliotech.models.CronogramaAlunoMonitor;
 import com.bibliotech.bibliotech.services.UsuarioService;
@@ -22,10 +23,9 @@ public class CronogramaAlunoMonitorMapper {
        this.usuarioResponseMapper = usuarioResponseMapper;
     }
 
-    public static CronogramaAlunoMonitor toEntity(CronogramaAlunoMonitorDTO dto) {
+    public static CronogramaAlunoMonitor toEntity(CronogramaAlunoMonitorRequestDTO dto) {
         CronogramaAlunoMonitor cronograma = new CronogramaAlunoMonitor();
-        cronograma.setId(dto.getId());
-        cronograma.setUsuario(usuarioService.buscarUsuarioAlunoMonitorPorId(dto.getAlunoMonitor().getId()));
+        cronograma.setUsuario(usuarioService.buscarUsuarioAlunoMonitorPorId(dto.getIdAlunoMonitor()));
         cronograma.setDiaDaSemana(dto.getDiaDaSemana());
         return cronograma;
     }
