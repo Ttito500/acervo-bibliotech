@@ -1,20 +1,20 @@
 package com.bibliotech.bibliotech.dtos.request.mappers;
 
-import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.UsuarioRequestPatchDTO;
 import com.bibliotech.bibliotech.models.Usuario;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UsuarioRequestMapper {
-    public Usuario toEntity(UsuarioRequestDTO requestDTO){
+public class UsuarioRequestPatchMapper {
+    public Usuario toEntity(UsuarioRequestPatchDTO requestDTO){
         Usuario usuario = new Usuario();
 
         usuario.setNome(requestDTO.getNome());
         usuario.setCargo(requestDTO.getCargo());
         usuario.setEmail(requestDTO.getEmail());
         usuario.setSenha(new BCryptPasswordEncoder().encode(requestDTO.getSenha()));
-        usuario.setAtivo(true);
+        usuario.setAtivo(requestDTO.isAtivo());
 
         return usuario;
     }

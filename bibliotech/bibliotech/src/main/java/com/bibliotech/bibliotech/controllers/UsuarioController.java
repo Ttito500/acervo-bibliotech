@@ -2,28 +2,30 @@ package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.AutenticacaoDTO;
 import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.UsuarioRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.UsuarioRequestMapper;
+import com.bibliotech.bibliotech.dtos.request.mappers.UsuarioRequestPatchMapper;
 import com.bibliotech.bibliotech.dtos.response.LoginResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.UsuarioResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.UsuarioResponseMapper;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.models.Usuario;
+import com.bibliotech.bibliotech.repositories.UsuarioRepository;
 import com.bibliotech.bibliotech.services.TokenService;
 import com.bibliotech.bibliotech.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @RestController
@@ -34,9 +36,6 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Autowired
-    private UsuarioRequestMapper usuarioRequestMapper;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -45,40 +44,44 @@ public class UsuarioController {
     @Autowired
     private UsuarioResponseMapper usuarioResponseMapper;
 
+    @Autowired
+    private UsuarioRequestMapper usuarioRequestMapper;
+
+    @Autowired
+    private UsuarioRequestPatchMapper usuarioRequestPatchMapper;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @PostMapping("")
     public ResponseEntity<UsuarioResponseDTO> criarUsuario (@Valid @RequestBody UsuarioRequestDTO body, BindingResult result){
         if (result.hasErrors()) {
             throw new ValidationException(result);
         }
 
-        String senhaEncriptada = new BCryptPasswordEncoder().encode(body.getSenha());
-        body.setSenha(senhaEncriptada);
-
-        UsuarioResponseDTO usuario = usuarioResponseMapper.toDto(usuarioService.cadastrarUsuario(body));
-        return ResponseEntity.ok(usuario);
+        return ResponseEntity.ok(usuarioResponseMapper.toDto(usuarioService.cadastrarUsuario(usuarioRequestMapper.toEntity(body))));
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Integer id){
-        return ResponseEntity.ok(usuarioService.getUsuarioById(id));
+    public ResponseEntity<UsuarioResponseDTO> getUsuarioById(@PathVariable Integer id){
+        return ResponseEntity.ok(usuarioResponseMapper.toDto(usuarioService.getUsuarioById(id)));
     }
 
     @GetMapping("/filtrar")
-    public List<Usuario> filtrarUsuarios(@RequestParam(required = false) String nome,
+    public List<UsuarioResponseDTO> filtrarUsuarios(@RequestParam(required = false) String nome,
                                      @RequestParam(required = false) String cargo,
                                      @RequestParam(required = false) Boolean ativo) {
-        return usuarioService.filtrarUsuarios(nome, cargo, ativo);
+        return usuarioResponseMapper.toDtoList(usuarioService.filtrarUsuarios(nome, cargo, ativo));
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<Usuario> alterarUsuario(@PathVariable Integer id, @Valid @RequestBody Usuario body, BindingResult result){
+    public ResponseEntity<UsuarioResponseDTO> alterarUsuario(@PathVariable Integer id, @Valid @RequestBody UsuarioRequestPatchDTO body, BindingResult result){
         if (result.hasErrors()) {
             throw new ValidationException(result);
         }
 
-        Usuario usuarioAtualizado = usuarioService.alterarUsuario(id, body);
-        return ResponseEntity.ok(usuarioAtualizado);
+        return ResponseEntity.ok(usuarioResponseMapper.toDto(usuarioService.alterarUsuario(id, usuarioRequestPatchMapper.toEntity(body))));
     }
 
     @PatchMapping("/{id}/inativar")
@@ -100,6 +103,10 @@ public class UsuarioController {
             var autenticacao = authenticationManager.authenticate(tokenAutenticacao);
 
             var token = tokenService.gerarToken((Usuario) autenticacao.getPrincipal());
+
+            Usuario usuario = usuarioRepository.getUsuariosByEmailAndAtivoTrue(autenticacaoDTO.getEmail());
+            usuario.setDataUltimoAcesso(LocalDate.now().atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant());
+            usuarioService.alterarUsuario(usuario.getId(), usuario);
 
             return ResponseEntity.ok(new LoginResponseDTO(token));
         } catch (AuthenticationException e) {

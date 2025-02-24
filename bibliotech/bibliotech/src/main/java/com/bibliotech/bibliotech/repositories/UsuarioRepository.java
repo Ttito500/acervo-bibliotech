@@ -27,4 +27,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByIdAndCargo(Integer id, String alunoMonitor);
 
     UserDetails findByEmail(String email);
+
+    Usuario getUsuariosByEmailAndAtivoTrue(String email);
 }
