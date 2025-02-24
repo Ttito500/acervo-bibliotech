@@ -29,17 +29,12 @@ public class EmprestimoController {
     private final EmprestimosService emprestimosService;
 
     @Autowired
-    private TokenService tokenService;
-
-    @Autowired
     public EmprestimoController(EmprestimosService emprestimosService) {
         this.emprestimosService = emprestimosService;
     }
 
     @PostMapping("")
     public ResponseEntity<EmprestimoResponseDTO> realizarEmprestimo(@RequestBody EmprestimoRequestDTO requestDTO) {
-        requestDTO.setIdUsuario(tokenService.getUsuarioId());
-
         EmprestimoResponseDTO emprestimoResponseDTO = emprestimosService.realizarEmprestimo(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoResponseDTO);
     }
