@@ -70,9 +70,33 @@ variable "email_smtp" {
   default     = "testeacervo01@gmail.com"
 }
 
+variable "pgadmin_default_email" {
+  description = "Email para o SMTP"
+  type        = string
+  default     = "pedrorivaldev@gmail.com"
+}
+
+variable "pgadmin_listen_port" {
+  description = "Porta de escuta do PGADMIN"
+  type        = number
+  default     = 80
+}
+
+variable "pgadmin_port" {
+  description = "Porta para PGADMIN"
+  type        = number
+  default     = 15432
+}
+
 # Variáveis secretas (não definir default)
 variable "db_password" {
   description = "Senha do banco de dados"
+  type        = string
+  sensitive   = true
+}
+
+variable "pgadmin_default_password" {
+  description = "Senha do PGADMIN"
   type        = string
   sensitive   = true
 }

@@ -40,6 +40,10 @@ jobs:
           db_password="${{ secrets.DB_PASSWORD }}"
           senha_email_smtp="${{ secrets.SENHA_EMAIL_SMTP }}"
           jwt_secret="${{ secrets.JWT_SECRET }}"
+          pgadmin_default_email="${{ vars.PGADMIN_DEFAULT_EMAIL }}"
+          pgadmin_default_password="${{ secrets.PGADMIN_DEFAULT_PASSWORD }}"
+          pgadmin_listen_port="${{ vars.PGADMIN_LISTEN_PORT }}"
+          pgadmin_port="${{ vars.PGADMIN_PORT }}"
           EOF
 
       - name: Terraform Init
