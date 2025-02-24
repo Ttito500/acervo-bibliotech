@@ -42,7 +42,7 @@ public class CronogramaAlunoMonitorService {
 
     @Transactional
     public CronogramaAlunoMonitor salvar(CronogramaAlunoMonitorDTO cronograma) {
-        if (cronograma.getIdAlunoMonitor() == null) {
+        if (cronograma.getAlunoMonitor().getId() == null) {
             throw new ValidationException("O id do aluno monitor não pode ser nulo.");
         }
         if (cronograma.getDiaDaSemana() == null || cronograma.getDiaDaSemana().equals("")) {
@@ -51,7 +51,7 @@ public class CronogramaAlunoMonitorService {
         if (!isDiaValido(cronograma.getDiaDaSemana())) {
             throw new ValidationException("Dia da semana inválido. Os dias válidos são: segunda-feira, terca-feira, quarta-feira, quinta-feira e sexta-feira.");
         }
-        if (repository.existsByUsuarioIdAndDiaDaSemana(cronograma.getIdAlunoMonitor(), cronograma.getDiaDaSemana())) {
+        if (repository.existsByUsuarioIdAndDiaDaSemana(cronograma.getAlunoMonitor().getId(), cronograma.getDiaDaSemana())) {
             throw new ValidationException("Já existe um cronograma para esse aluno no mesmo dia da semana.");
         }
         if (repository.countByDiaDaSemana(cronograma.getDiaDaSemana()) > 2) {
@@ -65,7 +65,7 @@ public class CronogramaAlunoMonitorService {
 
     @Transactional
     public CronogramaAlunoMonitor atualizar(Integer id, CronogramaAlunoMonitorDTO cronograma) {
-        if (cronograma.getIdAlunoMonitor() == null) {
+        if (cronograma.getAlunoMonitor().getId() == null) {
             throw new ValidationException("O id do aluno monitor não pode ser nulo.");
         }
         if (cronograma.getDiaDaSemana() == null || cronograma.getDiaDaSemana().equals("")) {
@@ -74,7 +74,7 @@ public class CronogramaAlunoMonitorService {
         if (!isDiaValido(cronograma.getDiaDaSemana())) {
             throw new ValidationException("Dia da semana inválido. Os dias válidos são: segunda-feira, terca-feira, quarta-feira, quinta-feira e sexta-feira.");
         }
-        if (repository.existsByUsuarioIdAndDiaDaSemana(cronograma.getIdAlunoMonitor(), cronograma.getDiaDaSemana())) {
+        if (repository.existsByUsuarioIdAndDiaDaSemana(cronograma.getAlunoMonitor().getId(), cronograma.getDiaDaSemana())) {
             throw new ValidationException("Já existe um cronograma para esse aluno no mesmo dia da semana.");
         }
         if (repository.countByDiaDaSemana(cronograma.getDiaDaSemana()) > 2) {
@@ -82,7 +82,7 @@ public class CronogramaAlunoMonitorService {
         }
 
         CronogramaAlunoMonitor existente = buscarPorId(id);
-        existente.setUsuario(usuarioService.buscarUsuarioAlunoMonitorPorId(cronograma.getIdAlunoMonitor()));
+        existente.setUsuario(usuarioService.buscarUsuarioAlunoMonitorPorId(cronograma.getAlunoMonitor().getId()));
         existente.setDiaDaSemana(cronograma.getDiaDaSemana());
 
         return repository.save(existente);
