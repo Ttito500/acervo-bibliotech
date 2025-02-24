@@ -35,7 +35,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.PATCH, "/alunos/ativar/{id}").hasRole("bibliotecario")
 
                         .requestMatchers(HttpMethod.GET, "/autor/buscar").authenticated() //testar
-                        .requestMatchers(HttpMethod.GET, "/autor/sem-associacao").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/autor/sem-associacao").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/cronograma").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.GET, "/cronograma").authenticated()
@@ -74,7 +74,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.DELETE, "/frequencia-alunos/{id}").hasRole("bibliotecario")
 
                         .requestMatchers(HttpMethod.GET, "/generos/buscar").hasAnyRole("bibliotecario", "aluno_monitor")
-                        .requestMatchers(HttpMethod.GET, "/generos/sem-associacao").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/generos/sem-associacao").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/ocorrencias").hasAnyRole("bibliotecario", "aluno_monitor")
                         .requestMatchers(HttpMethod.POST, "/frequencia-alunos/export/pdf").hasRole("bibliotecario")
