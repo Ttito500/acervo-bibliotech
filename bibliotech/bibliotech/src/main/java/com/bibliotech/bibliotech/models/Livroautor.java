@@ -21,11 +21,11 @@ public class Livroautor {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_livro", nullable = false)
-    private Livro idLivro;
+    private Livro livro;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_autor", nullable = false)
-    private Autor idAutor;
+    private Autor autor;
 
 }

@@ -1,62 +1,100 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faCheck, faUsersRectangle, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 import AlunosListagem from './templates/AlunosListagem';
 import AlunosFiltros from "./templates/AlunosFiltros";
 import Modal from 'react-bootstrap/Modal';
 import AlunosCadastrarAluno from "./templates/AlunosCadastrarAluno";
-import { CreateAlunoRequest, GetAlunoResponse, UpdateAlunoRequest } from "./../../interfaces/aluno";
-import { createAluno, deleteAluno, getAlunos, updateAluno } from "../../api/AlunosApi";
-import Spinner from "react-bootstrap/Spinner";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
+import { AlunoFiltros, CreateAlunoRequest, GetAlunoResponse, UpdateAlunoRequest } from "./../../interfaces/aluno";
+import { createAluno, inativarAluno, getAlunos, updateAluno, ativarAluno } from "../../api/AlunosApi";
 import AlunosEditarAluno from "./templates/AlunosEditarAluno";
-import AlunosEmprestimosAluno from "./templates/AlunosEmprestimosAluno";
+import GerenciarTurmas from "./turmas/GerenciarTurmas";
+import EmprestimosAluno from "./templates/EmprestimosAluno";
+import Pagination from "react-bootstrap/esm/Pagination";
+import { ResponsePagination } from "./../../interfaces/pagination";
 
 const Alunos: React.FC = () => {
+
+  const[showGerenciarTurmas, setShowGerenciarTurmas] = useState(false)
+  const handleCloseGerenciarTurmas = () => setShowGerenciarTurmas(false);
+  const handleShowGerenciarTurmas = () => setShowGerenciarTurmas(true);
+
+  const [showVerEmprestimos, setShowVerEmprestimos] = useState(false);
+  const handleCloseVerEmprestimos = () => setShowVerEmprestimos(false);
+  const handleShowVerEmprestimos = (aluno: GetAlunoResponse) => {
+    setEditingAluno(aluno);
+    setShowVerEmprestimos(true);
+  }
 
 	const [showEditar, setShowEditar] = useState(false);
   const handleCloseEditar = () => setShowEditar(false);
   const handleShowEditar = (aluno: GetAlunoResponse) => {
 		setEditingAluno(aluno);
-		setFormDataEditarAluno(aluno);
+		setFormDataEditarAluno({
+      nome: aluno.nome, 
+      email: aluno.email, 
+      situacao: aluno.situacao, 
+      telefone: aluno.telefone, 
+      idTurma: aluno.turma.id 
+    });
 		setShowEditar(true);
 	}
 
-  const [showEmprestimos, setShowEmprestimos] = useState(false);
-  const handleCloseEmprestimos = () => setShowEmprestimos(false);
-  const handleShowEmprestimos = () => setShowEmprestimos(true);
-
-  const [showExcluirAluno, setShowExcluirAluno] = useState(false);
-  const handleCloseExcluirAluno = () => setShowExcluirAluno(false);
-  const handleShowExcluirAluno = (id: number) => {
-		setDeletingAluno(id);
-		setShowExcluirAluno(true);
+  const [showActiveAluno, setShowActiveAluno] = useState(false);
+  const handleCloseActiveAluno = () => setShowActiveAluno(false);
+  const handleShowActiveAluno = (id: number) => {
+		setActivatingAluno(id);
+		setShowActiveAluno(true);
 	}
 
-	const [alunos, setAlunos] = useState<GetAlunoResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [showInactiveAluno, setShowInactiveAluno] = useState(false);
+  const handleCloseInactiveAluno = () => setShowInactiveAluno(false);
+  const handleShowInactiveAluno = (id: number) => {
+		setInactivatingAluno(id);
+		setShowInactiveAluno(true);
+	}
+
+	const [alunos, setAlunos] = useState<ResponsePagination<GetAlunoResponse>>();
 	const [editingAluno, setEditingAluno] = useState<GetAlunoResponse | null>(null);
-	const [deletingAluno, setDeletingAluno] = useState<number | null>(null);
-	const [showToastError, setShowToastError] = useState(false);
-	const [showToastSuccess, setShowToastSuccess] = useState(false);
+	const [activatingAluno, setActivatingAluno] = useState<number | null>(null);
+	const [inactivatingAluno, setInactivatingAluno] = useState<number | null>(null);
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const sizePage = 10;
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+  
+  useEffect(() => {
+    listarAlunos();
+  }, [currentPage]);
 
   useEffect(() => {
     listarAlunos();
   }, []);
 
+
   const listarAlunos = async (): Promise<void> => {
-		setLoading(true);
+    const filtros: AlunoFiltros = {
+      nome: formDataFiltrar.nome,
+      situacao: formDataFiltrar.situacao,
+      serie: formDataFiltrar.serie,
+      turma: formDataFiltrar.turma,
+      ativo: formDataFiltrar.ativo,
+      page: (currentPage - 1),
+      size: sizePage
+    }
 
     try {
-      const data = await getAlunos();
+      const data = await getAlunos(filtros);
       setAlunos(data);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
+      setTotalPages(data.totalPages);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const [showCadastrar, setShowCadastrar] = useState(false);
@@ -64,9 +102,18 @@ const Alunos: React.FC = () => {
 	const handleShowCadastrar = () => setShowCadastrar(true);
 
 	const [formDataCadastrarAluno, setFormDataCadastrarAluno] = useState({
+    idTurma: null as number,
     nome: '',
     telefone: '',
     email: '',
+  });
+
+  const [formDataFiltrar, setFormDataFiltrar] = useState({
+    nome: '',
+    serie: null as number,
+    turma: '',
+    situacao: '',
+    ativo: true
   });
 
 	const handleChangeCadastrarAluno = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -74,30 +121,44 @@ const Alunos: React.FC = () => {
     setFormDataCadastrarAluno({ ...formDataCadastrarAluno, [name]: value });
   };
 
-  const handleSubmitCadastrarAluno = async (): Promise<void> => {
-    try {
-			const body: CreateAlunoRequest = {
-				email: formDataCadastrarAluno.email,
-				idTurma: {
-					id: 1,
-					serie: 1,
-					turma: 'A'
-				},
-				nome: formDataCadastrarAluno.nome,
-				telefone: formDataCadastrarAluno.telefone
-			}
-      await createAluno(body);
+  const handleChangeFiltrar = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
 
-      listarAlunos();
-			setShowToastSuccess(true);
-			setFormDataCadastrarAluno(null);
-      handleCloseCadastrar();
-    } catch (err) {
-			setShowToastError(true);
+    if(name == "ativo") {
+      setFormDataFiltrar({...formDataFiltrar,
+        ativo: value === "true" ? true : value === "false" ? false : null,
+      });
+    } else {
+      setFormDataFiltrar({ ...formDataFiltrar, [name]: value });
     }
   };
 
+  const handleSubmitCadastrarAluno = async (): Promise<void> => {
+    const body: CreateAlunoRequest = {
+      email: formDataCadastrarAluno.email,
+      idTurma: Number(formDataCadastrarAluno.idTurma),
+      nome: formDataCadastrarAluno.nome,
+      telefone: formDataCadastrarAluno.telefone
+    }
+
+    try {
+      await createAluno(body);
+  
+      listarAlunos();
+      setFormDataCadastrarAluno({
+        idTurma: null as number,
+        nome: '',
+        telefone: '',
+        email: '',
+      });
+      handleCloseCadastrar();
+		} catch(err) {
+			console.log(err)
+		}
+  };
+
 	const [formDataEditarAluno, setFormDataEditarAluno] = useState({
+    idTurma: null as number,
     nome: '',
     telefone: '',
     email: '',
@@ -110,71 +171,53 @@ const Alunos: React.FC = () => {
   };
 
   const handleSubmitEditarAluno = async (): Promise<void> => {
+    const body: UpdateAlunoRequest = {
+      email: formDataEditarAluno.email,
+      situacao: formDataEditarAluno.situacao,
+      idTurma: Number(formDataEditarAluno.idTurma),
+      nome: formDataEditarAluno.nome,
+      telefone: formDataEditarAluno.telefone
+    }
+
     try {
-			const body: UpdateAlunoRequest = {
-				email: formDataEditarAluno.email,
-				situacao: formDataEditarAluno.situacao,
-				idTurma: {
-					id: 1,
-					serie: 1,
-					turma: 'A'
-				},
-				nome: formDataEditarAluno.nome,
-				telefone: formDataEditarAluno.telefone
-			}
       await updateAluno(editingAluno.id, body);
-
+  
       listarAlunos();
-			setShowToastSuccess(true);
-			setFormDataEditarAluno(null);
+      setFormDataEditarAluno({
+        idTurma: null as number,
+        nome: '',
+        telefone: '',
+        email: '',
+        situacao: ''
+      });
       handleCloseEditar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
-	const handleSubmitExcluirAluno = async (): Promise<void> => {
-    try {
-      await deleteAluno(deletingAluno);
-
-      listarAlunos();
-			setShowToastSuccess(true);
-      handleCloseExcluirAluno();
-    } catch (err) {
-      setShowToastError(true);
+	const handleSubmitActiveInactiveAluno = async (ativo: boolean): Promise<void> => {
+    if(ativo) {
+      try {
+        await inativarAluno(inactivatingAluno);
+        handleCloseInactiveAluno();
+      } catch(err) {
+        console.log(err)
+      }
+    } else {
+      try {
+        await ativarAluno(activatingAluno);
+        handleCloseActiveAluno();
+      } catch(err) {
+        console.log(err)
+      }
     }
-  };
 
-	if (loading) {
-    return <Spinner animation="border" role="status"><span className="visually-hidden">Carregando...</span></Spinner>;
-  }
+    listarAlunos();
+  };
 
 	return (
 		<section className="alunos">
-			<ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-        >
-					<Toast bg="success" onClose={() => setShowToastSuccess(false)} show={showToastSuccess} delay={3000} autohide>
-						<Toast.Header>
-							<strong className="me-auto">Operação realizada com sucesso!</strong>
-						</Toast.Header>
-					</Toast>
-				</ToastContainer>
-
-				<ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-        >
-					<Toast bg="danger" onClose={() => setShowToastError(false)} show={showToastError} delay={3000} autohide>
-						<Toast.Header>
-							<strong className="me-auto">Não foi possível concluir a operação. Tente novamente.</strong>
-						</Toast.Header>
-					</Toast>
-				</ToastContainer>
-				
 			<Modal
         show={showEditar}
         onHide={handleCloseEditar}
@@ -193,7 +236,7 @@ const Alunos: React.FC = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseEditar}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="success" onClick={handleSubmitEditarAluno}>
             <FontAwesomeIcon icon={faCheck} /> Salvar
@@ -202,47 +245,46 @@ const Alunos: React.FC = () => {
       </Modal>
 
       <Modal
-        show={showEmprestimos}
-        onHide={handleCloseEmprestimos}
-        size="xl"
-        backdrop="static"
-        centered
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Empréstimos do Aluno</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <AlunosEmprestimosAluno />
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="info" className="btn-blue" onClick={handleCloseEmprestimos}>Ok</Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={showExcluirAluno}
-        onHide={handleCloseExcluirAluno}
+        show={showActiveAluno}
+        onHide={handleCloseActiveAluno}
         size="lg"
         backdrop="static"
         centered
         keyboard={false}
+        className="Modais-Confirmacao-Custon"
       >
         <Modal.Header closeButton>
           <Modal.Title>Confirmação</Modal.Title>
         </Modal.Header>
 
-        <Modal.Body>Tem certeza que deseja excluir este aluno?</Modal.Body>
+        <Modal.Body>Tem certeza que deseja ativar este aluno?</Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseExcluirAluno}>
-            Desistir
+          <Button variant="secondary" onClick={handleCloseActiveAluno}>
+            Cancelar
           </Button>
-          <Button variant="danger" onClick={handleSubmitExcluirAluno}>
-            <FontAwesomeIcon icon={faTrash} /> Excluir
-          </Button>
+          <Button variant="success" onClick={() => handleSubmitActiveInactiveAluno(false)}>Ativar</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showInactiveAluno}
+        onHide={handleCloseInactiveAluno}
+        size="lg"
+        backdrop="static"
+        centered
+        keyboard={false}
+        className="Modais-Confirmacao-Custon"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmação</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>Tem certeza que deseja inativar este aluno?</Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseInactiveAluno}>Cancelar</Button>
+          <Button variant="danger" onClick={() => handleSubmitActiveInactiveAluno(true)}>Inativar</Button>
         </Modal.Footer>
       </Modal>
 
@@ -268,23 +310,87 @@ const Alunos: React.FC = () => {
 					</Modal.Body>
 
 					<Modal.Footer>
-						<Button variant="secondary" onClick={handleCloseCadastrar}>Desistir</Button>
+						<Button variant="secondary" onClick={handleCloseCadastrar}>Cancelar</Button>
 						<Button variant="success" onClick={handleSubmitCadastrarAluno}><FontAwesomeIcon icon={faCheck} /> Salvar</Button>
 					</Modal.Footer>
 				</Modal>
+
+        <Button variant="info" className="btn-orange" onClick={handleShowGerenciarTurmas}>
+          <FontAwesomeIcon icon={faUsersRectangle} /> Gerenciar Turmas
+        </Button>
+
+        <Modal
+          show={showGerenciarTurmas}
+          onHide={handleCloseGerenciarTurmas}
+          size="xl"
+          backdrop="static"
+          centered
+          keyboard={false}>
+
+          <Modal.Header closeButton>
+            <Modal.Title>Gerenciar Turmas</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <GerenciarTurmas/>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseGerenciarTurmas}>Ok</Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal
+          show={showVerEmprestimos}
+          onHide={handleCloseVerEmprestimos}
+          size="xl"
+          backdrop="static"
+          centered
+          keyboard={false}
+        >
+
+          <Modal.Header closeButton>
+            {editingAluno && 
+              <Modal.Title>
+                Emprestimos do Aluno: <span className="custom-variavel">{editingAluno.nome} - {editingAluno.turma.serie}ª{editingAluno.turma.turma}</span>
+              </Modal.Title>         
+            }
+          </Modal.Header>
+
+          <Modal.Body>
+            <EmprestimosAluno aluno={editingAluno}/>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseVerEmprestimos}>Ok</Button>
+          </Modal.Footer>
+        </Modal>
 			</div>
 
 			<div className="w-100">
-				<AlunosFiltros />
+				<AlunosFiltros formData={formDataFiltrar} onSearch={listarAlunos} onChange={handleChangeFiltrar}  />
 			</div>
 
 			<div className="w-100">
 				<AlunosListagem 
 					alunos={alunos} 
 					onEdit={handleShowEditar} 
-					onDelete={handleShowExcluirAluno} 
-					onEmprestimos={handleShowEmprestimos} 
+					onActive={handleShowActiveAluno} 
+          onInactive={handleShowInactiveAluno}
+					onEmprestimos={handleShowVerEmprestimos} 
 				/>
+
+        <Pagination>
+          <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+          <Pagination.Prev onClick={() => handlePageChange((currentPage - 1))} disabled={currentPage === 1} />
+          <Pagination.Item
+            active={true}
+          >
+            {currentPage}
+          </Pagination.Item>
+          <Pagination.Next onClick={() => handlePageChange((currentPage + 1))} disabled={currentPage === totalPages} />
+          <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+        </Pagination>
 			</div>
 		</section>
 	);

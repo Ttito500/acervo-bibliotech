@@ -1,17 +1,20 @@
 package com.bibliotech.bibliotech.controllers;
 
-import com.bibliotech.bibliotech.exception.ValidationException;
+import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
+import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.TurmaResponseMapper;
 import com.bibliotech.bibliotech.models.Turma;
+import com.bibliotech.bibliotech.services.PdfExportService;
 import com.bibliotech.bibliotech.services.TurmasService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/turmas")
@@ -20,45 +23,65 @@ public class TurmaController {
     @Autowired
     private TurmasService turmasService;
 
-    @PostMapping("")
-    public ResponseEntity<Turma> criarTurma (@Valid @RequestBody Turma body, BindingResult result){
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
+    @Autowired
+    private TurmaResponseMapper turmaResponseMapper;
 
-        Turma turma = turmasService.cadastrarTurma(body);
-        URI location = URI.create("/turmas/" + turma.getId());
-        return ResponseEntity.created(location).body(turma);
+    @Autowired
+    private PdfExportService pdfExportService;
+
+    @PostMapping("")
+    public ResponseEntity<TurmaResponseDTO> criarTurma(@RequestBody TurmaRequestDTO requestDTO){
+
+        TurmaResponseDTO turmaResponseDTO = turmaResponseMapper.toDto(turmasService.cadastrarTurma(requestDTO));
+        URI location = URI.create("/turmas/" + turmaResponseDTO.getId());
+        return ResponseEntity.created(location).body(turmaResponseDTO);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Turma> getTurmaById(@PathVariable Integer id){
-        return ResponseEntity.ok(turmasService.getTurmaById(id));
+    public ResponseEntity<TurmaResponseDTO> getTurmaById(@PathVariable Integer id){
+        return ResponseEntity.ok(turmaResponseMapper.toDto(turmasService.getTurmaById(id)));
     }
 
     @GetMapping("/filtrar")
-    public List<Turma> filtrarTurmas(@RequestParam(required = false) Integer serie,
-                                     @RequestParam(required = false) String turma,
-                                     @RequestParam(required = false) Integer anoDeEntrada,
-                                     @RequestParam(required = false) Boolean ativo) {
-        return turmasService.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
+    public ResponseEntity<List<TurmaResponseDTO>> filtrarTurmas(@RequestParam(required = false) Integer serie,
+                                                                @RequestParam(required = false) String turma,
+                                                                @RequestParam(required = false) Integer anoDeEntrada,
+                                                                @RequestParam(required = false) Boolean ativo) {
+        List<Turma> turmas = turmasService.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
+        return ResponseEntity.ok(turmas.stream()
+                .map(turmaResponseMapper::toDto)
+                .toList());
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<Turma> alterarTurma(@PathVariable Integer id, @Valid @RequestBody Turma body, BindingResult result){
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
-
-        Turma turmaAtualizada = turmasService.alterarTurma(id, body);
-        return ResponseEntity.ok(turmaAtualizada);
+    public ResponseEntity<TurmaResponseDTO> alterarTurma(@PathVariable Integer id, @RequestBody TurmaRequestDTO requestDTO) {
+        TurmaResponseDTO turmaAtualizadaResponseDTO = turmaResponseMapper.toDto(turmasService.alterarTurma(id, requestDTO));
+        return ResponseEntity.ok(turmaAtualizadaResponseDTO);
     }
 
-    @PatchMapping("/{id}/inativar")
+    @PatchMapping("/inativar/{id}")
     public ResponseEntity<Void> inativarTurma(@PathVariable Integer id) {
         turmasService.inativarTurma(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/ativar/{id}")
+    public ResponseEntity<Void> ativarTurma(@PathVariable Integer id) {
+        turmasService.ativarTurma(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/mais-leitoras/export/pdf")
+    public ResponseEntity<byte[]> exportTopLeitoresPdf(@RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim, @RequestParam(required = false) Integer qtdMax) {
+        byte[] pdfBytes = pdfExportService.exportTurmasMaisLeitoras(turmasService.obterTurmasMaisLeitoras(dataInicio, dataFim, qtdMax));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "turma-mais-leitoras.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
+    }
 }

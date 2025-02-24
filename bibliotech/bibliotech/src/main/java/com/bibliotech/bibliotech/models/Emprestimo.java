@@ -19,19 +19,16 @@ public class Emprestimo {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_aluno", nullable = false)
     private Aluno aluno;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_exemplar", nullable = false)
     private Exemplar exemplar;
 
     @Column(name = "data_emprestimo", nullable = false)
     private LocalDate dataEmprestimo;
-
-    @Column(name = "data_conclusao")
-    private LocalDate dataConclusao;
 
     @Column(name = "data_prazo", nullable = false)
     private LocalDate dataPrazo;
@@ -46,14 +43,17 @@ public class Emprestimo {
     @Column(name = "observacao", length = 500)
     private String observacao;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "realizado_por", nullable = false)
     private Usuario realizadoPor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "concluido_por")
     private Usuario concluidoPor;
 
-    @Column(name = "data_devolucao")
-    private LocalDate dataDevolucao;
+    @Column(name = "data_conclusao")
+    private LocalDate dataConclusao;
+
+    @Column(name = "data_ultima_notificacao")
+    private LocalDate dataUltimaNotificacao;
 }

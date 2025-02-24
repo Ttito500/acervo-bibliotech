@@ -4,20 +4,19 @@ import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.models.Aluno;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class AlunoResponseMapper {
 
-    private final TurmaResponseMapper turmaResponseMapper;
+    private static TurmaResponseMapper turmaResponseMapper;
 
     public AlunoResponseMapper(TurmaResponseMapper turmaResponseMapper) {
         this.turmaResponseMapper = turmaResponseMapper;
     }
 
-    public AlunoResponseDTO toDto(Aluno aluno) {
-        if (aluno == null) {
-            return null;
-        }
-
+    public static AlunoResponseDTO toDto(Aluno aluno) {
         AlunoResponseDTO dto = new AlunoResponseDTO();
         dto.setId(aluno.getId());
         dto.setNome(aluno.getNome());
@@ -32,5 +31,11 @@ public class AlunoResponseMapper {
         dto.setAtivo(aluno.getAtivo());
 
         return dto;
+    }
+
+    public static List<AlunoResponseDTO> toDtoList(List<Aluno> alunos) {
+        return alunos.stream()
+                .map(AlunoResponseMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

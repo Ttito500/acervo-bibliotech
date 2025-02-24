@@ -9,4 +9,6 @@ public class TurmaResponseDTO {
     private Integer id;
     private Integer serie;
     private String turma;
+    private Integer anoDeEntrada;
+    private boolean ativo;
 }

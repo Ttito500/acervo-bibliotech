@@ -1,19 +1,18 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faCheck } from '@fortawesome/free-solid-svg-icons';
 import AcervoListagem from './templates/AcervoListagem';
 import AcervoFiltros from "./templates/AcervoFiltros";
 import Modal from 'react-bootstrap/Modal';
 import AcervoCadastrarLivro from "./templates/AcervoCadastrarLivro";
-import { createLivro, deleteLivro, getLivros, updateLivro } from './../../api/AcervoApi';
-import { CreateLivroRequest, GetLivroResponse, UpdateLivroRequest } from "./../../interfaces/acervo";
-import Spinner from "react-bootstrap/Spinner";
+import { ativarLivro, createLivro, getLivros, inativarLivro, updateLivro } from './../../api/AcervoApi';
+import { CreateLivroRequest, GetLivroResponse, LivroFiltros, UpdateLivroRequest } from "./../../interfaces/acervo";
 import AcervoEditarLivro from "./templates/AcervoEditarLivro";
-import AcervoEmprestimosLivro from "./templates/AcervoEmprestimosLivro";
-import AcervoRealizarEmprestimo from "./templates/AcervoRealizarEmprestimo";
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
+import Exemplares from "./Exemplares/Exemplares";
+import EmprestimosLivro from "./templates/EmprestimosLivro";
+import { ResponsePagination } from "./../../interfaces/pagination";
+import Pagination from "react-bootstrap/esm/Pagination";
 
 const Acervo: React.FC = () => {
 
@@ -25,53 +24,127 @@ const Acervo: React.FC = () => {
 		setShowEditar(true);
 	}
 
-  const [showEmprestimos, setShowEmprestimos] = useState(false);
-  const handleCloseEmprestimos = () => setShowEmprestimos(false);
-  const handleShowEmprestimos = () => setShowEmprestimos(true);
-
-  const [showRealizarEmprestimo, setShowRealizarEmprestimo] = useState(false);
-  const handleCloseRealizarEmprestimo = () => setShowRealizarEmprestimo(false);
-  const handleShowRealizarEmprestimo = () => setShowRealizarEmprestimo(true);
-
-  const [showExcluirLivro, setShowExcluirLivro] = useState(false);
-  const handleCloseExcluirLivro = () => setShowExcluirLivro(false);
-  const handleShowExcluirLivro = (id: number) => {
-		setDeletingLivro(id);
-		setShowExcluirLivro(true);
+	const [showAtivarLivro, setShowAtivarLivro] = useState(false);
+	const handleCloseAtivarLivro = () => setShowAtivarLivro(false);
+	const handleShowAtivarLivro = (id: number) => {
+		setActivatingLivro(id);
+		setShowAtivarLivro(true);
 	}
 
-	const [livros, setLivros] = useState<GetLivroResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+	const [showInativarLivro, setShowInativarLivro] = useState(false);
+	const handleCloseInativarLivro = () => setShowInativarLivro(false);
+	const handleShowInativarLivro = (id: number) => {
+		setInactivatingLivro(id);
+		setShowInativarLivro(true);
+	}
+
+	const [activatingLivro, setActivatingLivro] = useState<number | null>(null);
+	const [inactivatingLivro, setInactivatingLivro] = useState<number | null>(null);
+
+	const [livros, setLivros] = useState<ResponsePagination<GetLivroResponse>>();
 	const [editingLivro, setEditingLivro] = useState<GetLivroResponse | null>(null);
-	const [deletingLivro, setDeletingLivro] = useState<number | null>(null);
-	const [showToastError, setShowToastError] = useState(false);
-	const [showToastSuccess, setShowToastSuccess] = useState(false);
+
+	const [showExemplares, setShowExemplares] = useState(false);
+	const handleCloseExemplares = () => setShowExemplares(false);
+	const handleShowExemplares = (livro: GetLivroResponse) => {
+		setEditingLivro(livro);
+		setShowExemplares(true);
+	}
+
+	const [showVerEmprestimos, setShowVerEmprestimos] = useState(false);
+	const handleCloseVerEmprestimos = () => setShowVerEmprestimos(false);
+	const handleShowVerEmprestimos  = (livro: GetLivroResponse) => {
+		setEditingLivro(livro);
+		setShowVerEmprestimos(true);
+	}
+
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [totalPages, setTotalPages] = useState<number>(0);
+	const sizePage = 10;
+
+	const [formDataFiltrar, setFormDataFiltrar] = useState<LivroFiltros>({
+		isbn: '',
+		ativo: true,
+		autor: '',
+		genero: '',
+		titulo: ''
+	});
+
+	const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+	useEffect(() => {
+		listarLivros();
+	}, [currentPage]);
 
   useEffect(() => {
     listarLivros();
   }, []);
 
-  const listarLivros = async (): Promise<void> => {
-		setLoading(true);
+	const handleChangeFiltros = (e: ChangeEvent<HTMLInputElement>): void => {
+		const { name, value } = e.target;
 
-    try {
-      const data = await getLivros();
-      setLivros(data);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
+    if(name == "ativo") {
+      setFormDataFiltrar({...formDataFiltrar,
+        ativo: value === "true" ? true : value === "false" ? false : null,
+      });
+    } else {
+      setFormDataFiltrar({ ...formDataFiltrar, [name]: value });
     }
+	};
+
+  const listarLivros = async (): Promise<void> => {
+		try {
+			const filtros: LivroFiltros = {
+				isbn: formDataFiltrar.isbn,
+				ativo: formDataFiltrar.ativo,
+				titulo: formDataFiltrar.titulo,
+				autor: formDataFiltrar.autor,
+				genero: formDataFiltrar.genero,
+				page: (currentPage - 1),
+				size: sizePage
+			}
+			const data = await getLivros(filtros);
+			setLivros(data);
+			setTotalPages(data.totalPages);
+		} catch(err) {
+			console.log(err)
+		}
   };
+
+	const handleSubmitActiveInactiveLivro = async (ativo: boolean): Promise<void> => {
+		if(ativo) {
+			try {
+				await inativarLivro(inactivatingLivro);
+				handleCloseInativarLivro();
+			} catch(err) {
+				console.log(err)
+			}
+		} else {
+			try {
+				await ativarLivro(activatingLivro);
+				handleCloseAtivarLivro();
+			} catch(err) {
+				console.log(err)
+			}
+		}
+
+		listarLivros();
+	};
 
 	const [showCadastrar, setShowCadastrar] = useState(false);
 	const handleCloseCadastrar = () => setShowCadastrar(false);
 	const handleShowCadastrar = () => setShowCadastrar(true);
 
-	const [formDataCadastrarLivro, setFormDataCadastrarLivro] = useState({
+	const [formDataCadastrarLivro, setFormDataCadastrarLivro] = useState<CreateLivroRequest>({
     isbn: '',
     titulo: '',
-    autor: ''
+		autores: [],
+		generos: [],
+		idEstanteprateleira: null as number,
+		idSecao: null as number,
+		qtdExemplares: null as number
   });
 
 	const handleChangeCadastrarLivro = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -80,38 +153,39 @@ const Acervo: React.FC = () => {
   };
 
   const handleSubmitCadastrarLivro = async (): Promise<void> => {
-    try {
-			const body: CreateLivroRequest = {
-				isbn: formDataCadastrarLivro.isbn,
-				autor: formDataCadastrarLivro.autor,
-				titulo: formDataCadastrarLivro.titulo,
-				observacao: "",
-				situacao: "disponivel",
-				idEstantePrateleira: {
-					id: 1,
-					estante: "3",
-					prateleira: "6"
-				},
-				idSecao: {
-					id: 1,
-					nome: "literatura portuguesa"
-				}
-			}
-      await createLivro(body);
+		const body: CreateLivroRequest = {
+			isbn: formDataCadastrarLivro.isbn,
+			titulo: formDataCadastrarLivro.titulo,
+			autores: formDataCadastrarLivro.autores,
+			generos: formDataCadastrarLivro.generos,
+			idEstanteprateleira: Number(formDataCadastrarLivro.idEstanteprateleira),
+			idSecao: Number(formDataCadastrarLivro.idSecao),
+			qtdExemplares: Number(formDataCadastrarLivro.qtdExemplares)
+		}
+		try {
+			await createLivro(body);
+			listarLivros();
+			setFormDataCadastrarLivro({
+				isbn: '',
+				titulo: '',
+				autores: [],
+				generos: [],
+				idEstanteprateleira: null as number,
+				idSecao: null as number,
+				qtdExemplares: null as number
+			});
+			handleCloseCadastrar();
+		} catch(err) {
+			console.log(err)
+		}
 
-      listarLivros();
-			setShowToastSuccess(true);
-			setFormDataCadastrarLivro(null);
-      handleCloseCadastrar();
-    } catch (err) {
-			setShowToastError(true);
-    }
   };
 
-	const [formDataEditarLivro, setFormDataEditarLivro] = useState({
+	const [formDataEditarLivro, setFormDataEditarLivro] = useState<UpdateLivroRequest>({
     isbn: '',
-    titulo: '',
-    autor: ''
+		titulo: '',
+		autores: [],
+		generos: []
   });
 
 	const handleChangeEditarLivro = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -120,78 +194,32 @@ const Acervo: React.FC = () => {
   };
 
   const handleSubmitEditarLivro = async (): Promise<void> => {
-    try {
-			const body: UpdateLivroRequest = {
-				isbn: formDataEditarLivro.isbn,
-				autor: formDataEditarLivro.autor,
-				titulo: formDataEditarLivro.titulo,
-				observacao: "",
-				situacao: "disponivel",
-				idEstantePrateleira: {
-					id: 1,
-					estante: "3",
-					prateleira: "6"
-				},
-				idSecao: {
-					id: 1,
-					nome: "literatura portuguesa"
-				}
-			}
-      await updateLivro(editingLivro.id, body);
+		const body: UpdateLivroRequest = {
+			isbn: formDataEditarLivro.isbn,
+			autores: formDataEditarLivro.autores,
+			titulo: formDataEditarLivro.titulo,
+			generos: formDataEditarLivro.generos
+		}
 
-      listarLivros();
-			setShowToastSuccess(true);
-			setFormDataEditarLivro(null);
-      handleCloseEditar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+		try {
+			await updateLivro(editingLivro.id, body);
+			listarLivros();
+			setFormDataEditarLivro({
+				isbn: '',
+				titulo: '',
+				autores: [],
+				generos: []
+			});
+			handleCloseEditar();
+		} catch(err) {
+			console.log(err)
+		}
+
   };
-
-	const handleSubmitExcluirLivro = async (): Promise<void> => {
-    try {
-      await deleteLivro(deletingLivro);
-
-      listarLivros();
-			setShowToastSuccess(true);
-      handleCloseExcluirLivro();
-    } catch (err) {
-      setShowToastError(true);
-    }
-  };
-
-	if (loading) {
-    return <Spinner animation="border" role="status"><span className="visually-hidden">Carregando...</span></Spinner>;
-  }
 
 	return (
-		<section className="acervo">
-			<div className="acervo-acoes">
-
-				<ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-        >
-					<Toast bg="success" onClose={() => setShowToastSuccess(false)} show={showToastSuccess} delay={3000} autohide>
-						<Toast.Header>
-							<strong className="me-auto">Operação realizada com sucesso!</strong>
-						</Toast.Header>
-					</Toast>
-				</ToastContainer>
-
-				<ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-        >
-					<Toast bg="danger" onClose={() => setShowToastError(false)} show={showToastError} delay={3000} autohide>
-						<Toast.Header>
-							<strong className="me-auto">Não foi possível concluir a operação. Tente novamente.</strong>
-						</Toast.Header>
-					</Toast>
-				</ToastContainer>
-
+		<section className="indentacaoPadrao">
+			<div className="indentacaoPadrao-acoes">
 				<Button variant="info" className="btn-blue" onClick={handleShowCadastrar}>
 					<FontAwesomeIcon icon={faPlus} /> Cadastrar Novo Livro
 				</Button>
@@ -213,7 +241,7 @@ const Acervo: React.FC = () => {
 					</Modal.Body>
 
 					<Modal.Footer>
-						<Button variant="secondary" onClick={handleCloseCadastrar}>Desistir</Button>
+						<Button variant="secondary" onClick={handleCloseCadastrar}>Cancelar</Button>
 						<Button variant="success" onClick={handleSubmitCadastrarLivro}><FontAwesomeIcon icon={faCheck} /> Salvar</Button>
 					</Modal.Footer>
 				</Modal>
@@ -236,7 +264,7 @@ const Acervo: React.FC = () => {
 
 					<Modal.Footer>
 						<Button variant="secondary" onClick={handleCloseEditar}>
-							Desistir
+							Cancelar
 						</Button>
 						<Button variant="success" onClick={handleSubmitEditarLivro}>
 							<FontAwesomeIcon icon={faCheck} /> Salvar
@@ -245,99 +273,127 @@ const Acervo: React.FC = () => {
 				</Modal>
 
 				<Modal
-					show={showEmprestimos}
-					onHide={handleCloseEmprestimos}
+					show={showVerEmprestimos}
+					onHide={handleCloseVerEmprestimos}
 					size="xl"
 					backdrop="static"
 					centered
 					keyboard={false}
+					className="Modais-VerEmprestimos-Custon"
 				>
+
 					<Modal.Header closeButton>
-						<Modal.Title>
-							Emprestimos do Livro: A Hora da Estrela - Clarice Lispector
-						</Modal.Title>
+						{editingLivro && 
+							<Modal.Title>Emprestimos do Livro: <span className="custom-variavel">{editingLivro.titulo}</span></Modal.Title>
+						}
 					</Modal.Header>
 
 					<Modal.Body>
-						<AcervoEmprestimosLivro />
+						<EmprestimosLivro livro={editingLivro} />
 					</Modal.Body>
 
 					<Modal.Footer>
-						<Button
-							variant="info"
-							className="btn-blue"
-							onClick={handleCloseEmprestimos}
-						>
-							Ok
-						</Button>
+						<Button variant="secondary" onClick={handleCloseVerEmprestimos}>Ok</Button>
+
 					</Modal.Footer>
 				</Modal>
 
 				<Modal
-					show={showRealizarEmprestimo}
-					onHide={handleCloseRealizarEmprestimo}
+					show={showExemplares}
+					onHide={handleCloseExemplares}
 					size="xl"
 					backdrop="static"
 					centered
-					keyboard={false}
-				>
+					keyboard={false}>
+
 					<Modal.Header closeButton>
-						<Modal.Title>
-							Realizar Emprestimo do Livro: A Hora da Estrela - Clarice Lispector
-						</Modal.Title>
+						<Modal.Title>Gerenciar Exemplares</Modal.Title>
 					</Modal.Header>
 
 					<Modal.Body>
-						<AcervoRealizarEmprestimo />
+						<Exemplares livro={editingLivro}/>
 					</Modal.Body>
 
 					<Modal.Footer>
-						<Button variant="secondary" onClick={handleCloseRealizarEmprestimo}>
-							Desistir
-						</Button>
-						<Button variant="success">
-							<FontAwesomeIcon icon={faCheck} /> Realizar Empréstimo
-						</Button>
+						<Button variant="secondary" onClick={handleCloseExemplares}>Ok</Button>
 					</Modal.Footer>
 				</Modal>
 
 				<Modal
-					show={showExcluirLivro}
-					onHide={handleCloseExcluirLivro}
+					show={showAtivarLivro}
+					onHide={handleCloseAtivarLivro}
 					size="lg"
 					backdrop="static"
 					centered
 					keyboard={false}
+					className="Modais-Confirmacao-Custon"
 				>
 					<Modal.Header closeButton>
 						<Modal.Title>Confirmação</Modal.Title>
 					</Modal.Header>
 
-					<Modal.Body>Tem certeza que deseja excluir este livro?</Modal.Body>
+					<Modal.Body>Tem certeza que deseja ativar este livro?</Modal.Body>
 
 					<Modal.Footer>
-						<Button variant="secondary" onClick={handleCloseExcluirLivro}>
-							Desistir
+						<Button variant="secondary" onClick={handleCloseAtivarLivro}>
+							Cancelar
 						</Button>
-						<Button variant="danger" onClick={handleSubmitExcluirLivro}>
-							<FontAwesomeIcon icon={faTrash} /> Excluir
-						</Button>
+						<Button variant="success" onClick={() => handleSubmitActiveInactiveLivro(false)}>Ativar</Button>
 					</Modal.Footer>
 				</Modal>
+
+				<Modal
+					show={showInativarLivro}
+					onHide={handleCloseInativarLivro}
+					size="lg"
+					backdrop="static"
+					centered
+					keyboard={false}
+					className="Modais-Confirmacao-Custon"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title>Confirmação</Modal.Title>
+					</Modal.Header>
+
+					<Modal.Body>Tem certeza que deseja inativar este livro?</Modal.Body>
+
+					<Modal.Footer>
+						<Button variant="secondary" onClick={handleCloseInativarLivro}>Cancelar</Button>
+						<Button variant="danger" onClick={() => handleSubmitActiveInactiveLivro(true)}>Inativar</Button>
+					</Modal.Footer>
+				</Modal>
+
 			</div>
 
 			<div className="w-100">
-				<AcervoFiltros />
+				<AcervoFiltros 
+					formData={formDataFiltrar} 
+					onChange={handleChangeFiltros} 
+					onSearch={listarLivros} 
+				/>
 			</div>
 
 			<div className="w-100">
 				<AcervoListagem 
 					livros={livros} 
 					onEdit={handleShowEditar} 
-					onDelete={handleShowExcluirLivro} 
-					onEmprestimos={handleShowEmprestimos} 
-					onRealizarEmprestimo={handleShowRealizarEmprestimo} 
+					onAtivar={handleShowAtivarLivro} 
+          onInativar={handleShowInativarLivro}
+					onEmprestimos={handleShowVerEmprestimos} 
+					onExemplares={handleShowExemplares}
 				/>
+
+				<Pagination>
+          <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+          <Pagination.Prev onClick={() => handlePageChange((currentPage - 1))} disabled={currentPage === 1} />
+          <Pagination.Item
+            active={true}
+          >
+            {currentPage}
+          </Pagination.Item>
+          <Pagination.Next onClick={() => handlePageChange((currentPage + 1))} disabled={currentPage === totalPages} />
+          <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+        </Pagination>
 			</div>
 		</section>
 	);

@@ -11,16 +11,13 @@ import {
   Estante,
   GetSecaoEstantePrateleiraResponse,
 } from "./../../../../interfaces/secao";
-import Spinner from "react-bootstrap/Spinner";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 import {
   addSecaoEstantePrateleira,
   deleteSecaoEstantePrateleira,
   getSecaoEstantePrateleiras,
 } from "./../../../../api/SecoesApi";
 import { GetEstantePrateleiraResponse } from "./../../../../interfaces/estante-prateleira";
-import { getEstantePrateleiras } from "./../../../../api/EstantePrateleiraApi";
+import { getEstantePrateleiras, getEstantePrateleirasPorSecao } from "./../../../../api/EstantePrateleiraApi";
 
 function transformEstantes(lista: GetEstantePrateleiraResponse[] | GetSecaoEstantePrateleiraResponse[]): Estante[] {
   const mapa = new Map<string, Estante>();
@@ -59,51 +56,36 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
   const [selectedEstantePrateleira, setSelectedEstantePrateleira] = useState("");
   const [validatedFormEstantePrateleira, setValidatedFormEstantePrateleira] = useState(false);
 
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
-
   const handleSubmitExcluirPrateleira = async (
     idEstantePrateleira: number
   ): Promise<void> => {
     try {
       await deleteSecaoEstantePrateleira(idSecao, idEstantePrateleira);
-
       listarEstantesPorSecao();
-      setShowToastSuccess(true);
-    } catch (err) {
-      setShowToastError(true);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const listarEstantes = async (): Promise<void> => {
-    setLoading(true);
-
     try {
       const data = await getEstantePrateleiras();
       const dataTransform = transformEstantes(data);
       console.log(dataTransform)
       setEstantes(dataTransform);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const listarEstantesPorSecao = async (): Promise<void> => {
-    setLoading(true);
-
     try {
-      const data = await getSecaoEstantePrateleiras(idSecao);
+      const data = await getEstantePrateleirasPorSecao(idSecao);
       const dataTransform = transformEstantes(data);
       setEstantesPorSecao(dataTransform);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const handleChangeSelectEstantePrateleira = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -111,26 +93,21 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
   };
   
   const handleSubmitFormAdicionarEstantePrateleira = async () => {
-    setLoading(true);
+    if (!selectedEstantePrateleira) {
+      setValidatedFormEstantePrateleira(true);
+    } else {
+      setValidatedFormEstantePrateleira(false);
+      console.log("Prateleira selecionada:", selectedEstantePrateleira);
 
-    try {
-      if (!selectedEstantePrateleira) {
-        setValidatedFormEstantePrateleira(true);
-      } else {
-        setValidatedFormEstantePrateleira(false);
-        console.log("Prateleira selecionada:", selectedEstantePrateleira);
-  
-        if(selectedEstantePrateleira && !isNaN(Number(selectedEstantePrateleira))) {
+      if(selectedEstantePrateleira && !isNaN(Number(selectedEstantePrateleira))) {
+        try {
           await addSecaoEstantePrateleira(idSecao, Number(selectedEstantePrateleira));
-          setShowToastSuccess(true);
+          listarEstantesPorSecao();
+        } catch(err) {
+          console.log(err)
         }
       }
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
     }
-
   };
 
   useEffect(() => {
@@ -138,54 +115,8 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
     listarEstantes();
   }, []);
 
-  if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Carregando...</span>
-      </Spinner>
-    );
-  }
-
   return (
     <>
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="success"
-          onClose={() => setShowToastSuccess(false)}
-          show={showToastSuccess}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="danger"
-          onClose={() => setShowToastError(false)}
-          show={showToastError}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">
-              Não foi possível concluir a operação. Tente novamente.
-            </strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
       <div className={styles.editar}>
         <div className={styles.editar_title}>Editar</div>
 
@@ -266,8 +197,8 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
                   required
                 >
                   <option value="">Selecione</option>
-                  {estantes.map((estante) => (
-                    estante.prateleiras.map((prateleira) => (
+                  {estantes?.map((estante) => (
+                    estante.prateleiras?.map((prateleira) => (
                       <option key={prateleira.id} value={prateleira.id}>
                         Estante {estante.estante} / Prateleira {prateleira.prateleira}
                       </option>
@@ -292,13 +223,13 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
         </Form>
 
         <div className={styles.estantes_listagem}>
-          {estantesPorSecao.map((estante) => (
+          {estantesPorSecao?.map((estante) => (
             <div key={estante.estante} className={styles.estantes_listagem_item}>
               <div className={styles.estantes_listagem_item_estante}>
                 Estante {estante.estante}
               </div>
 
-              {estante.prateleiras.map((prateleira) => (
+              {estante.prateleiras?.map((prateleira) => (
                 <div
                   key={prateleira.prateleira}
                   className={styles.estantes_listagem_item_prateleira}

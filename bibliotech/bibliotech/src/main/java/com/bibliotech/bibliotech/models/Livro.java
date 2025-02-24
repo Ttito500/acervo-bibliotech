@@ -1,8 +1,14 @@
 package com.bibliotech.bibliotech.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,4 +29,15 @@ public class Livro {
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = true;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "livro")
+    private List<Exemplar> exemplares;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "livros")
+    private List<Autor> autores;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "livros")
+    private List<Genero> generos;
 }

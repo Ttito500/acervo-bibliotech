@@ -1,11 +1,16 @@
-import axios from 'axios';
-import { CreateAlunoRequest, CreateAlunoResponse, GetAlunoResponse, UpdateAlunoRequest, UpdateAlunoResponse } from '../interfaces/aluno';
+import { AlunoFiltros, CreateAlunoRequest, CreateAlunoResponse, GetAlunoResponse, UpdateAlunoRequest, UpdateAlunoResponse } from '../interfaces/aluno';
+import { getQueryString } from '../shared/utils';
+import { ResponsePagination } from '../interfaces/pagination';
+import api from '../shared/axios/axios';
 
 const API_URL = 'http://localhost:8090/alunos';
 
-export const getAlunos = async (): Promise<GetAlunoResponse[]> => {
+export const getAlunos = async (filtros?: AlunoFiltros): Promise<ResponsePagination<GetAlunoResponse>> => {
   try {
-    const response = await axios.get<GetAlunoResponse[]>(API_URL);
+    const queryString = getQueryString(filtros);
+    const url = queryString ? `${API_URL}?${queryString}` : `${API_URL}`;
+
+    const response = await api.get<ResponsePagination<GetAlunoResponse>>(url);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar alunos:', error);
@@ -15,7 +20,7 @@ export const getAlunos = async (): Promise<GetAlunoResponse[]> => {
 
 export const createAluno = async (aluno: CreateAlunoRequest): Promise<CreateAlunoResponse> => {
   try {
-    const response = await axios.post<CreateAlunoResponse>(API_URL, aluno);
+    const response = await api.post<CreateAlunoResponse>(API_URL, aluno);
     return response.data;
   } catch (error) {
     console.error('Erro ao criar aluno:', error);
@@ -25,7 +30,7 @@ export const createAluno = async (aluno: CreateAlunoRequest): Promise<CreateAlun
 
 export const updateAluno = async (id: number, aluno: UpdateAlunoRequest): Promise<UpdateAlunoResponse> => {
   try {
-    const response = await axios.put<UpdateAlunoResponse>(`${API_URL}/${id}`, aluno);
+    const response = await api.put<UpdateAlunoResponse>(`${API_URL}/${id}`, aluno);
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar aluno:', error);
@@ -33,11 +38,20 @@ export const updateAluno = async (id: number, aluno: UpdateAlunoRequest): Promis
   }
 };
 
-export const deleteAluno = async (id: number): Promise<void> => {
+export const inativarAluno = async (id: number): Promise<void> => {
   try {
-    await axios.delete(`${API_URL}/${id}`);
+    await api.patch(`${API_URL}/inativar/${id}`);
   } catch (error) {
-    console.error('Erro ao deletar aluno:', error);
+    console.error('Erro ao inativar aluno:', error);
+    throw error;
+  }
+};
+
+export const ativarAluno = async (id: number): Promise<void> => {
+  try {
+    await api.patch(`${API_URL}/ativar/${id}`);
+  } catch (error) {
+    console.error('Erro ao ativar aluno:', error);
     throw error;
   }
 };

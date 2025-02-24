@@ -1,22 +1,128 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import { UpdateLivroRequest } from "./../../../interfaces/acervo";
+import { getAutores } from "./../../../api/AutorApi";
+import { WithContext as ReactTags, SEPARATORS, Tag } from 'react-tag-input';
+import { getGeneros } from "./../../../api/GeneroApi";
 
 interface AcervoEditarLivroProps {
-  formData: {
-    isbn: string;
-    titulo: string;
-    autor: string;
-  };
+  formData: UpdateLivroRequest
   onChange: (e: ChangeEvent<any>) => void;
 }
 
 const AcervoEditarLivro: React.FC<AcervoEditarLivroProps> = ({ formData, onChange }) => {
+  const [queryAutor, setQueryAutor] = useState('');
+  const [suggestionsAutores, setSuggestionsAutores] = useState<Tag[]>([]);
+  const [selectedTagAutores, setSelectedTagAutores] = useState<Tag[]>([]);
+
+  const handleDeleteAutor = (index: number) => {
+    setSelectedTagAutores(selectedTagAutores.filter((_, i) => i !== index));
+  };
+
+  const handleAdditionAutor = (autor: Tag) => {
+    setSelectedTagAutores((prevSelecteds) => {
+      return [...prevSelecteds, autor];
+    });
+  };
+
+  const handleInputChangeAutores = (value: any, event: any): void => {
+    setQueryAutor(value);
+  }
+
+  useEffect(() => {
+    const selecteds = selectedTagAutores.map((tag) => { return {nome: tag.text} } );
+    onChange({ target: { value: selecteds, name: "autores" }} as any)
+  }, [selectedTagAutores]);
+
+  useEffect(() => {
+    const listarAutores = async () => {
+      if (queryAutor.length > 2) {
+        try {
+          const response = await getAutores(queryAutor);
+          const data = response.map((autor) => {
+            return {
+              id: String(autor.id),
+              className: '',
+              text: autor.nome
+            } as Tag;
+          })
+          setSuggestionsAutores(data);
+        } catch (error) {
+          console.error('Erro ao buscar autores:', error);
+        }
+      } else {
+        setSuggestionsAutores([]);
+      }
+    };
+
+    listarAutores();
+  }, [queryAutor]);
+
+  const [queryGenero, setQueryGenero] = useState('');
+  const [suggestionsGeneros, setSuggestionsGeneros] = useState<Tag[]>([]);
+  const [selectedTagGeneros, setSelectedTagGeneros] = useState<Tag[]>([]);
+
+  const handleDeleteGenero = (index: number) => {
+    setSelectedTagGeneros(selectedTagGeneros.filter((_, i) => i !== index));
+  };
+
+  const handleAdditionGenero = (genero: Tag) => {
+    setSelectedTagGeneros((prevSelecteds) => {
+      return [...prevSelecteds, genero];
+    });
+  };
+
+  const handleInputChangeGeneros = (value: any, event: any): void => {
+    setQueryGenero(value);
+  }
+
+  useEffect(() => {
+    const selecteds = selectedTagGeneros.map((tag) => { return {genero: tag.text} } );
+    onChange({ target: { value: selecteds, name: "generos" }} as any)
+  }, [selectedTagGeneros]);
+
+  useEffect(() => {
+    const listarGeneros = async () => {
+      if (queryGenero.length > 2) {
+        try {
+          const response = await getGeneros(queryGenero);
+          const data = response.map((genero) => {
+            return {
+              id: String(genero.id),
+              className: '',
+              text: genero.genero
+            } as Tag;
+          })
+          setSuggestionsGeneros(data);
+        } catch (error) {
+          console.error('Erro ao buscar generos:', error);
+        }
+      } else {
+        setSuggestionsGeneros([]);
+      }
+    };
+
+    listarGeneros();
+  }, [queryGenero]);
+
+  useEffect(() => {
+    const tagsAutores = formData.autores.map((autor, index) => {
+      return { id: String(index), text: autor.nome, className: '' } as Tag
+    });
+    setSelectedTagAutores(tagsAutores);
+    
+    const tagsGeneros = formData.generos.map((genero, index) => {
+      return { id: String(index), text: genero.genero, className: '' } as Tag
+    });
+    setSelectedTagGeneros(tagsGeneros);
+  }, []);
+
   return (
     <Form>
       <Row>
-        <Col>
+      <Col>
           <Form.Group className="mb-3">
             <Form.Label>
               ISBN <span className="obgr">*</span>
@@ -24,7 +130,9 @@ const AcervoEditarLivro: React.FC<AcervoEditarLivroProps> = ({ formData, onChang
             <Form.Control
               type="text"
               placeholder="Digite o ISBN"
-              name="isbn" value={formData.isbn} onChange={onChange}
+              name="isbn"
+              value={formData.isbn}
+              onChange={onChange}
             />
           </Form.Group>
         </Col>
@@ -37,20 +145,9 @@ const AcervoEditarLivro: React.FC<AcervoEditarLivroProps> = ({ formData, onChang
             <Form.Control
               type="text"
               placeholder="Digite o título"
-              name="titulo" value={formData.titulo} onChange={onChange}
-            />
-          </Form.Group>
-        </Col>
-
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label>
-              Autor <span className="obgr">*</span>
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Digite o nome do autor"
-              name="autor" value={formData.autor} onChange={onChange}
+              name="titulo"
+              value={formData.titulo}
+              onChange={onChange}
             />
           </Form.Group>
         </Col>
@@ -60,26 +157,20 @@ const AcervoEditarLivro: React.FC<AcervoEditarLivroProps> = ({ formData, onChang
         <Col>
           <Form.Group className="mb-3">
             <Form.Label>
-              Gênero <span className="obgr">*</span>
+              Autores <span className="obgr">*</span>
             </Form.Label>
-            <Form.Select aria-label="Selecione um gênero" name="generos">
-              <option value="1">Romance</option>
-              <option value="2">Drama</option>
-              <option value="3">Terror</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label>
-              Qtd. Exemplares <span className="obgr">*</span>
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Digite a qtd. de exemplares"
-              value={4}
-              name="qtd_exemplares"
+            <ReactTags
+              placeholder="Adicione os autores"
+              autoFocus={false}
+              autofocus={false}
+              tags={selectedTagAutores}
+              handleInputChange={handleInputChangeAutores}
+              suggestions={suggestionsAutores}
+              separators={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
+              handleDelete={handleDeleteAutor}
+              inputFieldPosition="top"
+              handleAddition={handleAdditionAutor}
+              maxTags={10}
             />
           </Form.Group>
         </Col>
@@ -87,54 +178,25 @@ const AcervoEditarLivro: React.FC<AcervoEditarLivroProps> = ({ formData, onChang
         <Col>
           <Form.Group className="mb-3">
             <Form.Label>
-              Seção <span className="obgr">*</span>
+              Gêneros <span className="obgr">*</span>
             </Form.Label>
-            <Form.Select aria-label="Selecione a seção" name="secao">
-              <option value="Literatura Brasileira">Literatura Brasileira</option>
-              <option value="Drama">Drama</option>
-              <option value="Terror">Terror</option>
-            </Form.Select>
+            <ReactTags
+              placeholder="Adicione os gêneros"
+              autoFocus={false}
+              autofocus={false}
+              tags={selectedTagGeneros}
+              handleInputChange={handleInputChangeGeneros}
+              suggestions={suggestionsGeneros}
+              separators={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
+              handleDelete={handleDeleteGenero}
+              inputFieldPosition="top"
+              handleAddition={handleAdditionGenero}
+              maxTags={10}
+            />
           </Form.Group>
         </Col>
       </Row>
-
-      <Row>
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label>
-              Estante <span className="obgr">*</span>
-            </Form.Label>
-            <Form.Select aria-label="Selecione a estante" name="estante">
-              <option value="3">3</option>
-              <option value="2">2</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label>
-              Prateleira <span className="obgr">*</span>
-            </Form.Label>
-            <Form.Select aria-label="Selecione a prateleira" name="prateleira">
-              <option value="6">6</option>
-              <option value="2">2</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label>
-              Status <span className="obgr">*</span>
-            </Form.Label>
-            <Form.Select aria-label="Selecione o status" name="situacao">
-              <option value="disponivel">Disponível</option>
-              <option value="indisponivel">Indisponível</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
+        
     </Form>
   );
 };

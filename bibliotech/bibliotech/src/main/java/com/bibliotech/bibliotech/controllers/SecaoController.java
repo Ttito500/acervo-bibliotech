@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/secoes")
@@ -18,32 +16,27 @@ public class SecaoController {
     private SecoesService secaoService;
 
     @PostMapping ("")
-    public ResponseEntity<Secao> cadastrarSecao(@RequestBody Secao body) {
-        Secao secao = secaoService.criarSecao(body);
-        URI location = URI.create("/secoes" + secao.getId());
-        return ResponseEntity.created(location).body(secao);
+    public ResponseEntity<Secao> cadastrarSecao(@RequestBody Secao request) {
+        return ResponseEntity.ok(secaoService.criarSecao(request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Secao> deletarSecao(@PathVariable Integer id) {
-        secaoService.deletarSecao(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deletarSecao(@PathVariable Integer id) {
+        return ResponseEntity.ok(secaoService.deletarSecao(id));
     }
 
     @GetMapping("")
     public ResponseEntity<List<Secao>> getSecoes() {
-        List<Secao> secoes = secaoService.getSecoes();
-        return ResponseEntity.ok(secoes);
+        return ResponseEntity.ok(secaoService.getSecoes());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Secao> getSecaoById(@PathVariable Integer id) {
-        return ResponseEntity.ok(secaoService.getSecao(id));
+        return ResponseEntity.ok(secaoService.getSecaoById(id));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Secao> atualizarSecao(@PathVariable Integer id, @RequestBody Secao body) {
-        Secao secao = secaoService.atualizarSecao(id, body);
-        return ResponseEntity.ok().body(secao);
+    public ResponseEntity<Secao> atualizarSecao(@PathVariable Integer id, @RequestBody Secao request) {
+        return ResponseEntity.ok(secaoService.atualizarSecao(id, request));
     }
 }

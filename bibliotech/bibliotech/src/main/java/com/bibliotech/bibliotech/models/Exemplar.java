@@ -14,13 +14,17 @@ public class Exemplar {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_livro", nullable = false)
     private Livro livro;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_estante_prateleira")
     private Estanteprateleira estanteprateleira;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "id_secao", nullable = false)
+    private Secao secao;
 
     @Column(name = "observacao", length = 500)
     private String observacao;
@@ -34,5 +38,6 @@ public class Exemplar {
     @PrePersist
     public void prePersist() {
         this.situacao = "disponivel";
+        this.observacao = "";
     }
 }

@@ -1,0 +1,55 @@
+name: Build e Deploy para Google Cloud
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ci/
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v3
+
+      - name: Autenticar na Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+      - name: Instalar Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Setup terraform variables
+        id: vars
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+          project_id="bibliotech-451801" 
+          region="us-central1" 
+          zone="us-central1-a" 
+          instance_name="bibliotech-instance" 
+          repo_url="https://github.com/Ttito500/acervo-bibliotech.git" 
+          db_name="${{ vars.DB_NAME }}" 
+          db_user="${{ vars.DB_USER }}" 
+          db_port="${{ vars.DB_PORT }}" 
+          jdbc_url="${{ vars.JDBC_URL }}" 
+          db_schema_name="${{ vars.DB_SCHEMA_NAME }}" 
+          api_port="${{ vars.API_PORT }}" 
+          email_smtp="${{ vars.EMAIL_SMTP }}"
+          db_password="${{ secrets.DB_PASSWORD }}"
+          senha_email_smtp="${{ secrets.SENHA_EMAIL_SMTP }}"
+          jwt_secret="${{ secrets.JWT_SECRET }}"
+          EOF
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -input=false
+
+      - name: Terraform Refresh
+        run: terraform refresh
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false
