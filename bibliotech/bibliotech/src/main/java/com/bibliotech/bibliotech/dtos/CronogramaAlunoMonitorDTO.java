@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.dtos;
 
+import com.bibliotech.bibliotech.dtos.response.UsuarioResponseDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -12,7 +13,7 @@ public class CronogramaAlunoMonitorDTO {
     private Integer id;
 
     @NotNull(message = "O ID do aluno monitor é obrigatório.")
-    private Integer idAlunoMonitor;
+    private UsuarioResponseDTO AlunoMonitor;
 
     @NotBlank(message = "O dia da semana é obrigatório.")
     private String diaDaSemana;
