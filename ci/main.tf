@@ -14,7 +14,7 @@ resource "google_compute_subnetwork" "default" {
 
 resource "google_compute_instance" "default" {
   name         = var.instance_name
-  machine_type = "f1-micro"
+  machine_type = "e2-medium"
   zone         = var.zone
   tags         = ["ssh"]
 
@@ -24,7 +24,7 @@ resource "google_compute_instance" "default" {
     }
   }
 
-  metadata = {
+  metadata_startup_script = templatefile("${path.module}/startup.sh.tpl", {
     repo_url         = var.repo_url
 
     db_name          = var.db_name
@@ -39,10 +39,13 @@ resource "google_compute_instance" "default" {
     email_smtp       = var.email_smtp 
     senha_email_smtp = var.senha_email_smtp
 
-    jwt_secret       = var.jwt_secret
-  }
+    pgadmin_default_email = var.pgadmin_default_email 
+    pgadmin_listen_port = var.pgadmin_listen_port 
+    pgadmin_port = var.pgadmin_port
+    pgadmin_default_password = var.pgadmin_default_password
 
-  metadata_startup_script = "apt-get update && apt-get install -y docker.io docker-compose git; systemctl start docker; git clone https://github.com/Ttito500/acervo-bibliotech.git /opt/app; cd /opt/app; cd bibliotech/bibliotech; docker-compose up -d --build postgres api"
+    jwt_secret       = var.jwt_secret
+  })
 
   network_interface {
     subnetwork = google_compute_subnetwork.default.id
