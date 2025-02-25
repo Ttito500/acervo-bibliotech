@@ -58,6 +58,7 @@
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.1",
     "front": "file:",
+    "jwt-decode": "^4.0.0",
     "nprogress": "^0.2.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.6",

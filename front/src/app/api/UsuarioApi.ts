@@ -68,7 +68,7 @@ export const updateUsuario = async (
 
 export const inativarUsuario = async (id: number): Promise<void> => {
   try {
-    await api.patch(`${API_URL}/${id}/inativar`);
+    await api.patch(`${API_URL}/inativar/${id}`);
   } catch (error) {
     console.error("Erro ao inativar usuário:", error);
     throw error;
@@ -77,7 +77,7 @@ export const inativarUsuario = async (id: number): Promise<void> => {
 
 export const ativarUsuario = async (id: number): Promise<void> => {
   try {
-    await api.patch(`${API_URL}/${id}/ativar`);
+    await api.patch(`${API_URL}/ativar/${id}`);
   } catch (error) {
     console.error("Erro ao ativar usuário:", error);
     throw error;

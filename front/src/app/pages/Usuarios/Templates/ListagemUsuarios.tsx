@@ -1,24 +1,39 @@
-import React, { useState } from "react";
-import { Table, Badge, Button, ButtonGroup } from "react-bootstrap";
+import React from "react";
+import { Table, Badge, Button, ButtonGroup, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faEdit, faPowerOff } from "@fortawesome/free-solid-svg-icons";
-import Modal from "react-bootstrap/esm/Modal";
-import EditarUsuario from "./EditarUsuario";
-import InativarUsuario from "./InativarUsuario";
-import AtivarUsuario from "./AtivarUsuario";
+import { faPenToSquare, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { GetUsuarioResponse } from "./../../../interfaces/usuario";
+import { format } from "date-fns/format";
+import { registerLocale } from 'react-datepicker';
+import { ptBR } from 'date-fns/locale';
+registerLocale('ptBR', ptBR);
 
-const ListagemUsuarios: React.FC = () => {
-  const [showEditar, setShowEditar] = useState(false);
-  const handleCloseEditar = () => setShowEditar(false);
-  const handleShowEditar = () => setShowEditar(true);
+interface UsuariosListagemProps {
+  usuarios: GetUsuarioResponse[];
+  onEdit: (usuario: GetUsuarioResponse) => void;
+  onActive: (id: number) => void;
+  onInactive: (id: number) => void;
+}
 
-  const [showInativar, setShowInativar] = useState(false);
-  const handleCloseInativar = () => setShowInativar(false);
-  const handleShowInativar = () => setShowInativar(true);
+const ListagemUsuarios: React.FC<UsuariosListagemProps> = ({ usuarios, onActive, onEdit, onInactive }) => {
 
-  const [showAtivar, setShowAtivar] = useState(false);
-  const handleCloseAtivar = () => setShowAtivar(false);
-  const handleShowAtivar = () => setShowAtivar(true);
+  const renderTooltipInativar = (props: any) => (
+    <Tooltip id="button-tooltip-3" {...props}>
+      Inativar
+    </Tooltip>
+  );
+
+  const renderTooltipAtivar = (props: any) => (
+    <Tooltip id="button-tooltip-4" {...props}>
+      Ativar
+    </Tooltip>
+  );
+
+  const renderTooltipEditar = (props: any) => (
+    <Tooltip id="button-tooltip-5" {...props}>
+      Editar
+    </Tooltip>
+  );
 
   return (
     <>
@@ -34,93 +49,89 @@ const ListagemUsuarios: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          <tr className="tabela-tr">
-            <td className="th-size-ten">Bibliotecária(o)</td>
-            <td className="th-size-fifteen">Pedro Rivaldo</td>
-            <td className="text-center">10/02/2025 12:53:99</td>
-            <td>pr@email.com</td>
-            <td className="th-center-size-eight">
-              <Badge className="bibliotech-badge" bg="green">
-                Ativo
-              </Badge>
-            </td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  onClick={handleShowEditar}
-                  variant="btn-outline-secondary"
-                  className="color-green"
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                </Button>
-                <Button
-                  onClick={handleShowAtivar}
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                >
-                  <FontAwesomeIcon icon={faPowerOff} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr className="tabela-tr">
-            <td className="th-size-ten">Aluno Monitor</td>
-            <td className="th-size-fifteen">Kauan</td>
-            <td className="th-center-size-fifteen">09/14/2025 12:83:20</td>
-            <td>kauan@email.com</td>
-            <td className="th-center-size-eight">
-              <Badge className="bibliotech-badge" bg="green">
-                Ativo
-              </Badge>
-            </td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  onClick={handleShowEditar}
-                  variant="btn-outline-secondary"
-                  className="color-green"
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                </Button>
-                <Button
-                  onClick={handleShowAtivar}
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                >
-                  <FontAwesomeIcon icon={faPowerOff} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr className="tabela-tr">
-            <td className="th-size-ten">Aluno Monitor</td>
-            <td className="th-size-fifteen">Gabriel Alves</td>
-            <td className="th-center-size-fifteen">05/02/2025 12:53:40</td>
-            <td>gabrielalves@email.com</td>
-            <td className="th-center-size-eight">
-              <Badge className="bibliotech-badge" bg="red">
-                Inativo
-              </Badge>
-            </td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  onClick={handleShowEditar}
-                  variant="btn-outline-secondary"
-                  className="color-green"
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                </Button>
-                <Button
-                  onClick={handleShowInativar}
-                  variant="btn-outline-secondary"
-                  className="color-green"
-                >
-                  <FontAwesomeIcon icon={faPowerOff} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
+          {usuarios?.map((usuario) => (
+            <tr key={usuario.id} className="tabela-tr">
+              <td>
+                {usuario.cargo == 'aluno_monitor' &&
+                  <span>Aluno Monitor</span>
+                }
+                {usuario.cargo == 'bibliotecario' &&
+                  <span>Bibliotecário</span>
+                }
+              </td>
+              <td>{usuario.nome}</td>
+              <td>
+                {/* { format(new Date(usuario.dataUltimoAcesso), "dd/MM/yyyy HH:mm:ss")} TO DO */}
+                { format(new Date(usuario.dataUltimoAcesso), "dd/MM/yyyy")}
+              </td>
+              <td>{usuario.email}</td>
+              <td className="text-center">
+                
+                {usuario.ativo &&
+                  <Badge className="bibliotech-badge" bg="success">
+                    Ativo
+                  </Badge>
+                }
+
+                {!usuario.ativo &&
+                  <Badge className="bibliotech-badge" bg="danger">
+                    Inativo
+                  </Badge>
+                }
+                
+              </td>
+              <td>
+                <ButtonGroup aria-label="Ações" className="tabela-acoes">
+
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipEditar}
+                  >
+                    <Button
+                      variant="btn-outline-secondary"
+                      className="color-green"
+                      onClick={() => onEdit(usuario)}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </Button>
+                  </OverlayTrigger>
+                  { !usuario.ativo &&
+                    <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltipAtivar}
+                    >
+                      <Button
+                        variant="btn-outline-secondary"
+                        className="color-green"
+                        onClick={() => onActive(usuario.id)}
+                      >
+                        <FontAwesomeIcon icon={faPowerOff} />
+                      </Button>
+                    </OverlayTrigger>
+                  }
+
+                  { usuario.ativo &&
+                    <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltipInativar}
+                    >
+                      <Button
+                        variant="btn-outline-secondary"
+                        className="color-red"
+                        onClick={() => onInactive(usuario.id)}
+                      >
+                        <FontAwesomeIcon icon={faPowerOff} />
+                      </Button>
+                    </OverlayTrigger>
+                  }
+
+                </ButtonGroup>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </>

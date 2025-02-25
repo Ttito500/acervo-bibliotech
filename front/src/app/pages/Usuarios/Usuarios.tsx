@@ -10,6 +10,7 @@ import { CreateUsuarioRequest, GetUsuarioResponse, UpdateUsuarioRequest, Usuario
 import { getUsuarios, createUsuario, updateUsuario, inativarUsuario, ativarUsuario } from "./../../api/UsuarioApi";
 import AtivarUsuario from "./Templates/AtivarUsuario";
 import InativarUsuario from "./Templates/InativarUsuario";
+import EditarUsuario from "./Templates/EditarUsuario";
 
 const Usuarios: React.FC = () => {
 	const [showEditar, setShowEditar] = useState(false);
@@ -37,6 +38,7 @@ const Usuarios: React.FC = () => {
 	const handleCloseInactiveUsuario = () => setShowInactiveUsuario(false);
 	const handleShowInactiveUsuario = (id: number) => {
 		setInactivatingUsuario(id);
+		console.log(id)
 		setShowInactiveUsuario(true);
 	}
 
@@ -142,7 +144,7 @@ const Usuarios: React.FC = () => {
 			nome: formDataEditarUsuario.nome,
 			ativo: formDataEditarUsuario.ativo,
 			cargo: formDataEditarUsuario.cargo,
-			senha: formDataCadastrarUsuario.senha
+			senha: formDataEditarUsuario.senha
 		}
 
 		try {
@@ -206,14 +208,14 @@ const Usuarios: React.FC = () => {
           </Modal.Header>
 
           <Modal.Body>
-            <CadastrarUsuarios />
+            <CadastrarUsuarios formData={formDataCadastrarUsuario} onChange={handleChangeCadastrarUsuario} />
           </Modal.Body>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseCadastrar}>
               Cancelar
             </Button>
-            <Button variant="success">
+            <Button variant="success" onClick={handleSubmitCadastrarUsuario}>
               <FontAwesomeIcon icon={faCheck} /> Salvar
             </Button>
           </Modal.Footer>
@@ -266,7 +268,7 @@ const Usuarios: React.FC = () => {
 						<Button variant="secondary" onClick={handleCloseInactiveUsuario}>
 							Cancelar
 						</Button>
-						<Button variant="danger"  onClick={() => handleSubmitActiveInactiveUsuario(false)}>
+						<Button variant="danger"  onClick={() => handleSubmitActiveInactiveUsuario(true)}>
 							<FontAwesomeIcon icon={faCheck} /> Inativar
 						</Button>
 					</Modal.Footer>
@@ -299,11 +301,16 @@ const Usuarios: React.FC = () => {
       </div>
 
       <div className="w-100">
-        <FiltrosUsuarios />
+        <FiltrosUsuarios formData={formDataFiltrar} onSearch={listarUsuarios} onChange={handleChangeFiltrar} />
       </div>
 
       <div className="w-100">
-        <ListagemUsuarios />
+        <ListagemUsuarios 
+					usuarios={usuarios} 
+					onEdit={handleShowEditar} 
+					onActive={handleShowActiveUsuario}
+					onInactive={handleShowInactiveUsuario}
+				/>
       </div>
     </section>
   );

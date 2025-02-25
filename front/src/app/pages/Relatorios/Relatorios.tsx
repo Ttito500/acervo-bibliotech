@@ -7,11 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDay, faCheck, faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import InputGroup from "react-bootstrap/esm/InputGroup";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { showSuccess } from "./../../shared/components/success-toast/SuccessToast";
 import { showError } from "./../../shared/components/error-toast/ErrorToast";
 import { format } from "date-fns/format";
+import { ptBR } from 'date-fns/locale';
+registerLocale('ptBR', ptBR);
 
 const Relatorios: React.FC = () => {
 	const savePDF = async (url: string) => {

@@ -3,6 +3,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'ax
 import { showError } from './../components/error-toast/ErrorToast';
 import { showSuccess } from './../components/success-toast/SuccessToast';
 import NProgress from 'nprogress';
+import { isTokenValid } from '../auth/auth';
 
 const api = axios.create({
   baseURL: 'http://localhost:8090'
@@ -11,10 +12,14 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     NProgress.start();
-    const token = await window.electron.getStoreValue('token');
+    const storedToken = await window.electron.getStoreValue('token');
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (storedToken) {
+      if(isTokenValid(storedToken)) {
+        config.headers.Authorization = `Bearer ${storedToken}`;
+      } else {
+        // TODO Sair
+      }
     }
 
     return config;
