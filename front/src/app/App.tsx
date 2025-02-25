@@ -18,6 +18,7 @@ import Cronograma from "./pages/Cronograma/Cronograma";
 import LoadingBar from "./shared/components/loading-bar/LoadingBar";
 import ErrorToast from "./shared/components/error-toast/ErrorToast";
 import { login } from "./api/UsuarioApi";
+import Relatorios from "./pages/Relatorios/Relatorios";
 
 const App: React.FC = () => {
 
@@ -142,6 +143,7 @@ const App: React.FC = () => {
             <Route path="/estantes" element={isAuthenticated ? <><Menu /><Estantes /></> : <Navigate to="/" />} />
             <Route path="/usuarios" element={isAuthenticated ? <><Menu /><Usuarios /></> : <Navigate to="/" />} />
             <Route path="/cronograma" element={isAuthenticated ? <><Menu /><Cronograma /></> : <Navigate to="/" />} />
+            <Route path="/relatorios" element={isAuthenticated ? <><Menu /><Relatorios /></> : <Navigate to="/" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>

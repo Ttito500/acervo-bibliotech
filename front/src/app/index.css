@@ -272,6 +272,63 @@ body {
   box-shadow: none !important;
 }
 
+.accordion-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.accordion-relatorios {
+  width: 48%;
+  max-width: 550px;
+}
+
+.no-calendar::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.custon-accordion-header-cyan .accordion-button {
+  background-color: #CFF4FC !important;
+  color: black !important;
+}
+
+.custon-accordion-header-cyan .accordion-button:not(.collapsed) {
+  background-color: #CFF4FC !important;
+  box-shadow: none !important;
+}
+
+.custon-accordion-header-blue .accordion-button {
+  background-color: #CFE2FF !important;
+  color: black !important;
+}
+
+.custon-accordion-header-blue .accordion-button:not(.collapsed) {
+  background-color: #CFE2FF !important;
+  box-shadow: none !important;
+}
+
+.custon-accordion-header-orange .accordion-button {
+  background-color: #FFE5D0 !important;
+  color: black !important;
+}
+
+.custon-accordion-header-orange .accordion-button:not(.collapsed) {
+  background-color: #FFE5D0 !important;
+  box-shadow: none !important;
+}
+
+.custon-accordion-header-yellow .accordion-button {
+  background-color: #FFF3CD !important;
+  color: black !important;
+}
+
+.custon-accordion-header-yellow .accordion-button:not(.collapsed) {
+  background-color: #FFF3CD !important;
+  box-shadow: none !important;
+}
+
 .custom-placeholder:invalid {
   color: #495057
 }
