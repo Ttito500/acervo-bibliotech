@@ -19,8 +19,6 @@ function transformCronogramas(lista: GetCronogramaResponse[]): Cronograma[] {
 		mapa.get(diaDaSemana)!.items.push({ id, alunoMonitor, diaDaSemana });
 	});
 
-	console.log(Array.from(mapa.values()))
-
 	return Array.from(mapa.values());
 }
 

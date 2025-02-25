@@ -23,6 +23,21 @@ import { getAlunos } from "./../../api/AlunosApi";
 import { showError } from "./../../shared/components/error-toast/ErrorToast";
 import { createOcorrencia } from "./../../api/OcorrenciaApi";
 import { CreateOcorrenciaRequest } from "./../../interfaces/ocorrencia";
+import { Cronograma, GetCronogramaResponse } from "./../../interfaces/cronograma";
+import { getCronogramas } from "./../../api/CronogramaApi";
+
+function transformCronogramas(lista: GetCronogramaResponse[]): Cronograma[] {
+  const mapa = new Map<string, Cronograma>();
+
+  lista.forEach(({ id, diaDaSemana, alunoMonitor }) => {
+    if (!mapa.has(diaDaSemana)) {
+      mapa.set(diaDaSemana, { diaDaSemana, items: [] });
+    }
+    mapa.get(diaDaSemana)!.items.push({ id, alunoMonitor, diaDaSemana });
+  });
+
+  return Array.from(mapa.values());
+}
 
 const Inicio: React.FC = () => {
 
@@ -190,8 +205,33 @@ const Inicio: React.FC = () => {
     listarAlunos();
   }, [queryAlunoOcorrencia]);
 
+  const [cronogramas, setCronogramas] = useState<Cronograma[]>([]);
+  const [cronogramaSegunda, setCronogramaSegunda] = useState<GetCronogramaResponse[]>([]);
+  const [cronogramaTerca, setCronogramaTerca] = useState<GetCronogramaResponse[]>([]);
+  const [cronogramaQuarta, setCronogramaQuarta] = useState<GetCronogramaResponse[]>([]);
+  const [cronogramaQuinta, setCronogramaQuinta] = useState<GetCronogramaResponse[]>([]);
+  const [cronogramaSexta, setCronogramaSexta] = useState<GetCronogramaResponse[]>([]);
+
+  const listarCronogramas = async (): Promise<void> => {
+    try {
+      const data = await getCronogramas();
+      const cronogramasTransfom = transformCronogramas(data);
+      setCronogramas(cronogramasTransfom);
+    } catch(err) {
+      console.log(err)
+    }
+  };
+
   useEffect(() => {
-    null
+    setCronogramaSegunda(cronogramas.filter((c) => c.diaDaSemana === 'segunda-feira')[0]?.items || []);
+    setCronogramaTerca(cronogramas.filter((c) => c.diaDaSemana === 'terca-feira')[0]?.items || []);
+    setCronogramaQuarta(cronogramas.filter((c) => c.diaDaSemana === 'quarta-feira')[0]?.items || []);
+    setCronogramaQuinta(cronogramas.filter((c) => c.diaDaSemana === 'quinta-feira')[0]?.items || []);
+    setCronogramaSexta(cronogramas.filter((c) => c.diaDaSemana === 'sexta-feira')[0]?.items || []);
+  }, [cronogramas]);
+
+  useEffect(() => {
+    listarCronogramas();
   }, []);
 
   return (
@@ -203,32 +243,52 @@ const Inicio: React.FC = () => {
 
         <Table striped className="cronograma">
           <thead>
-          <tr>
-            <th className="text-center">Segunda</th>
-            <th className="text-center">Terça</th>
-            <th className="text-center">Quarta</th>
-            <th className="text-center">Quinta</th>
-            <th className="text-center">Sexta</th>
-          </tr>
+            <tr>
+              <th className="text-center">Segunda</th>
+              <th className="text-center">Terça</th>
+              <th className="text-center">Quarta</th>
+              <th className="text-center">Quinta</th>
+              <th className="text-center">Sexta</th>
+            </tr>
           </thead>
           <tbody>
-          <tr className="cronograma-tr">
-            <td className="text-center">
-              Pedro Rivaldo <br/> Gabriel Alves
-            </td>
-            <td className="text-center">
-              Kauan Pereira <br/> Luis King
-            </td>
-            <td className="text-center">
-              Tiago Tito <br/> Lucas Tito
-            </td>
-            <td className="text-center">
-              Robson José <br/> Gustavo Fernandes
-            </td>
-            <td className="text-center">
-              Gustavo Henrique <br/> Daniel Lucas
-            </td>
-          </tr>
+            <tr className="cronograma-tr">
+              <td className="text-center">
+                <div>
+                  {cronogramaSegunda?.map((cronograma) => (
+                    <div key={cronograma.id} className="texto">{cronograma.alunoMonitor.nome}</div>
+                  ))}
+                </div>
+              </td>
+              <td className="text-center">
+                <div>
+                  {cronogramaTerca?.map((cronograma) => (
+                    <div key={cronograma.id} className="texto">{cronograma.alunoMonitor.nome}</div>
+                  ))}
+                </div>
+              </td>
+              <td className="text-center">
+                <div>
+                  {cronogramaQuarta?.map((cronograma) => (
+                    <div key={cronograma.id} className="texto">{cronograma.alunoMonitor.nome}</div>
+                  ))}
+                </div>
+              </td>
+              <td className="text-center">
+                <div>
+                  {cronogramaQuinta?.map((cronograma) => (
+                    <div key={cronograma.id} className="texto">{cronograma.alunoMonitor.nome}</div>
+                  ))}
+                </div>
+              </td>
+              <td className="text-center">
+                <div>
+                  {cronogramaSexta?.map((cronograma) => (
+                    <div key={cronograma.id} className="texto">{cronograma.alunoMonitor.nome}</div>
+                  ))}
+                </div>
+              </td>
+            </tr>
           </tbody>
         </Table>
       </div>
