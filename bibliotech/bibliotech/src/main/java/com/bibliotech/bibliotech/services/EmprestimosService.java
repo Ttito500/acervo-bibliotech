@@ -61,6 +61,7 @@ public class EmprestimosService {
     @Autowired
     private EmailSend emailSend;
 
+    @Transactional
     public EmprestimoResponseDTO realizarEmprestimo(EmprestimoRequestDTO requestDTO) {
         if (requestDTO.getIdAluno() == null) {
             throw new ValidationException("O ID do aluno não pode ser nulo.");
@@ -72,14 +73,14 @@ public class EmprestimosService {
         Aluno aluno = alunoRepository.findById(requestDTO.getIdAluno())
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
-        if (!"regular".equalsIgnoreCase(aluno.getSituacao())) {
+        if (!aluno.getSituacao().equals("regular")) {
             throw new ValidationException("O aluno não está com a situação regular");
         }
 
         Exemplar exemplar = exemplarRepository.findById(requestDTO.getIdExemplar())
                 .orElseThrow(() -> new NotFoundException("Exemplar não encontrado"));
 
-        if (!"disponivel".equalsIgnoreCase(exemplar.getSituacao())) {
+        if (!exemplar.getSituacao().equals("disponivel")) {
             throw new ValidationException("O exemplar não está disponível");
         }
 
@@ -125,7 +126,7 @@ public class EmprestimosService {
         return "Emprestimo cancelado com sucesso.";
     }
 
-
+    @Transactional
     public String concluirEmprestimo(Integer id, EmprestimoRequestDTOConcluir DTOConcluir){
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID " + id + " não encontrado."));
