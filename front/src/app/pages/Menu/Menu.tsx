@@ -50,7 +50,7 @@ const Menu: React.FC = () => {
             <Nav.Link as={NavLink} to="/alunos" className="navbar-link color-white">
               Turmas e Alunos
             </Nav.Link>
-            { token.cargo === 'bibliotecario' &&
+            { token?.cargo === 'bibliotecario' &&
               <>
                 <Nav.Link as={NavLink} to="/secoes" className="navbar-link color-white">
                   Seções

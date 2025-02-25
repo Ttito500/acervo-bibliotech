@@ -3,6 +3,8 @@ export interface GetEmprestimoResponse {
   alunoId: number
   exemplarId: number
   numeroExemplar: number
+  estante: string
+  prateleira: number
   isbn: string
   tituloLivro: string
   nomeAluno: string

@@ -25,6 +25,7 @@ import { createOcorrencia } from "./../../api/OcorrenciaApi";
 import { CreateOcorrenciaRequest } from "./../../interfaces/ocorrencia";
 import { Cronograma, GetCronogramaResponse } from "./../../interfaces/cronograma";
 import { getCronogramas } from "./../../api/CronogramaApi";
+import { decodeToken, JwtPayload } from "./../../shared/auth/auth";
 
 function transformCronogramas(lista: GetCronogramaResponse[]): Cronograma[] {
   const mapa = new Map<string, Cronograma>();
@@ -40,6 +41,20 @@ function transformCronogramas(lista: GetCronogramaResponse[]): Cronograma[] {
 }
 
 const Inicio: React.FC = () => {
+
+   const [token, setToken] = useState<JwtPayload>(null);
+    
+  const getToken = async () => {
+    const storedToken = await window.electron.getStoreValue('token');
+    if (storedToken) {
+      const decodedToken = decodeToken(storedToken);
+      setToken(decodedToken);
+    }
+  }
+
+  useEffect(() => {
+    getToken();
+  }, [])
 
   const [showFrequencia, setFrequencia] = useState(false);
   const handleCloseFrequencia = () => setFrequencia(false);
@@ -63,7 +78,7 @@ const Inicio: React.FC = () => {
   const handleSubmitCadastrarFrequencia = async (): Promise<void> => {
     const body: CreateFrequenciaRequest = {
       idAluno: Number(formDataCadastrarFrequencia.idAluno),
-      registradaPor: 1, // TO DO
+      registradaPor: token?.id,
       atividade: formDataCadastrarFrequencia.atividade
     }
 
@@ -145,7 +160,7 @@ const Inicio: React.FC = () => {
   const handleSubmitCadastrarOcorrencia = async (): Promise<void> => {
     const body: CreateOcorrenciaRequest = {
       idAluno: Number(formDataCadastrarOcorrencia.idAluno),
-      registradaPor: 1, // TO DO
+      registradaPor: token?.id,
       detalhes: formDataCadastrarOcorrencia.detalhes
     }
     try {

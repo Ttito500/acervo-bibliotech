@@ -39,7 +39,7 @@ const DesistirEmprestimo: React.FC<CancelarEmprestimoProps> = ({ emprestimo }) =
         <Col xs={2}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Estante: </strong>TO DO
+              <strong>Estante: </strong>{ emprestimo.estante }
             </Form.Label>
           </Form.Group>
         </Col>
@@ -47,7 +47,7 @@ const DesistirEmprestimo: React.FC<CancelarEmprestimoProps> = ({ emprestimo }) =
         <Col xs={2}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Prateleira: </strong>TO DO
+              <strong>Prateleira: </strong>{ emprestimo.prateleira }
             </Form.Label>
           </Form.Group>
         </Col>

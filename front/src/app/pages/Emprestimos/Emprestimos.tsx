@@ -13,8 +13,23 @@ import { ConcluirEmprestimoRequest, CreateEmprestimoRequest, EmprestimosFiltros,
 import { cancelarEmprestimo, concluirEmprestimo, createEmprestimo, getEmprestimos, renovarPrazo } from "./../../api/EmprestimoApi";
 import { ResponsePagination } from "./../../interfaces/pagination";
 import Pagination from "react-bootstrap/Pagination";
+import { decodeToken, JwtPayload } from "./../../shared/auth/auth";
 
 const Emprestimo: React.FC = () => {
+  const [token, setToken] = useState<JwtPayload>(null);
+  
+  const getToken = async () => {
+    const storedToken = await window.electron.getStoreValue('token');
+    if (storedToken) {
+      const decodedToken = decodeToken(storedToken);
+      setToken(decodedToken);
+    }
+  }
+
+  useEffect(() => {
+    getToken();
+  }, [])
+
   const [editingEmprestimo, setEditingEmprestimo] = useState<GetEmprestimoResponse | null>(null);
 
   const [showReceber, setShowReceber] = useState(false);
@@ -122,7 +137,7 @@ const Emprestimo: React.FC = () => {
     const body: CreateEmprestimoRequest = {
       idAluno: Number(formDataCadastrarEmprestimo.idAluno),
       idExemplar: Number(formDataCadastrarEmprestimo.idExemplar),
-      idUsuario: 1, // TO DO
+      idUsuario: token?.id,
       observacao: formDataCadastrarEmprestimo.observacao
     }
     try {
