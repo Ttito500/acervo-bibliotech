@@ -84,13 +84,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioResponseMapper.toDto(usuarioService.alterarUsuario(id, usuarioRequestPatchMapper.toEntity(body))));
     }
 
-    @PatchMapping("/{id}/inativar")
+    @PatchMapping("/inativar/{id}")
     public ResponseEntity<Void> inativarUsuario(@PathVariable Integer id) {
         usuarioService.inativarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}/ativar")
+    @PatchMapping("/ativar/{id}")
     public ResponseEntity<Void> ativarUsuario(@PathVariable Integer id) {
         usuarioService.ativarUsuario(id);
         return ResponseEntity.noContent().build();
