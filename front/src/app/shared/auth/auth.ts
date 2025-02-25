@@ -4,6 +4,7 @@ export interface JwtPayload {
   iss: string
   sub: string
   nome: string
+  cargo: string
   id: number
   exp: number
 }

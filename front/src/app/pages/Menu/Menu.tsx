@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -8,8 +8,23 @@ import Modal from "react-bootstrap/esm/Modal";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRightFromBracket, faCircleUser} from "@fortawesome/free-solid-svg-icons";
 import Perfil from "./templates/Perfil";
+import { decodeToken, JwtPayload } from "./../../shared/auth/auth";
 
 const Menu: React.FC = () => {
+
+  const [token, setToken] = useState<JwtPayload>(null);
+
+	const getToken = async () => {
+		const storedToken = await window.electron.getStoreValue('token');
+		if (storedToken) {
+			const decodedToken = decodeToken(storedToken);
+			setToken(decodedToken);
+		}
+	}
+
+  useEffect(() => {
+    getToken();
+  }, [])
 
   const [showPerfil, setShowPerfil] = useState(false);
   const handleClosePerfil = () => setShowPerfil(false);
@@ -35,21 +50,25 @@ const Menu: React.FC = () => {
             <Nav.Link as={NavLink} to="/alunos" className="navbar-link color-white">
               Turmas e Alunos
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/secoes" className="navbar-link color-white">
-              Seções
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/estantes" className="navbar-link color-white">
-              Estantes
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/cronograma" className="navbar-link color-white">
-              Cronograma
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/usuarios" className="navbar-link color-white">
-              Usuários
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/relatorios" className="navbar-link color-white">
-              Relatórios
-            </Nav.Link>
+            { token.cargo === 'bibliotecario' &&
+              <>
+                <Nav.Link as={NavLink} to="/secoes" className="navbar-link color-white">
+                  Seções
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/estantes" className="navbar-link color-white">
+                  Estantes
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/cronograma" className="navbar-link color-white">
+                  Cronograma
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/usuarios" className="navbar-link color-white">
+                  Usuários
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/relatorios" className="navbar-link color-white">
+                  Relatórios
+                </Nav.Link>
+              </>
+            }
           </Nav>
             <div
                 onClick={handleShowPerfil}

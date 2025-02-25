@@ -19,10 +19,23 @@ import LoadingBar from "./shared/components/loading-bar/LoadingBar";
 import ErrorToast from "./shared/components/error-toast/ErrorToast";
 import { login } from "./api/UsuarioApi";
 import Relatorios from "./pages/Relatorios/Relatorios";
+import { decodeToken, JwtPayload } from "./shared/auth/auth";
 
 const App: React.FC = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const [token, setToken] = useState<JwtPayload>(null);
+  
+  const getToken = async () => {
+    const storedToken = await window.electron.getStoreValue('token');
+    if (storedToken) {
+      const decodedToken = decodeToken(storedToken);
+      decodedToken.cargo = "bibliotecario";
+
+      setToken(decodedToken);
+    }
+  }
 
   const handleLogin = async (email: string, senha: string) => {
 
@@ -31,6 +44,7 @@ const App: React.FC = () => {
       const token = data.token;
       await window.electron.setStoreValue('token', token);
       setIsAuthenticated(true);
+      getToken();
     } catch(err) {
       console.log(err);
     }
@@ -139,11 +153,11 @@ const App: React.FC = () => {
             <Route path="/acervo" element={isAuthenticated ? <><Menu /><Acervo /></> : <Navigate to="/" />} />
             <Route path="/emprestimos" element={isAuthenticated ? <><Menu /><Emprestimos /></> : <Navigate to="/" />} />
             <Route path="/alunos" element={isAuthenticated ? <><Menu /><Alunos /></> : <Navigate to="/" />} />
-            <Route path="/secoes" element={isAuthenticated ? <><Menu /><Secoes /></> : <Navigate to="/" />} />
-            <Route path="/estantes" element={isAuthenticated ? <><Menu /><Estantes /></> : <Navigate to="/" />} />
-            <Route path="/usuarios" element={isAuthenticated ? <><Menu /><Usuarios /></> : <Navigate to="/" />} />
-            <Route path="/cronograma" element={isAuthenticated ? <><Menu /><Cronograma /></> : <Navigate to="/" />} />
-            <Route path="/relatorios" element={isAuthenticated ? <><Menu /><Relatorios /></> : <Navigate to="/" />} />
+            <Route path="/secoes" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Secoes /></> : <Navigate to="/" />} />
+            <Route path="/estantes" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Estantes /></> : <Navigate to="/" />} />
+            <Route path="/usuarios" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Usuarios /></> : <Navigate to="/" />} />
+            <Route path="/cronograma" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Cronograma /></> : <Navigate to="/" />} />
+            <Route path="/relatorios" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Relatorios /></> : <Navigate to="/" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>

@@ -26,12 +26,12 @@ const Perfil: React.FC = () => {
         <Col xs={10}>
           <Form.Group className="mb-0">
             <Form.Label>
-              <strong>Nome:</strong> {token.nome}
+              <strong>Nome:</strong> {token?.nome}
             </Form.Label>
           </Form.Group>
           <Form.Group className="mb-0">
             <Form.Label>
-              <strong>Email:</strong> {token.sub}
+              <strong>Email:</strong> {token?.sub}
             </Form.Label>
           </Form.Group>
         </Col>
