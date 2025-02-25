@@ -101,6 +101,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/livros/exemplares").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.GET, "/livros/filtrar").hasAnyRole("bibliotecario", "aluno_monitor")
                         .requestMatchers(HttpMethod.GET, "/livros/exemplares/{id}").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/livros/{id}").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.PATCH, "/livros/inativar/{id}").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.PATCH, "/livros/ativar/{id}").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.PATCH, "/livros/exemplares/extraviar/{id}").hasRole("bibliotecario")
