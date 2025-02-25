@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "react-bootstrap/Button";
 import { GetAlunoResponse } from "./../../../interfaces/aluno";
 import { ResponsePagination } from "./../../../interfaces/pagination";
+import Tooltip from "react-bootstrap/esm/Tooltip";
+import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 
 interface AlunosListagemProps {
   alunos: ResponsePagination<GetAlunoResponse>;
@@ -21,6 +23,30 @@ interface AlunosListagemProps {
 }
 
 const AlunosListagem: React.FC<AlunosListagemProps> = ({ alunos, onEdit, onActive, onInactive, onEmprestimos }) => {
+
+  const renderTooltipAtivar = (props: any) => (
+    <Tooltip id="button-tooltip-1" {...props}>
+      Ativar
+    </Tooltip>
+  );
+
+  const renderTooltipInativar = (props: any) => (
+    <Tooltip id="button-tooltip-2" {...props}>
+      Inativar
+    </Tooltip>
+  );
+
+  const renderTooltipVerEmprestimos = (props: any) => (
+    <Tooltip id="button-tooltip-3" {...props}>
+      Ver Empréstimos
+    </Tooltip>
+  );
+
+  const renderTooltipEditar = (props: any) => (
+    <Tooltip id="button-tooltip-4" {...props}>
+      Editar
+    </Tooltip>
+  );
 
   return (
     <>
@@ -83,40 +109,65 @@ const AlunosListagem: React.FC<AlunosListagemProps> = ({ alunos, onEdit, onActiv
               <td>
                 <ButtonGroup aria-label="Ações" className="tabela-acoes">
 
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-blue"
-                    onClick={() => onEmprestimos(aluno)}
+                  <OverlayTrigger
+                    placement="left"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipVerEmprestimos}
                   >
-                    <FontAwesomeIcon icon={faClipboardList} />
-                  </Button>
+                    <Button
+                      variant="btn-outline-secondary"
+                      className="color-blue"
+                      onClick={() => onEmprestimos(aluno)}
+                    >
+                      <FontAwesomeIcon icon={faClipboardList} />
+                    </Button>
+                  </OverlayTrigger>
 
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-green"
-                    onClick={() => onEdit(aluno)}
+                  <OverlayTrigger
+                    placement="left"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipEditar}
                   >
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                  </Button>
-
-                  { !aluno.ativo &&
                     <Button
                       variant="btn-outline-secondary"
                       className="color-green"
-                      onClick={() => onActive(aluno.id)}
+                      onClick={() => onEdit(aluno)}
                     >
-                      <FontAwesomeIcon icon={faPowerOff} />
+                      <FontAwesomeIcon icon={faPenToSquare} />
                     </Button>
+                  </OverlayTrigger>
+
+
+                  { !aluno.ativo &&
+                    <OverlayTrigger
+                      placement="left"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltipAtivar}
+                    >
+                      <Button
+                        variant="btn-outline-secondary"
+                        className="color-green"
+                        onClick={() => onActive(aluno.id)}
+                      >
+                        <FontAwesomeIcon icon={faPowerOff} />
+                      </Button>
+                    </OverlayTrigger>
                   }
 
                   { aluno.ativo &&
-                    <Button
-                      variant="btn-outline-secondary"
-                      className="color-red"
-                      onClick={() => onInactive(aluno.id)}
+                    <OverlayTrigger
+                      placement="left"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltipInativar}
                     >
-                      <FontAwesomeIcon icon={faPowerOff} />
-                    </Button>
+                      <Button
+                        variant="btn-outline-secondary"
+                        className="color-red"
+                        onClick={() => onInactive(aluno.id)}
+                      >
+                        <FontAwesomeIcon icon={faPowerOff} />
+                      </Button>
+                    </OverlayTrigger>
                   }
 
                 </ButtonGroup>

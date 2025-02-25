@@ -84,7 +84,7 @@ const ListagemUsuarios: React.FC<UsuariosListagemProps> = ({ usuarios, onActive,
                 <ButtonGroup aria-label="Ações" className="tabela-acoes">
 
                   <OverlayTrigger
-                    placement="right"
+                    placement="left"
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltipEditar}
                   >
@@ -98,7 +98,7 @@ const ListagemUsuarios: React.FC<UsuariosListagemProps> = ({ usuarios, onActive,
                   </OverlayTrigger>
                   { !usuario.ativo &&
                     <OverlayTrigger
-                      placement="right"
+                      placement="left"
                       delay={{ show: 250, hide: 400 }}
                       overlay={renderTooltipAtivar}
                     >
@@ -114,7 +114,7 @@ const ListagemUsuarios: React.FC<UsuariosListagemProps> = ({ usuarios, onActive,
 
                   { usuario.ativo &&
                     <OverlayTrigger
-                      placement="right"
+                      placement="left"
                       delay={{ show: 250, hide: 400 }}
                       overlay={renderTooltipInativar}
                     >

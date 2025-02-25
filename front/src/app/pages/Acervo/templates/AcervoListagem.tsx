@@ -130,7 +130,7 @@ const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtiva
               <td>
                 <ButtonGroup aria-label="Ações" className="tabela-acoes">
                   <OverlayTrigger
-                    placement="right"
+                    placement="left"
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltipGerenciarExemplares}
                   >
@@ -144,7 +144,7 @@ const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtiva
                   </OverlayTrigger>
 
                   <OverlayTrigger
-                    placement="right"
+                    placement="left"
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltipVerEmprestimos}
                   >
@@ -158,7 +158,7 @@ const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtiva
                   </OverlayTrigger>
 
                   <OverlayTrigger
-                    placement="right"
+                    placement="left"
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltipEditar}
                   >
@@ -173,7 +173,7 @@ const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtiva
 
                   { !livro.ativo &&
                     <OverlayTrigger
-                      placement="right"
+                      placement="left"
                       delay={{ show: 250, hide: 400 }}
                       overlay={renderTooltipAtivar}
                     >
@@ -189,7 +189,7 @@ const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtiva
 
                   { livro.ativo &&
                     <OverlayTrigger
-                      placement="right"
+                      placement="left"
                       delay={{ show: 250, hide: 400 }}
                       overlay={renderTooltipInativar}
                     >

@@ -12,6 +12,8 @@ import Button from "react-bootstrap/Button";
 import { ResponsePagination } from "./../../../interfaces/pagination";
 import { GetEmprestimoResponse } from "./../../../interfaces/emprestimo";
 import FormatDate from "./../../../shared/components/format-date/FormatDate";
+import Tooltip from "react-bootstrap/esm/Tooltip";
+import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 
 interface ListagemEmprestimosProps {
   emprestimos: ResponsePagination<GetEmprestimoResponse>;
@@ -21,6 +23,25 @@ interface ListagemEmprestimosProps {
 }
 
 const ListagemEmprestimos: React.FC<ListagemEmprestimosProps> = ({ emprestimos, onConcluir, onRenovar, onCancelar }) => {
+
+  const renderTooltipCancelar = (props: any) => (
+    <Tooltip id="button-tooltip-1" {...props}>
+      Cancelar Empréstimo
+    </Tooltip>
+  );
+
+  const renderTooltipConcluir = (props: any) => (
+    <Tooltip id="button-tooltip-2" {...props}>
+      Concluir Empréstimo
+    </Tooltip>
+  );
+
+  const renderTooltipRenovar = (props: any) => (
+    <Tooltip id="button-tooltip-3" {...props}>
+      Renovar Empréstimos
+    </Tooltip>
+  );
+
   return (
     <>
       <Table striped className="tabela">
@@ -87,29 +108,47 @@ const ListagemEmprestimos: React.FC<ListagemEmprestimosProps> = ({ emprestimos, 
               <td>
                 <ButtonGroup aria-label="Ações" className="tabela-acoes">
 
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-orange"
-                    onClick={() => onConcluir(emprestimo)}
+                  <OverlayTrigger
+                    placement="left"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipConcluir}
                   >
-                    <FontAwesomeIcon icon={faClipboardCheck} />
-                  </Button>
+                    <Button
+                      variant="btn-outline-secondary"
+                      className="color-orange"
+                      onClick={() => onConcluir(emprestimo)}
+                    >
+                      <FontAwesomeIcon icon={faClipboardCheck} />
+                    </Button>
+                  </OverlayTrigger>
 
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-blue"
-                    onClick={() => onRenovar(emprestimo)}
+                  <OverlayTrigger
+                    placement="left"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipRenovar}
                   >
-                    <FontAwesomeIcon icon={faCalendarPlus} />
-                  </Button>
+                    <Button
+                      variant="btn-outline-secondary"
+                      className="color-blue"
+                      onClick={() => onRenovar(emprestimo)}
+                    >
+                      <FontAwesomeIcon icon={faCalendarPlus} />
+                    </Button>
+                  </OverlayTrigger>
 
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-red"
-                    onClick={() => onCancelar(emprestimo)}
+                  <OverlayTrigger
+                    placement="left"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipCancelar}
                   >
-                    <FontAwesomeIcon icon={faCircleXmark} />
-                  </Button>
+                    <Button
+                      variant="btn-outline-secondary"
+                      className="color-red"
+                      onClick={() => onCancelar(emprestimo)}
+                    >
+                      <FontAwesomeIcon icon={faCircleXmark} />
+                    </Button>
+                  </OverlayTrigger>
 
                 </ButtonGroup>
               </td>

@@ -45,7 +45,7 @@ const ListagemFrequencias: React.FC<ListagemFrequenciasProps> = ({ frequencias, 
               <td>
                 <ButtonGroup aria-label="Ações" className="tabela-acoes">
                   <OverlayTrigger
-                    placement="right"
+                    placement="left"
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltipDeletar}
                   >

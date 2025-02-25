@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Badge, Button, ButtonGroup } from "react-bootstrap";
+import { Table, Badge, Button, ButtonGroup, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { GetTurmaResponse } from "./../../../../interfaces/turma";
@@ -12,6 +12,25 @@ interface TurmasListagemProps {
 }
 
 const ListagemTurma: React.FC<TurmasListagemProps> = ({ turmas, onEdit, onActive, onInactive }) => {
+
+  const renderTooltipAtivar = (props: any) => (
+    <Tooltip id="button-tooltip-1" {...props}>
+      Ativar
+    </Tooltip>
+  );
+
+  const renderTooltipInativar = (props: any) => (
+    <Tooltip id="button-tooltip-2" {...props}>
+      Inativar
+    </Tooltip>
+  );
+
+  const renderTooltipEditar = (props: any) => (
+    <Tooltip id="button-tooltip-4" {...props}>
+      Editar
+    </Tooltip>
+  );
+  
   return (
     <>
       <Table striped className="tabela">
@@ -48,32 +67,51 @@ const ListagemTurma: React.FC<TurmasListagemProps> = ({ turmas, onEdit, onActive
               <td>
                 <ButtonGroup aria-label="Ações" className="tabela-acoes">
 
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-green"
-                    onClick={() => onEdit(turma)}
+                  <OverlayTrigger
+                    placement="left"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipEditar}
                   >
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                  </Button>
-
-                  { !turma.ativo &&
                     <Button
                       variant="btn-outline-secondary"
                       className="color-green"
-                      onClick={() => onActive(turma.id)}
+                      onClick={() => onEdit(turma)}
                     >
-                      <FontAwesomeIcon icon={faPowerOff} />
+                      <FontAwesomeIcon icon={faPenToSquare} />
                     </Button>
+                  </OverlayTrigger>
+
+
+                  { !turma.ativo &&
+                    <OverlayTrigger
+                      placement="left"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltipAtivar}
+                    >
+                      <Button
+                        variant="btn-outline-secondary"
+                        className="color-green"
+                        onClick={() => onActive(turma.id)}
+                      >
+                        <FontAwesomeIcon icon={faPowerOff} />
+                      </Button>
+                    </OverlayTrigger>
                   }
 
                   { turma.ativo &&
-                    <Button
-                      variant="btn-outline-secondary"
-                      className="color-red"
-                      onClick={() => onInactive(turma.id)}
+                    <OverlayTrigger
+                      placement="left"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltipInativar}
                     >
-                      <FontAwesomeIcon icon={faPowerOff} />
-                    </Button>
+                      <Button
+                        variant="btn-outline-secondary"
+                        className="color-red"
+                        onClick={() => onInactive(turma.id)}
+                      >
+                        <FontAwesomeIcon icon={faPowerOff} />
+                      </Button>
+                    </OverlayTrigger>
                   }
 
                 </ButtonGroup>
