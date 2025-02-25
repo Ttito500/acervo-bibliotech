@@ -15,19 +15,20 @@ export interface CreateUsuarioRequest {
 }
 
 export interface CreateUsuarioResponse {
-  id: number;
-  nome: string;
-  cargo: string;
-  email: string;
-  senha: string;
+  id: number
+  nome: string
+  cargo: string
+  ativo: boolean
+  email: string
+  dataUltimoAcesso: string
 }
 
 export interface UpdateUsuarioRequest {
-  nome: string;
-  cargo: string;
-  email: string;
-  senha: string;
-  ativo: boolean;
+  nome: string
+  cargo: string
+  ativo: boolean
+  email: string
+  senha?: string
 }
 
 export interface UpdateUsuarioResponse {

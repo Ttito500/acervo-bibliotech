@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Service
 public class UsuarioService {
@@ -31,7 +32,7 @@ public class UsuarioService {
     }
 
     public Usuario getUsuarioById(Integer id){
-        return usuarioRepository.findById(Long.valueOf(id))
+        return usuarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario com ID " + id + " não encontrado."));
     }
 
@@ -50,7 +51,7 @@ public class UsuarioService {
         if (!novoUsuario.getCargo().equals("aluno_monitor") && !novoUsuario.getCargo().equals("bibliotecario")) {
             throw new ValidationException("Cargo invalido! Cargos válidos: 'aluno_monitor', 'bibliotecario'.");
         }
-        if (usuarioRepository.existsByEmail(novoUsuario.getEmail())  && novoUsuario.getEmail() != usuarioExistente.getEmail()) {
+        if (usuarioRepository.existsByEmail(novoUsuario.getEmail())  && !Objects.equals(novoUsuario.getEmail(), usuarioExistente.getEmail())) {
             throw new ValidationException("Já existe um usuário cadastrado com esse e-mail.");
         }
 

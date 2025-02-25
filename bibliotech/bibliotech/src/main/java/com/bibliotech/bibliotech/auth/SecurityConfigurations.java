@@ -93,8 +93,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/usuarios/filtrar").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.GET, "/usuarios/{id}").authenticated() //a permissao mais abranjente de um mesmo http method e mesmo root de endpoint tem que estar em baixo das menos abranjentes
                         .requestMatchers(HttpMethod.PUT, "/usuarios/{id}").hasRole("bibliotecario")
-                        .requestMatchers(HttpMethod.PATCH, "/usuarios/{id}/inativar").hasRole("bibliotecario")
-                        .requestMatchers(HttpMethod.PATCH, "/usuarios/{id}/ativar").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/usuarios/inativar/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/usuarios/ativar/{id}").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/livros").hasRole("bibliotecario")

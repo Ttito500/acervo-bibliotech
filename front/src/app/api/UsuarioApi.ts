@@ -9,7 +9,6 @@ import {
   UpdateUsuarioRequest,
   UpdateUsuarioResponse,
 } from "../interfaces/usuario";
-import { ResponsePagination } from "../interfaces/pagination";
 import { getQueryString } from "../shared/utils";
 
 const API_URL = "/usuarios";
@@ -26,12 +25,12 @@ export const login = async (body: LoginRequest): Promise<LoginResponse> => {
 
 export const getUsuarios = async (
     filtros?: UsuarioFiltros
-): Promise<ResponsePagination<GetUsuarioResponse>> => {
+): Promise<GetUsuarioResponse[]> => {
   try {
     const queryString = getQueryString(filtros);
     const url = queryString ? `${API_URL}/filtrar?${queryString}` : `${API_URL}/filtrar`;
 
-    const response = await api.get<ResponsePagination<GetUsuarioResponse>>(url);
+    const response = await api.get<GetUsuarioResponse[]>(url);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar usuários:", error);
