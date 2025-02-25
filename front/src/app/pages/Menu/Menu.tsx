@@ -30,6 +30,10 @@ const Menu: React.FC = () => {
   const handleClosePerfil = () => setShowPerfil(false);
   const handleShowPerfil = () => setShowPerfil(true);
 
+  const handleSair = () => {
+    window.electron.sairDoAplicativo();
+  };
+
   return (
       <>
         <Navbar className="bg-green navbar">
@@ -113,7 +117,7 @@ const Menu: React.FC = () => {
             <Button variant="secondary" onClick={handleClosePerfil}>
               Voltar
             </Button>
-            <Button variant="danger">
+            <Button variant="danger" onClick={handleSair}>
               <FontAwesomeIcon icon={faRightFromBracket} /> Sair
             </Button>
           </Modal.Footer>

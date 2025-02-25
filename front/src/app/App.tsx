@@ -153,11 +153,11 @@ const App: React.FC = () => {
             <Route path="/acervo" element={isAuthenticated ? <><Menu /><Acervo /></> : <Navigate to="/" />} />
             <Route path="/emprestimos" element={isAuthenticated ? <><Menu /><Emprestimos /></> : <Navigate to="/" />} />
             <Route path="/alunos" element={isAuthenticated ? <><Menu /><Alunos /></> : <Navigate to="/" />} />
-            <Route path="/secoes" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Secoes /></> : <Navigate to="/" />} />
-            <Route path="/estantes" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Estantes /></> : <Navigate to="/" />} />
-            <Route path="/usuarios" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Usuarios /></> : <Navigate to="/" />} />
-            <Route path="/cronograma" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Cronograma /></> : <Navigate to="/" />} />
-            <Route path="/relatorios" element={isAuthenticated && token.cargo === 'bibliotecario' ? <><Menu /><Relatorios /></> : <Navigate to="/" />} />
+            <Route path="/secoes" element={isAuthenticated && token?.cargo === 'bibliotecario' ? <><Menu /><Secoes /></> : <Navigate to="/" />} />
+            <Route path="/estantes" element={isAuthenticated && token?.cargo === 'bibliotecario' ? <><Menu /><Estantes /></> : <Navigate to="/" />} />
+            <Route path="/usuarios" element={isAuthenticated && token?.cargo === 'bibliotecario' ? <><Menu /><Usuarios /></> : <Navigate to="/" />} />
+            <Route path="/cronograma" element={isAuthenticated && token?.cargo === 'bibliotecario' ? <><Menu /><Cronograma /></> : <Navigate to="/" />} />
+            <Route path="/relatorios" element={isAuthenticated && token?.cargo === 'bibliotecario' ? <><Menu /><Relatorios /></> : <Navigate to="/" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
