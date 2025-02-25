@@ -22,6 +22,7 @@ public class EmprestimoResponseMapper {
         dto.setNumeroExemplar(emprestimo.getExemplar().getNumero());
         dto.setNomeAluno(emprestimo.getAluno().getNome());
         dto.setRealizadoPor(emprestimo.getRealizadoPor().getNome());
+        dto.setConcluidoPor(emprestimo.getConcluidoPor().getNome());
         dto.setObservacao(emprestimo.getObservacao());
         dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
         dto.setDataPrazo(emprestimo.getDataPrazo());
