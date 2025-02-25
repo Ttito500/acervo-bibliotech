@@ -21,6 +21,5 @@ public class UsuarioRequestPatchDTO {
     @NotBlank(message = "Senha é obrigatória")
     private String senha;
 
-    @NotBlank(message = "Ativo é obrigatório")
     private boolean ativo;
 }
