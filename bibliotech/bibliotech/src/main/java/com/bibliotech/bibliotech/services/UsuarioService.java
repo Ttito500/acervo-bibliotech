@@ -56,9 +56,11 @@ public class UsuarioService {
 
         usuarioExistente.setNome(novoUsuario.getNome());
         usuarioExistente.setEmail(novoUsuario.getEmail());
-        usuarioExistente.setSenha(novoUsuario.getSenha());
         usuarioExistente.setCargo(novoUsuario.getCargo());
         usuarioExistente.setAtivo(novoUsuario.getAtivo());
+        if (novoUsuario.getSenha() != null) {
+            usuarioExistente.setSenha(novoUsuario.getSenha());
+        }
 
         return usuarioRepository.save(usuarioExistente);
     }

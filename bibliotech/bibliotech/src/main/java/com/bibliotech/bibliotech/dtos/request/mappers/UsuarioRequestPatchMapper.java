@@ -13,7 +13,10 @@ public class UsuarioRequestPatchMapper {
         usuario.setNome(requestDTO.getNome());
         usuario.setCargo(requestDTO.getCargo());
         usuario.setEmail(requestDTO.getEmail());
-        usuario.setSenha(new BCryptPasswordEncoder().encode(requestDTO.getSenha()));
+
+        if (requestDTO.getSenha() != null) {
+            usuario.setSenha(new BCryptPasswordEncoder().encode(requestDTO.getSenha()));
+        }
         usuario.setAtivo(requestDTO.isAtivo());
 
         return usuario;
