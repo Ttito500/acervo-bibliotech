@@ -275,13 +275,12 @@ body {
 .accordion-container {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 32px;
   width: 100%;
 }
 
 .accordion-relatorios {
-  width: 48%;
-  max-width: 550px;
+  width: 100%;
 }
 
 .no-calendar::-webkit-calendar-picker-indicator {
