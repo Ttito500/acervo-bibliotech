@@ -74,13 +74,13 @@ const Menu: React.FC = () => {
         </Navbar>
 
         <Modal
-            show={showPerfil}
-            onHide={handleClosePerfil}
-            size="lg"
-            backdrop="static"
-            centered
-            keyboard={false}
-            className="Modais-Confirmacao-Custon"
+          show={showPerfil}
+          onHide={handleClosePerfil}
+          size="lg"
+          backdrop="static"
+          centered
+          keyboard={false}
+          className="Modais-Confirmacao-Custon"
         >
           <Modal.Header closeButton>
             <Modal.Title>Perfil</Modal.Title>
