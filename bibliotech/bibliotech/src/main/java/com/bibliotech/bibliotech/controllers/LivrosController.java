@@ -127,17 +127,9 @@ public class LivrosController {
             @RequestParam(value = "dataInicio") LocalDate dataInicio,
             @RequestParam(value = "dataFim") LocalDate dataFim,
             @RequestParam(value = "qtdMaxLivros") Integer qtdMaxLivros) throws DocumentException {
-        List<LivrosMaisLidosDTO> livrosMaisLidos = livrosService.obterLivrosMaisLidos(dataInicio, dataFim);
+        List<LivrosMaisLidosDTO> livrosMaisLidos = livrosService.obterLivrosMaisLidos(dataInicio, dataFim, qtdMaxLivros);
 
-        int quantidadeARetornar = Math.min(qtdMaxLivros, livrosMaisLidos.size());
-
-        List<LivrosMaisLidosDTO> livrosSelecionados = new ArrayList<>();
-
-        for (int i = 0; i < quantidadeARetornar; i++) {
-            livrosSelecionados.add(livrosMaisLidos.get(i));
-        }
-
-        byte[] pdfBytes = pdfExportService.exportLivrosMaisLidos(livrosSelecionados);
+        byte[] pdfBytes = pdfExportService.exportLivrosMaisLidos(livrosMaisLidos);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

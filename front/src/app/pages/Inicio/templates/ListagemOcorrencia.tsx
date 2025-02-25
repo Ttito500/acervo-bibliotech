@@ -1,14 +1,22 @@
-import React, { useState } from "react";
-import { Table, Button, ButtonGroup } from "react-bootstrap";
+import React from "react";
+import { Table, Button, ButtonGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import Modal from "react-bootstrap/esm/Modal";
-import ConfirmacaoOcorrencia from "./ConfirmacaoOcorrencia";
+import { GetOcorrenciaResponse } from "./../../../interfaces/ocorrencia";
+import { format } from "date-fns/format";
 
-const ListagemOcorrencia: React.FC = () => {
-  const [showConfirmar, setConfirmar] = useState(false);
-  const handleCloseConfirmar = () => setConfirmar(false);
-  const handleShowConfirmar = () => setConfirmar(true);
+interface ListagemOcorrenciasProps {
+  ocorrencias: GetOcorrenciaResponse[];
+  onDelete: (id: number) => void;
+}
+
+const ListagemOcorrencias: React.FC<ListagemOcorrenciasProps> = ({ ocorrencias, onDelete }) => {
+
+  const renderTooltipDeletar = (props: any) => (
+    <Tooltip id="button-tooltip-5" {...props}>
+      Deletar
+    </Tooltip>
+  );
 
   return (
     <>
@@ -18,115 +26,42 @@ const ListagemOcorrencia: React.FC = () => {
             <th className="th-center-size-eight">Série</th>
             <th className="th-center-size-eight">Turma</th>
             <th>Nome</th>
-            <th className="th-size-twenty">Ocorrência</th>
-            <th className="th-center-size-eight">Data</th>
+            <th>Detalhes</th>
+            <th className="align-center">Data</th>
             <th className="th-center-size-eight">Ações</th>
           </tr>
         </thead>
         <tbody>
-          <tr className="tabela-tr">
-            <td className="text-center">1</td>
-            <td className="text-center">A</td>
-            <td>João Silva</td>
-            <td>Estudando</td>
-            <td>07/02/2025</td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                  onClick={handleShowConfirmar}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr className="tabela-tr">
-            <td className="text-center">2</td>
-            <td className="text-center">B</td>
-            <td>Ana Oliveira</td>
-            <td>Descansando</td>
-            <td>07/02/2025</td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                  onClick={handleShowConfirmar}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr className="tabela-tr">
-            <td className="text-center">3</td>
-            <td className="text-center">C</td>
-            <td>Pedro Souza</td>
-            <td>Vivendo</td>
-            <td>07/02/2025</td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                  onClick={handleShowConfirmar}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr className="tabela-tr">
-            <td className="text-center">4</td>
-            <td className="text-center">D</td>
-            <td>Maria Santos</td>
-            <td>Estudando</td>
-            <td>07/02/2025</td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                  onClick={handleShowConfirmar}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
+          {ocorrencias?.map((ocorrencia) => (
+            <tr key={ocorrencia.id} className="tabela-tr">
+              <td className="text-center">{ocorrencia.aluno.turma.serie}ª</td>
+              <td className="text-center">{ocorrencia.aluno.turma.turma}</td>
+              <td>{ocorrencia.aluno.nome}</td>
+              <td>{ocorrencia.detalhes}</td>
+              <td>{format(ocorrencia.data, "dd/MM/yyyy")}</td>
+              <td>
+                <ButtonGroup aria-label="Ações" className="tabela-acoes">
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipDeletar}
+                  >
+                    <Button
+                      variant="btn-outline-secondary"
+                      className="color-red"
+                      onClick={() => onDelete(ocorrencia.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </OverlayTrigger>
+                </ButtonGroup>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
-
-      <Modal
-        show={showConfirmar}
-        onHide={handleCloseConfirmar}
-        size="lg"
-        backdrop="static"
-        centered
-        keyboard={false}
-        className="Modais-Confirmacao-Custon"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmação</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <ConfirmacaoOcorrencia />
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseConfirmar}>
-            Cancelar
-          </Button>
-          <Button variant="danger">
-            <FontAwesomeIcon icon={faTrash} /> Excluir
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 };
 
-export default ListagemOcorrencia;
+export default ListagemOcorrencias;

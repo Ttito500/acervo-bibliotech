@@ -10,6 +10,4 @@ public class EmprestimoRequestDTO {
     private Integer idAluno;
     private Integer idExemplar;
     private String observacao;
-
-    private Integer idUsuario; //TEMPORARIO
 }

@@ -8,6 +8,7 @@ import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.repositories.EstantePrateleiraRepository;
 import com.bibliotech.bibliotech.repositories.ExemplarRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,89 +28,65 @@ public class EstantePrateleiraService {
     @Autowired
     private ExemplarResponseMapper exemplarResponseMapper;
 
-    public Estanteprateleira adicionarEstanteprateleira(Estanteprateleira ep) {
-
-        if(ep.getPrateleira() == null){
+    @Transactional
+    public Estanteprateleira adicionarEstanteprateleira(Estanteprateleira estanteprateleira) {
+        if(estanteprateleira.getPrateleira() == null){
             throw new ValidationException("A prateleira não pode ser vazia.");
         }
-        if(ep.getEstante() == null || ep.getEstante().trim().isEmpty()){
-            throw new ValidationException("A estante não pode ser vazia.");
+        if(!estanteIsValid(estanteprateleira.getEstante())){
+            throw new ValidationException("A estante invalida! A estante não pode ser vaiza e deve ser uma letra!");
         }
-        if(ep.getEstante().length() > 1){
-            throw new ValidationException("A estante só pode conter um caractere.");
-        }
-
-        ep.setEstante(ep.getEstante().trim().toUpperCase());
-        if (estantePrateleiraRepository.findByEstanteAndPrateleira(ep.getEstante(), ep.getPrateleira()).isPresent()){
-            throw new ValidationException("Já existe uma Estante-Prateleira com esses valores.");
+        if (estantePrateleiraRepository.existsEstanteprateleiraByEstanteAndPrateleira(estanteprateleira.getEstante(), estanteprateleira.getPrateleira())) {
+            throw new ValidationException("Já existe uma estante-prateleira com esses valores!");
         }
 
-        return estantePrateleiraRepository.save(ep);
+        return estantePrateleiraRepository.save(estanteprateleira);
     }
 
     public List<Estanteprateleira> listarEstanteprateleiras() {
         return estantePrateleiraRepository.findAll();
     }
 
+    private boolean estanteIsValid(String estante) {
+        if(estante == null || estante.length() != 1 || estante.equals("0") || estante.equals("1") || estante.equals("2") ||
+                estante.equals("3") || estante.equals("4") || estante.equals("5") || estante.equals("6") || estante.equals("7") ||
+                estante.equals("8") || estante.equals("9")){
+            return false;
+        }
+
+        return true;
+    }
+
     public List<ExemplarResponseDTO> listarExemplaresPorEstantePrateleira(Integer idEstantePrateleira) {
-        Estanteprateleira estanteprateleira = estantePrateleiraRepository.findById(idEstantePrateleira)
-                .orElseThrow(() -> new NotFoundException("Estante-Prateleira com ID " + idEstantePrateleira + " não encontrada."));
+        Estanteprateleira estanteprateleira = getEstantePrateleiraById(idEstantePrateleira);
         List<Exemplar> exemplares = exemplarRepository.findByEstanteprateleira(estanteprateleira);
         if (exemplares.isEmpty()) {
             throw new NotFoundException("Nenhum exemplar encontrado para a Estante-Prateleira com ID " + idEstantePrateleira);
         }
-        return exemplares.stream().map(exemplarResponseMapper::toDTO)
-                .collect(Collectors.toList());
+
+        return exemplares.stream().map(exemplarResponseMapper::toDTO).collect(Collectors.toList());
     }
 
-    public String atualizarEstanteprateleira(Integer id, Estanteprateleira ep) {
-        Estanteprateleira ep_existente = estantePrateleiraRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Estante-Prateleira com ID " + id + " não encontrado."));
+    public Estanteprateleira atualizarEstanteprateleira(Integer id, Estanteprateleira estanteprateleira) {
+        Estanteprateleira ep_existente = getEstantePrateleiraById(id);
 
-        if (ep.getEstante() == null || ep.getEstante().isEmpty()) {
-            throw new ValidationException("A estante não pode ser vazia.");
-        }
-        if (ep.getPrateleira() == null) {
+        if(estanteprateleira.getPrateleira() == null){
             throw new ValidationException("A prateleira não pode ser vazia.");
         }
-        if (ep.getEstante().length() > 1) {
-            throw new ValidationException("A estante só pode conter um caractere.");
+        if(!estanteIsValid(estanteprateleira.getEstante())){
+            throw new ValidationException("A estante invalida! A estante não pode ser vaiza e deve ser uma letra!");
         }
-
-        String novaEstante = ep.getEstante().trim().toUpperCase();
-        Integer novaPrateleira = ep.getPrateleira();
-
-        if (estantePrateleiraRepository.findByEstanteAndPrateleira(novaEstante, novaPrateleira).isPresent()
-                && !estantePrateleiraRepository.findByEstanteAndPrateleira(novaEstante, novaPrateleira).get().getId().equals(id)) {
-            throw new ValidationException("Já existe uma Estante-Prateleira com esses valores.");
+        if (estantePrateleiraRepository.existsEstanteprateleiraByEstanteAndPrateleira(estanteprateleira.getEstante(), estanteprateleira.getPrateleira())) {
+            throw new ValidationException("Já existe uma estante-prateleira com esses valores!");
         }
+        ep_existente.setEstante(estanteprateleira.getEstante());
+        ep_existente.setPrateleira(estanteprateleira.getPrateleira());
 
-        boolean estanteAtualizada = !ep_existente.getEstante().equals(novaEstante);
-        boolean prateleiraAtualizada = !ep_existente.getPrateleira().equals(novaPrateleira);
-
-        if (estanteAtualizada) {
-            ep_existente.setEstante(novaEstante);
-        }
-        if (prateleiraAtualizada) {
-            ep_existente.setPrateleira(novaPrateleira);
-        }
-
-        if (estanteAtualizada || prateleiraAtualizada) {
-            estantePrateleiraRepository.save(ep_existente);
-            if (estanteAtualizada && prateleiraAtualizada) {
-                return "Estante e Prateleira atualizadas com sucesso.";
-            } else if (estanteAtualizada) {
-                return "Estante atualizada com sucesso.";
-            } else {
-                return "Prateleira atualizada com sucesso.";
-            }
-        }
-
-        return "Nada foi atualizado.";
+        return estantePrateleiraRepository.save(ep_existente);
     }
 
 
-    public String deletarEstanteprateleira (Integer id) {
+    public void deletarEstanteprateleira (Integer id) {
         Estanteprateleira estanteprateleira = estantePrateleiraRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estante-Prateleira com ID " + id + " não encontrada."));
 
@@ -118,8 +95,6 @@ public class EstantePrateleiraService {
         }
 
         estantePrateleiraRepository.delete(estanteprateleira);
-
-        return "Estante-Prateleira deletada com sucesso";
     }
 
     public Estanteprateleira getEstantePrateleiraById(Integer id) {

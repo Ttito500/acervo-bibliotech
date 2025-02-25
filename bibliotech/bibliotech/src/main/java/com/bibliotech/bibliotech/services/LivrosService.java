@@ -10,6 +10,7 @@ import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPatchMapper;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
 import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
 import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
+import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.*;
@@ -172,8 +173,22 @@ public class LivrosService {
         return exemplaresService.atualizarExemplar(id, exemplarDTO);
     }
 
-    public List<LivrosMaisLidosDTO> obterLivrosMaisLidos(LocalDate dataInicio, LocalDate dataFim) {
-        return livroRepository.buscarLivrosMaisLidos(dataInicio, dataFim);
+    public List<LivrosMaisLidosDTO> obterLivrosMaisLidos(LocalDate dataInicio, LocalDate dataFim, Integer qtdMax) {
+        if (dataInicio == null) {
+            throw new ValidationException("A data de início é obrigatória.");
+        } else if (dataFim == null) {
+            dataFim = LocalDate.now();
+        } else if (dataInicio.isAfter(dataFim)) {
+            throw new ValidationException("A data de início deve ser anterior à data final.");
+        }
+
+        List<LivrosMaisLidosDTO> result = livroRepository.buscarLivrosMaisLidos(dataInicio, dataFim);
+
+        if (qtdMax != null && result.size() > qtdMax) {
+            return result.subList(0, qtdMax);
+        }
+
+        return result;
     }
 
     public List<RelatorioAcervoDTO> buscarRelatorioAcervo() {

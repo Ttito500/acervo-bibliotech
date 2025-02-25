@@ -1,7 +1,7 @@
 import api from "../shared/axios/axios";
 import { GetGeneroResponse } from "../interfaces/genero";
 
-const API_URL = "http://localhost:8090/generos";
+const API_URL = "/generos";
 
 export const getGeneros = async (genero: string): Promise<GetGeneroResponse[]> => {
   try {

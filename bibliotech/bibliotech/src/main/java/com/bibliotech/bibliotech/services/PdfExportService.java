@@ -8,7 +8,6 @@ import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
 
-import com.bibliotech.bibliotech.repositories.LivroRepository;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
@@ -175,7 +174,7 @@ public class PdfExportService {
             //fonte em negrito para o título, tamanho 18
             Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
 
-            PdfPCell cell = new PdfPCell(new Phrase("Alunos Leitores", fontBold18));
+            PdfPCell cell = new PdfPCell(new Phrase("Alunos Mais Leitores", fontBold18));
             cell.setColspan(3);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setPadding(8.0f);

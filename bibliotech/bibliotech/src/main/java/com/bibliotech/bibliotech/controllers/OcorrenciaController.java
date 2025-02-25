@@ -41,7 +41,7 @@ public class OcorrenciaController {
         return ResponseEntity.ok(ocorrenciaResponseMapper.toDtoList(ocorrenciaService.filtrarOcorrencias(dataInicio, dataFim)));
     }
 
-    @GetMapping("export/pdf")
+    @GetMapping("/export/pdf")
     public ResponseEntity<byte[]> exportOcorrenciasPdf(@RequestParam(value = "dataInicio", required = false) LocalDate dataInicio, @RequestParam(value = "dataFim", required = false) LocalDate dataFim) {
         List<Ocorrencia> ocorrencias = ocorrenciaService.filtrarOcorrencias(dataInicio, dataFim);
 
@@ -55,7 +55,6 @@ public class OcorrenciaController {
                 .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
                 .body(pdfBytes);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarOcorrencia(@PathVariable Integer id) {

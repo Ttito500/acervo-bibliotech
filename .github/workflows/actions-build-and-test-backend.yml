@@ -28,6 +28,8 @@ jobs:
 
         EMAIL_SMTP: ${{ vars.EMAIL_SMTP }}
         SENHA_EMAIL_SMTP: ${{ secrets.SENHA_EMAIL_SMTP }}
+
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
     defaults:
       run:
         working-directory: ./bibliotech/bibliotech/

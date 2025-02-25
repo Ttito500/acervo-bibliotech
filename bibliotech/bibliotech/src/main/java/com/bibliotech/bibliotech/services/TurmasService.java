@@ -103,7 +103,7 @@ public class TurmasService {
         turmaRepository.save(turmaExistente);
     }
 
-    public List<TurmaLeiturasDTO> obterTurmasMaisLeitoras(LocalDate dataInicio, LocalDate dataFim) {
+    public List<TurmaLeiturasDTO> obterTurmasMaisLeitoras(LocalDate dataInicio, LocalDate dataFim, Integer qtdMax) {
         if (dataInicio == null) {
             throw new ValidationException("A data de início é obrigatória.");
         } else if (dataFim == null) {
@@ -112,6 +112,12 @@ public class TurmasService {
             throw new ValidationException("A data de início deve ser anterior à data final.");
         }
 
-        return turmaRepository.obterTurmasMaisLeitoras(dataInicio, dataFim);
+        List<TurmaLeiturasDTO> result = turmaRepository.obterTurmasMaisLeitoras(dataInicio, dataFim);
+
+        if (qtdMax != null && result.size() > qtdMax) {
+            return result.subList(0, qtdMax);
+        }
+
+        return result;
     }
 }

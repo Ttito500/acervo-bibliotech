@@ -42,6 +42,7 @@ services:
       - API_PORT=${API_PORT}
       - EMAIL_SMTP=${EMAIL_SMTP}
       - SENHA_EMAIL_SMTP=${SENHA_EMAIL_SMTP}
+      - JWT_SECRET=${JWT_SECRET}
     ports:
       - "${API_PORT}:8090"
     healthcheck:

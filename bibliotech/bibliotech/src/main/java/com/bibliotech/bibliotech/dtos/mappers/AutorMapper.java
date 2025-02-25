@@ -2,10 +2,13 @@ package com.bibliotech.bibliotech.dtos.mappers;
 
 import com.bibliotech.bibliotech.dtos.AutorDTO;
 import com.bibliotech.bibliotech.models.Autor;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+@Component
 public class AutorMapper {
 
     public static AutorDTO toDTO(Autor autor) {

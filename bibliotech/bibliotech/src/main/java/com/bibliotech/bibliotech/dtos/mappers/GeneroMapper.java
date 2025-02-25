@@ -2,10 +2,13 @@ package com.bibliotech.bibliotech.dtos.mappers;
 
 import com.bibliotech.bibliotech.dtos.GeneroDTO;
 import com.bibliotech.bibliotech.models.Genero;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+@Component
 public class GeneroMapper {
 
     public static GeneroDTO toDTO(Genero genero) {

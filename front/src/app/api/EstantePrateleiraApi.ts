@@ -7,7 +7,7 @@ import {
   UpdateEstantePrateleiraResponse,
 } from "../interfaces/estante-prateleira";
 
-const API_URL = "http://localhost:8090/estanteprateleira";
+const API_URL = "/estanteprateleira";
 
 export const getEstantePrateleiras = async (): Promise<GetEstantePrateleiraResponse[]> => {
   try {

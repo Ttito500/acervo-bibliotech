@@ -3,7 +3,7 @@ import { ResponsePagination } from "../interfaces/pagination";
 import api from "../shared/axios/axios";
 import { getQueryString } from "../shared/utils";
 
-const API_URL = "http://localhost:8090/emprestimos";
+const API_URL = "/emprestimos";
 
 export const getEmprestimos = async (filtros?: EmprestimosFiltros): Promise<ResponsePagination<GetEmprestimoResponse>> => {
   try {
