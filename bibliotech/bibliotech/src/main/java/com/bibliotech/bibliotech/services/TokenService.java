@@ -28,6 +28,7 @@ public class TokenService {
                     .withSubject(usuario.getEmail())
                     .withClaim("nome", usuario.getNome())
                     .withClaim("id", usuario.getId())
+                    .withClaim("cargo", usuario.getCargo())
                     .withExpiresAt(gerarDataExpiracao())
                     .sign(algoritimo);
             return token;
@@ -88,6 +89,25 @@ public class TokenService {
                     .asString();
         } catch (Exception exception) {
             throw new TokenExeption("Erro ao obter nome do usuário do token");
+        }
+    }
+
+    public String getUsuarioCargo() {
+        try {
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null) {
+                throw new TokenExeption("Usuário não autenticado");
+            }
+
+            String token = authentication.getCredentials().toString();
+            return JWT.require(Algorithm.HMAC256(secret))
+                    .withIssuer("bibliotech")
+                    .build()
+                    .verify(token)
+                    .getClaim("cargo")
+                    .asString();
+        } catch (Exception exception) {
+            throw new TokenExeption("Erro ao obter cargo do usuário do token");
         }
     }
 }
