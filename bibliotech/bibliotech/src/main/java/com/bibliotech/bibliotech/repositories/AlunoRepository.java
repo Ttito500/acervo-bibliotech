@@ -35,10 +35,10 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
     @Query("SELECT new com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO(" +
             "a.nome, t.serie, t.turma, COUNT(e.id)) " +
             "FROM Aluno a " +
-            "INNER JOIN Turma t ON a.turma.id = t.id " + // Join with Turma
+            "INNER JOIN Turma t ON a.turma.id = t.id " +
             "INNER JOIN Emprestimo e ON a.id = e.aluno.id " +
             "WHERE e.dataEmprestimo BETWEEN :dataInicio AND :dataFim " +
-            "GROUP BY a.nome, t.serie, t.turma " + // Group by all selected non-aggregated fields
+            "GROUP BY a.nome, t.serie, t.turma " +
             "ORDER BY COUNT(e.id) DESC")
     List<AlunoLeiturasDTO> obterAlunosMaisLeitures(LocalDate dataInicio, LocalDate dataFim);
 

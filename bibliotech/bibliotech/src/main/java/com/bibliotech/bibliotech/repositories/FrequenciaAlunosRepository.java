@@ -17,9 +17,9 @@ public interface FrequenciaAlunosRepository extends JpaRepository<FrequenciaAlun
 
     default List<FrequenciaAlunos> filtrarFrequencias(LocalDate data) {
         if (data == null) {
-            return findAll(); // Return all records if data is null
+            return findAll();
         } else {
-            return findByData(data); // Filter by date if data is not null
+            return findByData(data);
         }
     }
 }

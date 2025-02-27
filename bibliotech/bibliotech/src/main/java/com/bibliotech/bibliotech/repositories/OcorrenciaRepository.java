@@ -18,19 +18,19 @@ public interface OcorrenciaRepository extends JpaRepository<Ocorrencia, Integer>
 
     default List<Ocorrencia> filtrarOcorrencias(LocalDate dataInicio, LocalDate dataFim) {
         if (dataInicio == null) {
-            return findAll(); // Return all records if dataInicio or dataFim is null
+            return findAll();
         }
         else if (dataFim == null) {
             if (dataInicio.isAfter(LocalDate.now())) {
                 throw new ValidationException("Data de início não pode ser maior que a data atual.");
             }
-            return findByPeriod(dataInicio, LocalDate.now()); // Filter by date if dataFim is null
+            return findByPeriod(dataInicio, LocalDate.now());
         }
         else {
             if (dataInicio.isAfter(dataFim)) {
                 throw new ValidationException("Data de início não pode ser maior que a data de fim.");
             }
-            return findByPeriod(dataInicio, dataFim); // Filter by date if dataInicio and dataFim are not null
+            return findByPeriod(dataInicio, dataFim);
         }
     }
 }
