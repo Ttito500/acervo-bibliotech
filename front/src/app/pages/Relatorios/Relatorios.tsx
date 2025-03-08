@@ -371,7 +371,7 @@ const Relatorios: React.FC = () => {
             </Accordion.Header>
             <Accordion.Body className="accordion-body-expanded">
               <p>
-                Selecione a data inicial e final do período desejado para gerar
+                Selecione "Exportar Relatório" para gerar
                 um relatório com as informações do acervo.
               </p>
 

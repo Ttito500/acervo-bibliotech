@@ -1,41 +1,34 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.dtos.mappers.AlunoMapper;
 import com.bibliotech.bibliotech.dtos.request.AlunoRequestDTO;
 import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.AlunoResponseMapper;
+import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.services.AlunosService;
-import com.bibliotech.bibliotech.services.PdfExportService;
-import org.springframework.http.HttpHeaders;
-import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
+import javax.naming.Binding;
 
 @RestController
 @RequestMapping("/alunos")
 public class AlunoController {
 
-    private final AlunosService alunosService;
-    private final AlunoResponseMapper alunoResponseMapper;
-    private final PdfExportService pdfExportService;
+    @Autowired
+    private AlunoMapper mapper;
 
-    public AlunoController(AlunosService alunosService, AlunoResponseMapper alunoResponseMapper, PdfExportService pdfExportService) {
-        this.alunosService = alunosService;
-        this.alunoResponseMapper = alunoResponseMapper;
-        this.pdfExportService = pdfExportService;
-    }
+    @Autowired
+    private AlunosService alunosService;
 
     @GetMapping("")
-    public ResponseEntity<Page<AlunoResponseDTO>> listarAlunos(
+    public ResponseEntity<Page<AlunoResponseDTO>> listarAlunosPaginado(
             @RequestParam(value = "serie", required = false) Integer serie,
             @RequestParam(value = "turma", required = false) String turma,
             @RequestParam(value = "nome", required = false) String nome,
@@ -45,30 +38,30 @@ public class AlunoController {
             @RequestParam(value = "size", defaultValue = "10") int size)
             {
 
+        Page<Aluno> alunosPage = alunosService.filtrarAlunos(serie, turma, nome, situacao, ativo, PageRequest.of(page, size));
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        Page<Aluno> alunosPage = alunosService.filtrarAlunos(serie, turma, nome, situacao, ativo, pageable);
-
-        Page<AlunoResponseDTO> alunosResponseDTOPage = alunosPage.map(aluno -> AlunoResponseMapper.toDto(aluno));
-
-        return ResponseEntity.ok(alunosResponseDTOPage);
+        return ResponseEntity.ok(alunosPage.map(aluno -> mapper.toAlunoResponseDTO(aluno)));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<AlunoResponseDTO> buscarAlunoPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(AlunoResponseMapper.toDto(alunosService.buscarAlunoPorId(id)));
+        return ResponseEntity.ok(mapper.toAlunoResponseDTO(alunosService.buscarAlunoPorId(id)));
     }
 
     @PostMapping
-    public ResponseEntity<AlunoResponseDTO> cadastrarAluno(@RequestBody AlunoRequestDTO requestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(AlunoResponseMapper.toDto(alunosService.cadastrarAluno(requestDTO)));
+    public ResponseEntity<AlunoResponseDTO> cadastrarAluno(@RequestBody AlunoRequestDTO alunoRequestDTO, BindingResult result) {
+        if (result.hasErrors()) { // Verifica as validações do Jakarta
+            throw new ValidationException(result);
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toAlunoResponseDTO(alunosService.cadastrarAluno(mapper.toEntity(alunoRequestDTO))));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AlunoResponseDTO> atualizarAluno(
             @PathVariable Integer id,
             @RequestBody AlunoRequestDTO requestDTO) {
-        return ResponseEntity.ok(alunoResponseMapper.toDto(alunosService.atualizarAluno(id, requestDTO)));
+        return ResponseEntity.ok(mapper.toAlunoResponseDTO(alunosService.atualizarAluno(id, requestDTO)));
     }
 
     @PatchMapping("/inativar/{id}")
@@ -81,19 +74,5 @@ public class AlunoController {
     public ResponseEntity<Void> ativarAluno(@PathVariable Integer id) {
         alunosService.ativarAluno(id);
         return ResponseEntity.noContent().build();
-    }
-
-    //coloquei a data de inicio como nao obrigatorio para tratar dela bonitinho no service
-    @GetMapping("/mais-leitores/export/pdf")
-    public ResponseEntity<byte[]> exportTopLeitoresPdf(@RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim, @RequestParam(required = false) Integer qtdMax) {
-        byte[] pdfBytes = pdfExportService.exportAlunosMaisLeitores(alunosService.obterAlunosMaisLeitures(dataInicio, dataFim, qtdMax));
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "top-leitores.pdf");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(pdfBytes);
     }
 }

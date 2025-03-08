@@ -37,10 +37,10 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
             "FROM Aluno a " +
             "INNER JOIN Turma t ON a.turma.id = t.id " + // Join with Turma
             "INNER JOIN Emprestimo e ON a.id = e.aluno.id " +
-            "WHERE e.dataEmprestimo BETWEEN :dataInicio AND :dataFim " +
+            "WHERE e.dataEmprestimo BETWEEN :dataInicio AND :dataFim AND e.situacao = 'entregue' "+
             "GROUP BY a.nome, t.serie, t.turma " + // Group by all selected non-aggregated fields
             "ORDER BY COUNT(e.id) DESC")
-    List<AlunoLeiturasDTO> obterAlunosMaisLeitures(LocalDate dataInicio, LocalDate dataFim);
+    List<AlunoLeiturasDTO> obterAlunosMaisLeitures(LocalDate dataInicio, LocalDate dataFim, Integer qtdMax);
 
     boolean existsByEmail(String email);
     boolean existsById(Integer id);

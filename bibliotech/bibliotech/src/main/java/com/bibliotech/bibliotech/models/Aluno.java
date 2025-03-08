@@ -25,7 +25,7 @@ public class Aluno {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Email
+    @Email(message = "O email está inválido!")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -35,7 +35,7 @@ public class Aluno {
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = true;
 
-    @Column(name = "situacao", length = 20)
+    @Column(name = "situacao", length = 20) // 'regular', 'irregular', 'debito'
     private String situacao;
 
     @PrePersist

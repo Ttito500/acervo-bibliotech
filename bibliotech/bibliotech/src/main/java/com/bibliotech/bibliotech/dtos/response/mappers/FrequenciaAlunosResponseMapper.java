@@ -1,7 +1,9 @@
 package com.bibliotech.bibliotech.dtos.response.mappers;
 
+import com.bibliotech.bibliotech.dtos.mappers.AlunoMapper;
 import com.bibliotech.bibliotech.dtos.response.FrequenciaAlunosResponseDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,13 +12,11 @@ import java.util.stream.Collectors;
 @Component
 public class FrequenciaAlunosResponseMapper {
 
-    private final AlunoResponseMapper alunoResponseMapper;
-    private final UsuarioResponseMapper usuarioResponseMapper;
+    @Autowired
+    private AlunoMapper alunoMapper;
+    @Autowired
+    private UsuarioResponseMapper usuarioResponseMapper;
 
-    public FrequenciaAlunosResponseMapper(AlunoResponseMapper alunoResponseMapper, UsuarioResponseMapper usuarioResponseMapper) {
-        this.alunoResponseMapper = alunoResponseMapper;
-        this.usuarioResponseMapper = usuarioResponseMapper;
-    }
 
     public FrequenciaAlunosResponseDTO toDto(FrequenciaAlunos frequenciaAlunos) {
         if (frequenciaAlunos == null) {
@@ -25,7 +25,7 @@ public class FrequenciaAlunosResponseMapper {
 
         FrequenciaAlunosResponseDTO dto = new FrequenciaAlunosResponseDTO();
         dto.setId(frequenciaAlunos.getId());
-        dto.setAluno(alunoResponseMapper.toDto(frequenciaAlunos.getAluno()));
+        dto.setAluno(alunoMapper.toAlunoResponseDTO(frequenciaAlunos.getAluno()));
         dto.setRegistradaPor(usuarioResponseMapper.toDto(frequenciaAlunos.getRegistradaPor()));
         dto.setAtividade(frequenciaAlunos.getAtividade());
         dto.setData(frequenciaAlunos.getData());

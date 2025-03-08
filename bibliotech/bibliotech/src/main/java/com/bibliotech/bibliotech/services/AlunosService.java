@@ -11,6 +11,7 @@ import com.bibliotech.bibliotech.repositories.AlunoRepository;
 import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import com.bibliotech.bibliotech.utils.EmailValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,15 @@ import java.util.List;
 @Service
 public class AlunosService {
 
-    private final AlunoRepository alunoRepository;
-    private final AlunoRequestMapper alunoRequestMapper;
-    private final TurmaRepository turmaRepository;
-    private final EmprestimoRepository emprestimoRepository;
+    @Autowired
+    private AlunoRepository alunoRepository;
 
-    public AlunosService(AlunoRepository alunoRepository, AlunoRequestMapper alunoRequestMapper, TurmaRepository turmaRepository, EmprestimoRepository emprestimoRepository) {
-        this.alunoRepository = alunoRepository;
-        this.alunoRequestMapper = alunoRequestMapper;
-        this.turmaRepository = turmaRepository;
-        this.emprestimoRepository = emprestimoRepository;
-    }
+    @Autowired
+    private TurmaRepository turmaRepository;
+
+    @Autowired
+    private AlunoRequestMapper alunoRequestMapper;
+
 
     public Page<Aluno> filtrarAlunos(Integer serie, String turma, String nome, String situacao, Boolean ativo, Pageable pageable) {
         return alunoRepository.filtrarAlunos(serie, turma, nome, ativo, situacao, pageable);
@@ -43,21 +42,11 @@ public class AlunosService {
     }
 
     @Transactional
-    public Aluno cadastrarAluno(AlunoRequestDTO requestDTO) {
-        if (requestDTO.getIdTurma() == null) {
-            throw new ValidationException("A turma não pode ser nula.");
-        }
-        if (requestDTO.getNome() == null || requestDTO.getNome().isEmpty()) {
-            throw new ValidationException("O nome do aluno é obrigatório.");
-        }
-        if (!EmailValidator.isValid(requestDTO.getEmail()) || requestDTO.getEmail().isEmpty()) {
-            throw new ValidationException("O e-mail informado não é válido.");
-        }
-        if (alunoRepository.existsByEmail(requestDTO.getEmail())) {
+    public Aluno cadastrarAluno(Aluno aluno) {
+        if (alunoRepository.existsByEmail(aluno.getEmail())) {
             throw new ValidationException("Já existe um aluno cadastrado com esse e-mail.");
         }
 
-        Aluno aluno = alunoRequestMapper.toEntity(requestDTO);
         aluno.setSituacao("regular");
 
         return alunoRepository.save(aluno);
@@ -123,10 +112,11 @@ public class AlunosService {
         alunoRepository.save(alunoExistente);
     }
 
+    @Transactional
     public void inativarAlunosPorTurma(Turma turma) {
         List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, true, null, Pageable.unpaged()).getContent();
         for (Aluno aluno : alunos) {
-            aluno.setAtivo(false);
+            inativarAluno(aluno.getId());
         }
         alunoRepository.saveAll(alunos);
     }
@@ -139,21 +129,17 @@ public class AlunosService {
         alunoRepository.saveAll(alunos);
     }
 
-    public List<AlunoLeiturasDTO> obterAlunosMaisLeitures(LocalDate dataInicio, LocalDate dataFim, Integer qtdMax) {
+    public List<AlunoLeiturasDTO> obterAlunosMaisLeitores(LocalDate dataInicio, LocalDate dataFim, Integer qtdMax) {
         if (dataInicio == null) {
             throw new ValidationException("A data de início é obrigatória.");
         } else if (dataFim == null) {
             dataFim = LocalDate.now();
         } else if (dataInicio.isAfter(dataFim)) {
             throw new ValidationException("A data de início deve ser anterior à data final.");
+        } else if (qtdMax <= 0 || qtdMax == null) {
+            throw new ValidationException("A quantidade máxima deve ser maior que zero.");
         }
 
-        List<AlunoLeiturasDTO> result = alunoRepository.obterAlunosMaisLeitures(dataInicio, dataFim);
-
-        if (qtdMax != null && result.size() > qtdMax) {
-            return result.subList(0, qtdMax);
-        }
-
-        return result;
+        return alunoRepository.obterAlunosMaisLeitures(dataInicio, dataFim, qtdMax);
     }
 }

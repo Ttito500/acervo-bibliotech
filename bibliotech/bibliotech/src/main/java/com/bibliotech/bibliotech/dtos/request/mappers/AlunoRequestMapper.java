@@ -16,16 +16,5 @@ public class AlunoRequestMapper {
         this.turmaRepository = turmaRepository;
     }
 
-    public Aluno toEntity(AlunoRequestDTO alunoRequestDTO) {
-        Aluno aluno = new Aluno();
 
-        aluno.setTurma(turmaRepository.findById(alunoRequestDTO.getIdTurma()).orElseThrow(() -> new NotFoundException("Turma não encontrada")));
-        aluno.setId(alunoRequestDTO.getId());
-        aluno.setNome(alunoRequestDTO.getNome());
-        aluno.setEmail(alunoRequestDTO.getEmail());
-        aluno.setTelefone(alunoRequestDTO.getTelefone());
-        aluno.setSituacao(alunoRequestDTO.getSituacao());
-
-        return aluno;
-    }
 }

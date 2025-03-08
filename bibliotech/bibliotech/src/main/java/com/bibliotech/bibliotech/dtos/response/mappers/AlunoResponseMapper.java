@@ -16,26 +16,5 @@ public class AlunoResponseMapper {
         this.turmaResponseMapper = turmaResponseMapper;
     }
 
-    public static AlunoResponseDTO toDto(Aluno aluno) {
-        AlunoResponseDTO dto = new AlunoResponseDTO();
-        dto.setId(aluno.getId());
-        dto.setNome(aluno.getNome());
-        dto.setEmail(aluno.getEmail());
-        dto.setTelefone(aluno.getTelefone());
 
-        if (aluno.getTurma() != null) {
-            dto.setTurma(turmaResponseMapper.toDto(aluno.getTurma()));
-        }
-
-        dto.setSituacao(aluno.getSituacao());
-        dto.setAtivo(aluno.getAtivo());
-
-        return dto;
-    }
-
-    public static List<AlunoResponseDTO> toDtoList(List<Aluno> alunos) {
-        return alunos.stream()
-                .map(AlunoResponseMapper::toDto)
-                .collect(Collectors.toList());
-    }
 }
