@@ -1,19 +1,17 @@
-package com.bibliotech.bibliotech.controllers;
+package com.bibliotech.bibliotech.livros;
 
 import com.bibliotech.bibliotech.dtos.ExemplarDTO;
 import com.bibliotech.bibliotech.dtos.mappers.ExemplarMapper;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPostDTO;
-import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
-import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
-import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
-import com.bibliotech.bibliotech.dtos.response.LivroResponseGetDTO;
-import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
+import com.bibliotech.bibliotech.livros.dto.LivroRequestPatchDTO;
+import com.bibliotech.bibliotech.livros.dto.LivroRequestPostDTO;
+import com.bibliotech.bibliotech.livros.dto.LivroResponseDTO;
+import com.bibliotech.bibliotech.livros.dto.LivroResponseGetDTO;
+import com.bibliotech.bibliotech.livros.dto.LivrosMaisLidosDTO;
 import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
-import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseGetMapper;
-import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseMapper;
-import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.services.LivrosService;
+import com.bibliotech.bibliotech.livros.dto.LivroResponseGetMapper;
+import com.bibliotech.bibliotech.livros.dto.LivroResponseMapper;
 import com.bibliotech.bibliotech.services.PdfExportService;
 import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController

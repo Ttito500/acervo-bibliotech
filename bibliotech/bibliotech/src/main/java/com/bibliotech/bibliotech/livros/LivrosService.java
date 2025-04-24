@@ -1,20 +1,19 @@
-package com.bibliotech.bibliotech.services;
+package com.bibliotech.bibliotech.livros;
 
 import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPostDTO;
-import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
-import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
-import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPatchMapper;
-import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
-import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
+import com.bibliotech.bibliotech.livros.dto.LivroRequestPatchDTO;
+import com.bibliotech.bibliotech.livros.dto.LivroRequestPostDTO;
+import com.bibliotech.bibliotech.livros.dto.LivroRequestPatchMapper;
+import com.bibliotech.bibliotech.livros.dto.LivroRequestPostMapper;
+import com.bibliotech.bibliotech.livros.dto.LivrosMaisLidosDTO;
 import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
-import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.*;
-import com.bibliotech.bibliotech.repositories.LivroRepository;
+import com.bibliotech.bibliotech.services.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

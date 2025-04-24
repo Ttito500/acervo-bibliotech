@@ -1,8 +1,6 @@
-package com.bibliotech.bibliotech.repositories;
+package com.bibliotech.bibliotech.livros;
 
-import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
-import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
-import com.bibliotech.bibliotech.models.Livro;
+import com.bibliotech.bibliotech.livros.dto.LivrosMaisLidosDTO;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +42,7 @@ public interface LivroRepository extends JpaRepository<Livro, Integer> {
             Pageable pageable);
     Integer id(Integer id);
 
-    @Query("SELECT new com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO(l.titulo, COUNT(e.id)) " +
+    @Query("SELECT new com.bibliotech.bibliotech.livros.dto.LivrosMaisLidosDTO(l.titulo, COUNT(e.id)) " +
             "FROM Livro l LEFT JOIN Emprestimo e ON e.exemplar.livro.id = l.id " +
             "WHERE e.situacao = 'entregue' " +
             "AND e.dataEmprestimo BETWEEN :dataInicio AND :dataFim " +

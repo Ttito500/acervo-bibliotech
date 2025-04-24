@@ -2,7 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Autor;
-import com.bibliotech.bibliotech.models.Livro;
+import com.bibliotech.bibliotech.livros.Livro;
 import com.bibliotech.bibliotech.models.Livroautor;
 import com.bibliotech.bibliotech.repositories.AutorRepository;
 import com.bibliotech.bibliotech.repositories.LivroautorRepository;

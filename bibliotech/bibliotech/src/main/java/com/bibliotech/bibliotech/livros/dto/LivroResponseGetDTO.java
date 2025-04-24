@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.dtos.response;
+package com.bibliotech.bibliotech.livros.dto;
 
 import com.bibliotech.bibliotech.dtos.AutorDTO;
 import com.bibliotech.bibliotech.dtos.GeneroDTO;
@@ -9,13 +9,17 @@ import java.util.List;
 
 @Getter
 @Setter
-public class LivroResponseDTO {
+public class LivroResponseGetDTO {
     private Integer id;
     private String titulo;
     private String isbn;
     private boolean ativo;
     private List<AutorDTO> autores;
     private List<GeneroDTO> generos;
+    private Integer totalExemplares;
+    private Integer totalEmprestados;
+    private Integer totalExtraviados;
+    private Integer totalDisponiveis;
 }
 
 

@@ -1,14 +1,12 @@
 package com.bibliotech.bibliotech.models;
 
+import com.bibliotech.bibliotech.livros.Livro;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter

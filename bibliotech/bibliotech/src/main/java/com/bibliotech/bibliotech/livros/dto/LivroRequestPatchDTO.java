@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.dtos.request;
+package com.bibliotech.bibliotech.livros.dto;
 
 import com.bibliotech.bibliotech.dtos.AutorDTO;
 import com.bibliotech.bibliotech.dtos.GeneroDTO;

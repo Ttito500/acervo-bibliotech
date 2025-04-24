@@ -1,14 +1,14 @@
-package com.bibliotech.bibliotech.models;
+package com.bibliotech.bibliotech.livros;
 
+import com.bibliotech.bibliotech.models.Autor;
+import com.bibliotech.bibliotech.models.Exemplar;
+import com.bibliotech.bibliotech.models.Genero;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter

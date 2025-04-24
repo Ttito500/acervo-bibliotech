@@ -1,9 +1,8 @@
-package com.bibliotech.bibliotech.dtos.request.mappers;
+package com.bibliotech.bibliotech.livros.dto;
 
 import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
-import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
-import com.bibliotech.bibliotech.models.Livro;
+import com.bibliotech.bibliotech.livros.Livro;
 import org.springframework.stereotype.Component;
 
 @Component
