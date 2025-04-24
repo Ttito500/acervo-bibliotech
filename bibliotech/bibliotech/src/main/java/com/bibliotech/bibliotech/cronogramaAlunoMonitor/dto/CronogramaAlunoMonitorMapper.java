@@ -1,9 +1,6 @@
-package com.bibliotech.bibliotech.dtos.mappers;
+package com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto;
 
-import com.bibliotech.bibliotech.dtos.CronogramaAlunoMonitorDTO;
-import com.bibliotech.bibliotech.dtos.request.CronogramaAlunoMonitorRequestDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.UsuarioResponseMapper;
-import com.bibliotech.bibliotech.models.CronogramaAlunoMonitor;
 import com.bibliotech.bibliotech.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

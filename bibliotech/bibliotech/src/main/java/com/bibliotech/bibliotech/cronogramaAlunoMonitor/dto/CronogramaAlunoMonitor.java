@@ -1,5 +1,6 @@
-package com.bibliotech.bibliotech.models;
+package com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto;
 
+import com.bibliotech.bibliotech.models.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

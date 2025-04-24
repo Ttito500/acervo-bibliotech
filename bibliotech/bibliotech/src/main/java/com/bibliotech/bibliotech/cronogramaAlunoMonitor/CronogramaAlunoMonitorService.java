@@ -1,10 +1,9 @@
-package com.bibliotech.bibliotech.services;
+package com.bibliotech.bibliotech.cronogramaAlunoMonitor;
 
-import com.bibliotech.bibliotech.dtos.CronogramaAlunoMonitorDTO;
-import com.bibliotech.bibliotech.dtos.mappers.CronogramaAlunoMonitorMapper;
+import com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto.CronogramaAlunoMonitorMapper;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.CronogramaAlunoMonitor;
-import com.bibliotech.bibliotech.repositories.CronogramaAlunoMonitorRepository;
+import com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto.CronogramaAlunoMonitor;
+import com.bibliotech.bibliotech.services.UsuarioService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,6 +1,6 @@
-package com.bibliotech.bibliotech.repositories;
+package com.bibliotech.bibliotech.cronogramaAlunoMonitor;
 
-import com.bibliotech.bibliotech.models.CronogramaAlunoMonitor;
+import com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto.CronogramaAlunoMonitor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

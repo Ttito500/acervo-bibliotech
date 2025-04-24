@@ -1,9 +1,8 @@
-package com.bibliotech.bibliotech.controllers;
+package com.bibliotech.bibliotech.cronogramaAlunoMonitor;
 
-import com.bibliotech.bibliotech.dtos.CronogramaAlunoMonitorDTO;
-import com.bibliotech.bibliotech.dtos.mappers.CronogramaAlunoMonitorMapper;
-import com.bibliotech.bibliotech.dtos.request.CronogramaAlunoMonitorRequestDTO;
-import com.bibliotech.bibliotech.services.CronogramaAlunoMonitorService;
+import com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto.CronogramaAlunoMonitorDTO;
+import com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto.CronogramaAlunoMonitorMapper;
+import com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto.CronogramaAlunoMonitorRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

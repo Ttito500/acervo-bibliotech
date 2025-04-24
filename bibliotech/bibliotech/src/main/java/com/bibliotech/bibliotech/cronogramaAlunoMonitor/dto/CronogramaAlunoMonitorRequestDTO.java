@@ -1,19 +1,17 @@
-package com.bibliotech.bibliotech.dtos;
+package com.bibliotech.bibliotech.cronogramaAlunoMonitor.dto;
 
-import com.bibliotech.bibliotech.dtos.response.UsuarioResponseDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CronogramaAlunoMonitorDTO {
-
-    private Integer id;
-
+@AllArgsConstructor
+public class CronogramaAlunoMonitorRequestDTO {
     @NotNull(message = "O ID do aluno monitor é obrigatório.")
-    private UsuarioResponseDTO AlunoMonitor;
+    private Integer idAlunoMonitor;
 
     @NotBlank(message = "O dia da semana é obrigatório.")
     private String diaDaSemana;
