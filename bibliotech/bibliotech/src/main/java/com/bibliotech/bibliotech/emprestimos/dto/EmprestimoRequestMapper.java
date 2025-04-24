@@ -1,7 +1,6 @@
-package com.bibliotech.bibliotech.dtos.request.mappers;
+package com.bibliotech.bibliotech.emprestimos.dto;
 
-import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
-import com.bibliotech.bibliotech.models.Emprestimo;
+import com.bibliotech.bibliotech.emprestimos.Emprestimo;
 import org.springframework.stereotype.Component;
 
 

@@ -1,6 +1,5 @@
-package com.bibliotech.bibliotech.specifications;
+package com.bibliotech.bibliotech.emprestimos;
 
-import com.bibliotech.bibliotech.models.Emprestimo;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

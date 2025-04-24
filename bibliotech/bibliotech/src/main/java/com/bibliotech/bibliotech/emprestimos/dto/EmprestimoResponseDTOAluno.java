@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.dtos.response;
+package com.bibliotech.bibliotech.emprestimos.dto;
 
 import lombok.Getter;
 import lombok.Setter;

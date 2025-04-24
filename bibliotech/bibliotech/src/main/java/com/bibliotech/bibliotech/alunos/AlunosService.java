@@ -6,7 +6,7 @@ import com.bibliotech.bibliotech.alunos.dto.AlunoLeiturasDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
-import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
+import com.bibliotech.bibliotech.emprestimos.EmprestimoRepository;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import com.bibliotech.bibliotech.utils.EmailValidator;
 import org.springframework.data.domain.Page;

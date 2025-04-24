@@ -1,15 +1,7 @@
-package com.bibliotech.bibliotech.controllers;
+package com.bibliotech.bibliotech.emprestimos;
 
-import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
-import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
-import com.bibliotech.bibliotech.dtos.response.EmprestimoNotificacaoDTO;
-import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
-import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
-import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
+import com.bibliotech.bibliotech.emprestimos.dto.*;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.Emprestimo;
-import com.bibliotech.bibliotech.services.EmprestimosService;
-import com.bibliotech.bibliotech.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

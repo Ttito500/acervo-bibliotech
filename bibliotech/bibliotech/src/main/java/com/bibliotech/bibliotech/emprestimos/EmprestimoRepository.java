@@ -1,7 +1,6 @@
-package com.bibliotech.bibliotech.repositories;
+package com.bibliotech.bibliotech.emprestimos;
 
 
-import com.bibliotech.bibliotech.models.Emprestimo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

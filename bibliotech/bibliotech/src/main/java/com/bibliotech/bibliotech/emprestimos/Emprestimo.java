@@ -1,6 +1,8 @@
-package com.bibliotech.bibliotech.models;
+package com.bibliotech.bibliotech.emprestimos;
 
 import com.bibliotech.bibliotech.alunos.Aluno;
+import com.bibliotech.bibliotech.models.Exemplar;
+import com.bibliotech.bibliotech.models.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

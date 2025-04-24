@@ -1,10 +1,6 @@
-package com.bibliotech.bibliotech.dtos.response.mappers;
+package com.bibliotech.bibliotech.emprestimos.dto;
 
-import com.bibliotech.bibliotech.dtos.response.EmprestimoNotificacaoDTO;
-import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
-import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
-import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
-import com.bibliotech.bibliotech.models.Emprestimo;
+import com.bibliotech.bibliotech.emprestimos.Emprestimo;
 import org.springframework.stereotype.Component;
 
 @Component
