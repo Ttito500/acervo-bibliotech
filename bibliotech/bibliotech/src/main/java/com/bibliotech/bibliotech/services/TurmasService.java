@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.alunos.AlunosService;
 import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.TurmaRequestMapper;
 import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;

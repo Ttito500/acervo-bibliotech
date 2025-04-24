@@ -1,7 +1,7 @@
-package com.bibliotech.bibliotech.dtos.response.mappers;
+package com.bibliotech.bibliotech.alunos.dto;
 
-import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
-import com.bibliotech.bibliotech.models.Aluno;
+import com.bibliotech.bibliotech.dtos.response.mappers.TurmaResponseMapper;
+import com.bibliotech.bibliotech.alunos.Aluno;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

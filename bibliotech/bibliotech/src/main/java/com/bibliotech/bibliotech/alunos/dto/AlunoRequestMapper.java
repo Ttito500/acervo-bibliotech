@@ -1,8 +1,7 @@
-package com.bibliotech.bibliotech.dtos.request.mappers;
+package com.bibliotech.bibliotech.alunos.dto;
 
-import com.bibliotech.bibliotech.dtos.request.AlunoRequestDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
-import com.bibliotech.bibliotech.models.Aluno;
+import com.bibliotech.bibliotech.alunos.Aluno;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import org.springframework.stereotype.Component;
 

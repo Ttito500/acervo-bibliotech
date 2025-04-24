@@ -1,12 +1,10 @@
-package com.bibliotech.bibliotech.models;
+package com.bibliotech.bibliotech.alunos;
 
+import com.bibliotech.bibliotech.models.Turma;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter

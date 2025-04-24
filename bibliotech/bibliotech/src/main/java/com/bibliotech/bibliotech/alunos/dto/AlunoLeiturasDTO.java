@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.dtos.response;
+package com.bibliotech.bibliotech.alunos.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,10 +1,10 @@
 package com.bibliotech.bibliotech.dtos.request.mappers;
 
 import com.bibliotech.bibliotech.dtos.request.OcorrenciaRequestDTO;
-import com.bibliotech.bibliotech.models.Aluno;
+import com.bibliotech.bibliotech.alunos.Aluno;
 import com.bibliotech.bibliotech.models.Ocorrencia;
 import com.bibliotech.bibliotech.models.Usuario;
-import com.bibliotech.bibliotech.services.AlunosService;
+import com.bibliotech.bibliotech.alunos.AlunosService;
 import com.bibliotech.bibliotech.services.UsuarioService;
 import org.springframework.stereotype.Component;
 

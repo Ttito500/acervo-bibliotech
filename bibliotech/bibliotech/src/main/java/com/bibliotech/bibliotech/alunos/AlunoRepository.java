@@ -1,7 +1,6 @@
-package com.bibliotech.bibliotech.repositories;
+package com.bibliotech.bibliotech.alunos;
 
-import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
-import com.bibliotech.bibliotech.models.Aluno;
+import com.bibliotech.bibliotech.alunos.dto.AlunoLeiturasDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,7 +31,7 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
     @Query("SELECT CASE WHEN a.situacao <> 'regular' THEN true ELSE false END FROM Aluno a WHERE a.id = :id")
     boolean temSituacaoIrregular(@Param("id") Integer id);
 
-    @Query("SELECT new com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO(" +
+    @Query("SELECT new com.bibliotech.bibliotech.alunos.dto.AlunoLeiturasDTO(" +
             "a.nome, t.serie, t.turma, COUNT(e.id)) " +
             "FROM Aluno a " +
             "INNER JOIN Turma t ON a.turma.id = t.id " + // Join with Turma

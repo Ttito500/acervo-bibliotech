@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.dtos.response;
 
+import com.bibliotech.bibliotech.alunos.dto.AlunoResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 

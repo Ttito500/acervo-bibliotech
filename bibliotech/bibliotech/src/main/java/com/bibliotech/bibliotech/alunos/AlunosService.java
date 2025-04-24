@@ -1,13 +1,11 @@
-package com.bibliotech.bibliotech.services;
+package com.bibliotech.bibliotech.alunos;
 
-import com.bibliotech.bibliotech.dtos.request.AlunoRequestDTO;
-import com.bibliotech.bibliotech.dtos.request.mappers.AlunoRequestMapper;
-import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
+import com.bibliotech.bibliotech.alunos.dto.AlunoRequestDTO;
+import com.bibliotech.bibliotech.alunos.dto.AlunoRequestMapper;
+import com.bibliotech.bibliotech.alunos.dto.AlunoLeiturasDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Turma;
-import com.bibliotech.bibliotech.repositories.AlunoRepository;
 import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import com.bibliotech.bibliotech.utils.EmailValidator;

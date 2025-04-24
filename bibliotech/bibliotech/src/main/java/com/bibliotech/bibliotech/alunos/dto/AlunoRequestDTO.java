@@ -1,16 +1,15 @@
-package com.bibliotech.bibliotech.dtos.response;
+package com.bibliotech.bibliotech.alunos.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AlunoResponseDTO {
+public class AlunoRequestDTO {
     private Integer id;
     private String nome;
     private String email;
     private String telefone;
-    private TurmaResponseDTO turma;
+    private Integer idTurma;
     private String situacao;
-    private boolean ativo;
 }

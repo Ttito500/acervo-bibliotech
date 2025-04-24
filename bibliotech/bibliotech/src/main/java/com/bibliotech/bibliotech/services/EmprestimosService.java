@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.alunos.AlunoRepository;
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
 import com.bibliotech.bibliotech.dtos.request.mappers.EmprestimoRequestMapper;
@@ -10,7 +11,7 @@ import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
 import com.bibliotech.bibliotech.dtos.response.mappers.EmprestimoResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.Aluno;
+import com.bibliotech.bibliotech.alunos.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.models.Usuario;

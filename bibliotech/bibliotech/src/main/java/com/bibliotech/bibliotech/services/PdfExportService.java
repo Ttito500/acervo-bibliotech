@@ -1,6 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
-import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
+import com.bibliotech.bibliotech.alunos.dto.AlunoLeiturasDTO;
 
 import com.bibliotech.bibliotech.livros.dto.LivrosMaisLidosDTO;
 import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
