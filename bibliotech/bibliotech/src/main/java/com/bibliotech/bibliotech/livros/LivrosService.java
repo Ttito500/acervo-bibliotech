@@ -1,6 +1,8 @@
 package com.bibliotech.bibliotech.livros;
 
-import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
+import com.bibliotech.bibliotech.autores.Autor;
+import com.bibliotech.bibliotech.autores.AutorService;
+import com.bibliotech.bibliotech.autores.dto.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPostDTO;

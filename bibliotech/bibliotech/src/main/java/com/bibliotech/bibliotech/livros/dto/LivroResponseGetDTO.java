@@ -1,6 +1,6 @@
 package com.bibliotech.bibliotech.livros.dto;
 
-import com.bibliotech.bibliotech.dtos.AutorDTO;
+import com.bibliotech.bibliotech.autores.dto.AutorDTO;
 import com.bibliotech.bibliotech.dtos.GeneroDTO;
 import lombok.Getter;
 import lombok.Setter;

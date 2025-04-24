@@ -1,6 +1,6 @@
 package com.bibliotech.bibliotech.livros.dto;
 
-import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
+import com.bibliotech.bibliotech.autores.dto.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
 import com.bibliotech.bibliotech.livros.Livro;
 import org.springframework.stereotype.Component;

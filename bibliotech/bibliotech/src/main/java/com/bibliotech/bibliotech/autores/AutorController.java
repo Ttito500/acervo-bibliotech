@@ -1,7 +1,5 @@
-package com.bibliotech.bibliotech.controllers;
+package com.bibliotech.bibliotech.autores;
 
-import com.bibliotech.bibliotech.models.Autor;
-import com.bibliotech.bibliotech.services.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

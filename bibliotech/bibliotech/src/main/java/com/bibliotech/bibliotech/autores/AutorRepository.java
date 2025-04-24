@@ -1,6 +1,5 @@
-package com.bibliotech.bibliotech.repositories;
+package com.bibliotech.bibliotech.autores;
 
-import com.bibliotech.bibliotech.models.Autor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

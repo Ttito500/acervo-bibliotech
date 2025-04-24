@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.dtos;
+package com.bibliotech.bibliotech.autores.dto;
 
 import lombok.Getter;
 import lombok.Setter;

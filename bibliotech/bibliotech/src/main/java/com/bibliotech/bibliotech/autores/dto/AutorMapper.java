@@ -1,7 +1,6 @@
-package com.bibliotech.bibliotech.dtos.mappers;
+package com.bibliotech.bibliotech.autores.dto;
 
-import com.bibliotech.bibliotech.dtos.AutorDTO;
-import com.bibliotech.bibliotech.models.Autor;
+import com.bibliotech.bibliotech.autores.Autor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

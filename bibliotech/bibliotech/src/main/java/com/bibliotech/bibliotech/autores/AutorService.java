@@ -1,10 +1,8 @@
-package com.bibliotech.bibliotech.services;
+package com.bibliotech.bibliotech.autores;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
-import com.bibliotech.bibliotech.models.Autor;
 import com.bibliotech.bibliotech.livros.Livro;
 import com.bibliotech.bibliotech.models.Livroautor;
-import com.bibliotech.bibliotech.repositories.AutorRepository;
 import com.bibliotech.bibliotech.repositories.LivroautorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

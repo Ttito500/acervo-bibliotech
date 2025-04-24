@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.models;
+package com.bibliotech.bibliotech.autores;
 
 import com.bibliotech.bibliotech.livros.Livro;
 import com.fasterxml.jackson.annotation.JsonIgnore;

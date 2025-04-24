@@ -1,6 +1,6 @@
 package com.bibliotech.bibliotech.livros;
 
-import com.bibliotech.bibliotech.models.Autor;
+import com.bibliotech.bibliotech.autores.Autor;
 import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.models.Genero;
 import com.fasterxml.jackson.annotation.JsonIgnore;
