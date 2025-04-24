@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.alunos.AlunosService;
 import com.bibliotech.bibliotech.dtos.request.OcorrenciaRequestDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Ocorrencia;

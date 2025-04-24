@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.models;
+package com.bibliotech.bibliotech.autores;
 
 import com.bibliotech.bibliotech.livros.Livro;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,15 +11,15 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "genero")
-public class Genero {
+@Table(name = "autor")
+public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "genero", nullable = false)
-    private String genero;
+    @Column(name = "nome", nullable = false)
+    private String nome;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)

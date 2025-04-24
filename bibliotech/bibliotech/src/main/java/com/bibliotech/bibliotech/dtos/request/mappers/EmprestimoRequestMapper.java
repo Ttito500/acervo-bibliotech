@@ -1,16 +1,7 @@
 package com.bibliotech.bibliotech.dtos.request.mappers;
 
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
-import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
-import com.bibliotech.bibliotech.exception.NotFoundException;
-import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
-import com.bibliotech.bibliotech.models.Exemplar;
-import com.bibliotech.bibliotech.models.Usuario;
-import com.bibliotech.bibliotech.repositories.AlunoRepository;
-import com.bibliotech.bibliotech.repositories.ExemplarRepository;
-import com.bibliotech.bibliotech.repositories.UsuarioRepository;
 import org.springframework.stereotype.Component;
 
 

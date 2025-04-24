@@ -1,0 +1,39 @@
+package com.bibliotech.bibliotech.livros.dto;
+
+import com.bibliotech.bibliotech.autores.dto.AutorMapper;
+import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
+import com.bibliotech.bibliotech.livros.Livro;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class LivroResponseGetMapper {
+
+    private static GeneroMapper generoMapper;
+    private static AutorMapper autorMapper;
+
+    public LivroResponseGetDTO toDTO(Livro livro) {
+        LivroResponseGetDTO livroResponseGetDTO = new LivroResponseGetDTO();
+
+        livroResponseGetDTO.setId(livro.getId());
+        livroResponseGetDTO.setTitulo(livro.getTitulo());
+        livroResponseGetDTO.setIsbn(livro.getIsbn());
+        livroResponseGetDTO.setAtivo(livro.getAtivo());
+        livroResponseGetDTO.setGeneros(generoMapper.toDTOList(livro.getGeneros()));
+        livroResponseGetDTO.setAutores(autorMapper.toDTOList(livro.getAutores()));
+        livroResponseGetDTO.setTotalExemplares(livro.getExemplares().size());
+        livroResponseGetDTO.setTotalEmprestados(livro.getExemplares().stream().filter(exemplar -> exemplar.getSituacao().equals("emprestado")).collect(Collectors.toList()).size());
+        livroResponseGetDTO.setTotalDisponiveis(livro.getExemplares().stream().filter(exemplar -> exemplar.getSituacao().equals("disponivel")).collect(Collectors.toList()).size());
+        livroResponseGetDTO.setTotalExtraviados(livro.getExemplares().stream().filter(exemplar -> exemplar.getSituacao().equals("extraviado")).collect(Collectors.toList()).size());
+
+        return livroResponseGetDTO;
+    }
+
+    public List<LivroResponseGetDTO> toDTOList(List<Livro> livros) {
+        return livros.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+}

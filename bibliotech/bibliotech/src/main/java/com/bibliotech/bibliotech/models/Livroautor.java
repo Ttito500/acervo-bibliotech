@@ -1,5 +1,7 @@
 package com.bibliotech.bibliotech.models;
 
+import com.bibliotech.bibliotech.autores.Autor;
+import com.bibliotech.bibliotech.livros.Livro;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

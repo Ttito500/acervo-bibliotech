@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.dtos.response.mappers;
 
+import com.bibliotech.bibliotech.alunos.dto.AlunoResponseMapper;
 import com.bibliotech.bibliotech.dtos.response.OcorrenciaResponseDTO;
 import com.bibliotech.bibliotech.models.Ocorrencia;
 import org.springframework.stereotype.Component;

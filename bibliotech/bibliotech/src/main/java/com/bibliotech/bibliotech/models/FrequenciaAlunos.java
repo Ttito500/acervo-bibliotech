@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.models;
 
+import com.bibliotech.bibliotech.alunos.Aluno;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

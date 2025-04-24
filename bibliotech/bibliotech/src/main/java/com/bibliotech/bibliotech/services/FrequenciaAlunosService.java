@@ -1,8 +1,8 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.alunos.AlunosService;
 import com.bibliotech.bibliotech.dtos.request.FrequenciaAlunosRequestDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
-import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.repositories.FrequenciaAlunosRepository;
 import org.springframework.stereotype.Service;

@@ -1,0 +1,36 @@
+package com.bibliotech.bibliotech.livros.dto;
+
+import com.bibliotech.bibliotech.autores.dto.AutorMapper;
+import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
+import com.bibliotech.bibliotech.livros.Livro;
+import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class LivroResponseMapper {
+
+    private static final AutorMapper autorMapper = new AutorMapper();
+    private static final GeneroMapper generoMapper = new GeneroMapper();
+
+    public LivroResponseDTO toDTO(Livro livro) {
+        LivroResponseDTO dto = new LivroResponseDTO();
+        dto.setId(livro.getId());
+        dto.setTitulo(livro.getTitulo());
+        dto.setIsbn(livro.getIsbn());
+        dto.setAtivo(livro.getAtivo());
+        dto.setAutores(AutorMapper.toDTOList(livro.getAutores()));
+        dto.setGeneros(GeneroMapper.toDTOList(livro.getGeneros()));
+
+        return dto;
+    }
+
+    public List<LivroResponseDTO> toDTOList(List<Livro> livros) {
+        if (livros == null) {
+            return Collections.emptyList();
+        }
+        return livros.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+}

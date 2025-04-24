@@ -2,7 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Genero;
-import com.bibliotech.bibliotech.models.Livro;
+import com.bibliotech.bibliotech.livros.Livro;
 import com.bibliotech.bibliotech.models.Livrogenero;
 import com.bibliotech.bibliotech.repositories.GeneroRepository;
 import com.bibliotech.bibliotech.repositories.LivrogeneroRepository;
