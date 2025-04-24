@@ -1,9 +1,6 @@
-package com.bibliotech.bibliotech.controllers;
+package com.bibliotech.bibliotech.estanteprateleirasecao;
 
-import com.bibliotech.bibliotech.dtos.request.EstantePrateleiraSecaoDTO;
 import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
-import com.bibliotech.bibliotech.models.Estanteprateleirasecao;
-import com.bibliotech.bibliotech.services.EstantePrateleiraSecaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

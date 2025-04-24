@@ -1,6 +1,7 @@
-package com.bibliotech.bibliotech.models;
+package com.bibliotech.bibliotech.estanteprateleirasecao;
 
 import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
+import com.bibliotech.bibliotech.models.Secao;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

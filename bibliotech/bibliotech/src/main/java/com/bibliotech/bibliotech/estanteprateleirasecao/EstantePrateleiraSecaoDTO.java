@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.dtos.request;
+package com.bibliotech.bibliotech.estanteprateleirasecao;
 
 import lombok.Getter;
 import lombok.Setter;

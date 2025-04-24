@@ -1,13 +1,10 @@
-package com.bibliotech.bibliotech.services;
+package com.bibliotech.bibliotech.estanteprateleirasecao;
 
-import com.bibliotech.bibliotech.dtos.request.EstantePrateleiraSecaoDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
-import com.bibliotech.bibliotech.models.Estanteprateleirasecao;
 import com.bibliotech.bibliotech.models.Secao;
 import com.bibliotech.bibliotech.estanteprateleira.EstantePrateleiraRepository;
-import com.bibliotech.bibliotech.repositories.EstantePrateleiraSecaoRepository;
 import com.bibliotech.bibliotech.repositories.SecaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,7 @@
 
-package com.bibliotech.bibliotech.repositories;
+package com.bibliotech.bibliotech.estanteprateleirasecao;
 
 import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
-import com.bibliotech.bibliotech.models.Estanteprateleirasecao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
