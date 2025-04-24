@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.models;
 
+import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
 import com.bibliotech.bibliotech.livros.Livro;
 import jakarta.persistence.*;
 import lombok.Getter;

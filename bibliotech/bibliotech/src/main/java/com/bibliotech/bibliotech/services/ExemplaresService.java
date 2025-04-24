@@ -1,9 +1,10 @@
 package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPatchDTO;
+import com.bibliotech.bibliotech.estanteprateleira.EstantePrateleiraService;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.Estanteprateleira;
+import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.livros.Livro;
 import com.bibliotech.bibliotech.models.Secao;

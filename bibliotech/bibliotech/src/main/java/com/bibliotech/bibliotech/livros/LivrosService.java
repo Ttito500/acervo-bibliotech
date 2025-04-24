@@ -6,6 +6,8 @@ import com.bibliotech.bibliotech.autores.dto.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPostDTO;
+import com.bibliotech.bibliotech.estanteprateleira.EstantePrateleiraService;
+import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
 import com.bibliotech.bibliotech.livros.dto.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.livros.dto.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.livros.dto.LivroRequestPatchMapper;

@@ -1,7 +1,7 @@
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.request.EstantePrateleiraSecaoDTO;
-import com.bibliotech.bibliotech.models.Estanteprateleira;
+import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Estanteprateleirasecao;
 import com.bibliotech.bibliotech.services.EstantePrateleiraSecaoService;
 import org.springframework.beans.factory.annotation.Autowired;

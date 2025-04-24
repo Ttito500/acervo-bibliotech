@@ -1,7 +1,4 @@
-package com.bibliotech.bibliotech.dtos.response.mappers;
-
-import com.bibliotech.bibliotech.dtos.EstanteprateleiraDTO;
-import com.bibliotech.bibliotech.models.Estanteprateleira;
+package com.bibliotech.bibliotech.estanteprateleira;
 
 public class EstanteprateleiraResponseMapper {
 

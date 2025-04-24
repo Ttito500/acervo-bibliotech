@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.dtos;
 
 import com.bibliotech.bibliotech.dtos.response.SecaoResponseDTO;
+import com.bibliotech.bibliotech.estanteprateleira.EstanteprateleiraDTO;
 import lombok.Getter;
 import lombok.Setter;
 

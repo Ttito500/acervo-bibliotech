@@ -1,19 +1,16 @@
-package com.bibliotech.bibliotech.services;
+package com.bibliotech.bibliotech.estanteprateleira;
 
 import com.bibliotech.bibliotech.dtos.response.ExemplarResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.ExemplarResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Exemplar;
-import com.bibliotech.bibliotech.repositories.EstantePrateleiraRepository;
 import com.bibliotech.bibliotech.repositories.ExemplarRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

@@ -1,10 +1,7 @@
-package com.bibliotech.bibliotech.controllers;
+package com.bibliotech.bibliotech.estanteprateleira;
 
-import com.bibliotech.bibliotech.dtos.EstanteprateleiraDTO;
-import com.bibliotech.bibliotech.dtos.mappers.EstanteprateleiraMapper;
+import com.bibliotech.bibliotech.estanteprateleira.dto.EstanteprateleiraMapper;
 import com.bibliotech.bibliotech.dtos.response.ExemplarResponseDTO;
-import com.bibliotech.bibliotech.models.Estanteprateleira;
-import com.bibliotech.bibliotech.services.EstantePrateleiraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

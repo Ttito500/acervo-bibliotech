@@ -1,4 +1,4 @@
-package com.bibliotech.bibliotech.models;
+package com.bibliotech.bibliotech.estanteprateleira;
 
 import jakarta.persistence.*;
 import lombok.Getter;

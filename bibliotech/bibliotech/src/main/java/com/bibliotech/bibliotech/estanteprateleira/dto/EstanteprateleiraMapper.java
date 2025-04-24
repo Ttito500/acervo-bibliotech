@@ -1,7 +1,7 @@
-package com.bibliotech.bibliotech.dtos.mappers;
+package com.bibliotech.bibliotech.estanteprateleira.dto;
 
-import com.bibliotech.bibliotech.dtos.EstanteprateleiraDTO;
-import com.bibliotech.bibliotech.models.Estanteprateleira;
+import com.bibliotech.bibliotech.estanteprateleira.EstanteprateleiraDTO;
+import com.bibliotech.bibliotech.estanteprateleira.Estanteprateleira;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

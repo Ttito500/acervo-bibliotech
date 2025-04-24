@@ -1,7 +1,7 @@
 package com.bibliotech.bibliotech.dtos.mappers;
 
 import com.bibliotech.bibliotech.dtos.ExemplarDTO;
-import com.bibliotech.bibliotech.dtos.response.mappers.EstanteprateleiraResponseMapper;
+import com.bibliotech.bibliotech.estanteprateleira.EstanteprateleiraResponseMapper;
 import com.bibliotech.bibliotech.dtos.response.mappers.SecaoResponseMapper;
 import com.bibliotech.bibliotech.models.Exemplar;
 import org.springframework.stereotype.Component;
